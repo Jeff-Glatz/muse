@@ -2,8 +2,8 @@ package kungzhi.muse.osc;
 
 public class DrlReference
         extends AbstractSignal {
-    private final float drivenRightLegVoltage;
-    private final float referenceVoltage;
+    private final Float drivenRightLegVoltage;
+    private final Float referenceVoltage;
 
     public DrlReference(String path, Float drivenRightLegVoltage, Float referenceVoltage) {
         super(path);
@@ -27,15 +27,16 @@ public class DrlReference
 
         DrlReference that = (DrlReference) o;
 
-        if (Float.compare(that.drivenRightLegVoltage, drivenRightLegVoltage) != 0) return false;
-        return Float.compare(that.referenceVoltage, referenceVoltage) == 0;
+        if (drivenRightLegVoltage != null ? !drivenRightLegVoltage.equals(that.drivenRightLegVoltage) : that.drivenRightLegVoltage != null)
+            return false;
+        return referenceVoltage != null ? referenceVoltage.equals(that.referenceVoltage) : that.referenceVoltage == null;
     }
 
     @Override
     public int hashCode() {
         int result = super.hashCode();
-        result = 31 * result + (drivenRightLegVoltage != +0.0f ? Float.floatToIntBits(drivenRightLegVoltage) : 0);
-        result = 31 * result + (referenceVoltage != +0.0f ? Float.floatToIntBits(referenceVoltage) : 0);
+        result = 31 * result + (drivenRightLegVoltage != null ? drivenRightLegVoltage.hashCode() : 0);
+        result = 31 * result + (referenceVoltage != null ? referenceVoltage.hashCode() : 0);
         return result;
     }
 }

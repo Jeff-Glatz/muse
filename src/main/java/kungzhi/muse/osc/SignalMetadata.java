@@ -154,7 +154,7 @@ public enum SignalMetadata {
         return metadata;
     }
 
-    public static  <S extends Signal> S as(Signal signal) {
+    public static <S extends Signal> S as(Signal signal) {
         return (S) signal;
     }
 

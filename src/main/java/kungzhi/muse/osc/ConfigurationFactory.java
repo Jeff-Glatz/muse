@@ -1,18 +1,17 @@
 package kungzhi.muse.osc;
 
-import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
+import com.jsoniter.any.Any;
 
 import static kungzhi.muse.osc.Serializer.MuseConfig.newBuilder;
 
 public class ConfigurationFactory
-        extends ProtocolBufferSignalFactory<Configuration> {
+        extends JsonSignalFactory<Configuration> {
 
     @Override
-    protected Configuration create(String path, ByteString data)
+    protected Configuration create(String path, Any json)
             throws InvalidProtocolBufferException {
         return new Configuration(path, newBuilder()
-                .mergeFrom(data)
                 .build());
     }
 }

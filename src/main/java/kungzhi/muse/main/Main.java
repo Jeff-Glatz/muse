@@ -1,9 +1,8 @@
 package kungzhi.muse.main;
 
 import de.sciss.net.OSCServer;
-import kungzhi.muse.osc.Battery;
-import kungzhi.muse.osc.Signal;
-import kungzhi.muse.osc.SignalMetadata;
+import kungzhi.muse.osc.*;
+import kungzhi.muse.osc.Serializer.MuseVersion;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -52,6 +51,8 @@ public class Main {
                     case BATTERY:
                         printBatteryStatus(as(signal));
                         break;
+                    case VERSION:
+                        printVersion(as(signal));
                 }
             } catch (Exception e) {
                 log.error("Failure processing OSC message", e);
@@ -74,18 +75,34 @@ public class Main {
     }
 
     private void printBatteryStatus(Battery battery) {
-        StringBuilder message = new StringBuilder()
+        log.info(new StringBuilder("\n")
                 .append("state of charge: {}\n")
                 .append("percent remaining: {}%\n")
                 .append("fuel gauge voltage: {}\n")
                 .append("adc voltage: {}\n")
-                .append("temperature: {}\n");
-        log.info(message.toString(),
+                .append("temperature: {}\n").toString(),
                 battery.getStateOfCharge(),
                 battery.getPercentRemaining(),
                 battery.getFuelGuageVoltage(),
                 battery.getAdcVoltage(),
                 battery.getTemperature());
+    }
+
+    private void printVersion(Version version) {
+        MuseVersion delegate = version.getDelegate();
+        log.info(new StringBuilder("\n")
+                        .append("build number: {}\n")
+                        .append("firmware type: {}\n")
+                        .append("hardware version: {}\n")
+                        .append("firmware headset version: {}\n")
+                        .append("protocol version: {}\n")
+                        .append("firmware bootloader version: {}\n").toString(),
+                delegate.getBuildNumber(),
+                delegate.getFirmwareType(),
+                delegate.getHardwareVersion(),
+                delegate.getFirmwareHeadsetVersion(),
+                delegate.getProtocolVersion(),
+                delegate.getFirmwareBootloaderVersion());
     }
 
     public static void main(String[] args)
