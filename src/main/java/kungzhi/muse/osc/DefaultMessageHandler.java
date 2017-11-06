@@ -20,7 +20,7 @@ class DefaultMessageHandler<M extends Model>
     }
 
     @Override
-    public void onMessage(OSCMessage message, long time)
+    public void onMessage(long time, OSCMessage message)
             throws Exception {
         controller.update(session,
                 transformer.fromMessage(time, message));

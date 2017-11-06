@@ -71,18 +71,18 @@ public class MessageDispatcher
     public void messageReceived(OSCMessage message, SocketAddress sender, long time) {
         String path = message.getName();
         try {
-            MessageHandler processor = processorForPath(path);
+            MessageHandler handler = handlerForPath(path);
             availablePaths.add(path);
-            processor.onMessage(message, time);
+            handler.onMessage(time, message);
         } catch (Exception e) {
             log.error(format("Failure dispatching message: %s", toString(message)), e);
         }
     }
 
-    private MessageHandler processorForPath(String path) {
-        return messageHandlers.getOrDefault(path, (message, time) -> {
+    private MessageHandler handlerForPath(String path) {
+        return messageHandlers.getOrDefault(path, (time, message) -> {
             throw new RuntimeException(format(
-                    "Not configured to dispatch messages received on %s", path));
+                    "Not configured to handle messages received on %s", path));
         });
     }
 
