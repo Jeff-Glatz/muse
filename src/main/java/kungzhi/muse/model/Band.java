@@ -49,4 +49,12 @@ public class Band
         result = 31 * result + (range != null ? range.hashCode() : 0);
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "Band{" +
+                "identifier='" + identifier + '\'' +
+                ", range=" + range +
+                '}';
+    }
 }

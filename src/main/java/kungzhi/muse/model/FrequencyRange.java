@@ -43,4 +43,12 @@ public class FrequencyRange
         result = 31 * result + (upper != null ? upper.hashCode() : 0);
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "FrequencyRange{" +
+                "lower=" + lower +
+                ", upper=" + upper +
+                '}';
+    }
 }
