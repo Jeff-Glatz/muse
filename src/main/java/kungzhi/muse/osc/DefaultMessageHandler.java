@@ -23,6 +23,6 @@ class DefaultMessageHandler<M extends Model>
     public void onMessage(OSCMessage message, long time)
             throws Exception {
         controller.update(session,
-                transformer.fromMessage(message, time));
+                transformer.fromMessage(time, message));
     }
 }

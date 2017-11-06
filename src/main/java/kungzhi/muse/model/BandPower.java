@@ -1,15 +1,14 @@
 package kungzhi.muse.model;
 
-import java.util.Arrays;
 import java.util.stream.Stream;
 
 public class BandPower
         extends AbstractModel {
     private final Band band;
     private final boolean relative;
-    private final Float[] values;
+    private final Values<Float> values;
 
-    public BandPower(Band band, boolean relative, long time, Float... values) {
+    public BandPower(long time, Band band, boolean relative, Values<Float> values) {
         super(time);
         this.band = band;
         this.relative = relative;
@@ -24,16 +23,12 @@ public class BandPower
         return relative;
     }
 
-    public Float[] getValues() {
-        return values;
-    }
-
     public Float forChannel(EegChannel channel) {
-        return values[channel.getIndex()];
+        return values.at(channel.getIndex());
     }
 
     public Stream<Float> values() {
-        return Stream.of(values);
+        return values.streamOf();
     }
 
     @Override
@@ -46,8 +41,7 @@ public class BandPower
 
         if (relative != bandPower.relative) return false;
         if (band != null ? !band.equals(bandPower.band) : bandPower.band != null) return false;
-        // Probably incorrect - comparing Object[] arrays with Arrays.equals
-        return Arrays.equals(values, bandPower.values);
+        return values != null ? values.equals(bandPower.values) : bandPower.values == null;
     }
 
     @Override
@@ -55,7 +49,17 @@ public class BandPower
         int result = super.hashCode();
         result = 31 * result + (band != null ? band.hashCode() : 0);
         result = 31 * result + (relative ? 1 : 0);
-        result = 31 * result + Arrays.hashCode(values);
+        result = 31 * result + (values != null ? values.hashCode() : 0);
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return "BandPower{" +
+                "time=" + time +
+                ", band=" + band +
+                ", relative=" + relative +
+                ", values=" + values +
+                '}';
     }
 }

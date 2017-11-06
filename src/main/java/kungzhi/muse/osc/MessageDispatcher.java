@@ -25,10 +25,10 @@ public class MessageDispatcher
     private final Map<String, MessageHandler> messageHandlers = new HashMap<>();
     private final List<SessionListener> sessionListeners = new ArrayList<>();
 
-    private final Configuration currentConfiguration;
+    private final Configuration configuration;
 
-    public MessageDispatcher(Configuration currentConfiguration) {
-        this.currentConfiguration = currentConfiguration;
+    public MessageDispatcher(Configuration configuration) {
+        this.configuration = configuration;
     }
 
     public <M extends Model> MessageDispatcher withHandler(
@@ -52,18 +52,18 @@ public class MessageDispatcher
     }
 
     @Override
-    public Configuration currentConfiguration() {
-        return currentConfiguration;
+    public Configuration getConfiguration() {
+        return configuration;
     }
 
     @Override
-    public void currentConfiguration(Configuration configuration) {
-        if (!currentConfiguration.equals(configuration)) {
-            Configuration previous = currentConfiguration.copyOf();
-            currentConfiguration.updateFrom(configuration);
-            log.info("Current configuration has been updated");
+    public void setConfiguration(Configuration configuration) {
+        if (!this.configuration.equals(configuration)) {
+            Configuration previous = this.configuration.copyOf();
+            this.configuration.updateFrom(configuration);
+            log.info("Current configuration has been updated: {}", configuration);
             sessionListeners.forEach(listener ->
-                    listener.configurationChanged(previous, currentConfiguration));
+                    listener.configurationChanged(previous, this.configuration));
         }
     }
 

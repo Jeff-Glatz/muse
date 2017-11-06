@@ -1,6 +1,7 @@
 package kungzhi.muse.osc;
 
 import de.sciss.net.OSCMessage;
+import kungzhi.muse.model.Values;
 
 import java.lang.reflect.Field;
 
@@ -15,9 +16,10 @@ public class MessageHelper {
         return type.cast(message.getArg(index));
     }
 
-    public static <T> T[] collectArguments(OSCMessage message) {
+    public static <T> Values<T> collectArguments(OSCMessage message, Class<T> type) {
         try {
-            return (T[]) MessageHelper.args.get(message);
+            Object[] args = (Object[]) MessageHelper.args.get(message);
+            return new Values<T>(type, args);
         } catch (IllegalAccessException e) {
             throw new RuntimeException(e);
         }

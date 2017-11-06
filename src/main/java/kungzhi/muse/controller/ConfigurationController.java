@@ -8,6 +8,6 @@ public class ConfigurationController
 
     @Override
     public void update(Session session, Configuration configuration) {
-        session.currentConfiguration(configuration);
+        session.setConfiguration(configuration);
     }
 }

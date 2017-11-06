@@ -45,7 +45,7 @@ public class Configuration
     }
 
     public void updateFrom(Configuration that) {
-        setTime(that.getTime());
+        setTime(that.time);
         setEegChannelLayout(that.eegChannelLayout);
     }
 
@@ -65,5 +65,13 @@ public class Configuration
         int result = super.hashCode();
         result = 31 * result + eegChannelLayout.hashCode();
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return "Configuration{" +
+                "time=" + time +
+                ", eegChannelLayout=" + eegChannelLayout +
+                '}';
     }
 }

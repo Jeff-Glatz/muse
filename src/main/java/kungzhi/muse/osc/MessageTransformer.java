@@ -4,6 +4,6 @@ import de.sciss.net.OSCMessage;
 import kungzhi.muse.model.Model;
 
 public interface MessageTransformer<M extends Model> {
-    M fromMessage(OSCMessage message, long time)
+    M fromMessage(long time, OSCMessage message)
             throws Exception;
 }

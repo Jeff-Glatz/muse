@@ -47,4 +47,12 @@ public class EegChannel
         result = 31 * result + index;
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "EegChannel{" +
+                "sensor=" + sensor +
+                ", index=" + index +
+                '}';
+    }
 }

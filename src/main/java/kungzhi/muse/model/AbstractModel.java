@@ -2,7 +2,7 @@ package kungzhi.muse.model;
 
 public abstract class AbstractModel
         implements Model {
-    private long time;
+    protected long time;
 
     public AbstractModel(long time) {
         this.time = time;

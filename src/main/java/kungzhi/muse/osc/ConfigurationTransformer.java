@@ -14,7 +14,7 @@ public class ConfigurationTransformer
         implements MessageTransformer<Configuration> {
 
     @Override
-    public Configuration fromMessage(OSCMessage message, long time)
+    public Configuration fromMessage(long time, OSCMessage message)
             throws Exception {
         Any json = deserialize(argumentAt(message, String.class, 0));
         Configuration configuration = new Configuration(time);

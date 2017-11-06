@@ -168,6 +168,107 @@ public class MessageReceiver {
                 .withHandler("/muse/elements/gamma_relative",
                         new BandPowerTransformer(bands.band("gamma"), true),
                         (session, model) -> {
+                        })
+                .withHandler("/muse/eeg",
+                        new EegTransformer(),
+                        (session, model) -> {
+                        })
+                // TODO: Unimplemented
+                .withHandler("/muse/eeg/dropped_samples",
+                        (time, message) -> null,
+                        (session, model) -> {
+                        })
+                .withHandler("/muse/eeg/quantization",
+                        (time, message) -> null,
+                        (session, model) -> {
+                        })
+                .withHandler("/muse/acc",
+                        (time, message) -> null,
+                        (session, model) -> {
+                        })
+                .withHandler("/muse/acc/dropped_samples",
+                        (time, message) -> null,
+                        (session, model) -> {
+                        })
+                .withHandler("/muse/elements/raw_fft0",
+                        (time, message) -> null,
+                        (session, model) -> {
+                        })
+                .withHandler("/muse/elements/raw_fft1",
+                        (time, message) -> null,
+                        (session, model) -> {
+                        })
+                .withHandler("/muse/elements/raw_fft2",
+                        (time, message) -> null,
+                        (session, model) -> {
+                        })
+                .withHandler("/muse/elements/raw_fft3",
+                        (time, message) -> null,
+                        (session, model) -> {
+                        })
+                .withHandler("/muse/elements/delta_session_score",
+                        (time, message) -> null,
+                        (session, model) -> {
+                        })
+                .withHandler("/muse/elements/theta_session_score",
+                        (time, message) -> null,
+                        (session, model) -> {
+                        })
+                .withHandler("/muse/elements/alpha_session_score",
+                        (time, message) -> null,
+                        (session, model) -> {
+                        })
+                .withHandler("/muse/elements/beta_session_score",
+                        (time, message) -> null,
+                        (session, model) -> {
+                        })
+                .withHandler("/muse/elements/gamma_session_score",
+                        (time, message) -> null,
+                        (session, model) -> {
+                        })
+                .withHandler("/muse/elements/touching_forehead",
+                        (time, message) -> null,
+                        (session, model) -> {
+                        })
+                .withHandler("/muse/elements/horseshoe",
+                        (time, message) -> null,
+                        (session, model) -> {
+                        })
+                .withHandler("/muse/elements/is_good",
+                        (time, message) -> null,
+                        (session, model) -> {
+                        })
+                .withHandler("/muse/elements/blink",
+                        (time, message) -> null,
+                        (session, model) -> {
+                        })
+                .withHandler("/muse/elements/jaw_clench",
+                        (time, message) -> null,
+                        (session, model) -> {
+                        })
+                .withHandler("/muse/elements/experimental/concentration",
+                        (time, message) -> null,
+                        (session, model) -> {
+                        })
+                .withHandler("/muse/elements/experimental/mellow",
+                        (time, message) -> null,
+                        (session, model) -> {
+                        })
+                .withHandler("/muse/drlref",
+                        (time, message) -> null,
+                        (session, model) -> {
+                        })
+                .withHandler("/muse/version",
+                        (time, message) -> null,
+                        (session, model) -> {
+                        })
+                .withHandler("/muse/batt",
+                        (time, message) -> null,
+                        (session, model) -> {
+                        })
+                .withHandler("/muse/annotation",
+                        (time, message) -> null,
+                        (session, model) -> {
                         }));
         receiver.setProtocol("tcp");
         receiver.setPort(5000);
