@@ -29,7 +29,7 @@ public class BandsImpl
     }
 
     @Override
-    public Band band(String name) {
+    public Band load(String name) {
         Band band = bands.get(name);
         if (band == null) {
             throw new IllegalArgumentException(format("Band %s is not defined", name));

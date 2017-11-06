@@ -125,52 +125,74 @@ public class MessageReceiver {
                 .withHandler("/muse/config",
                         new ConfigurationTransformer(),
                         new ConfigurationController())
+                .withHandler("/muse/eeg",
+                        new EegTransformer(),
+                        (session, model) -> {
+                        })
                 .withHandler("/muse/elements/low_freqs_absolute",
-                        new BandPowerTransformer(bands.band("low"), false),
+                        new BandPowerTransformer(bands.load("low"), false),
                         (session, model) -> {
                         })
                 .withHandler("/muse/elements/delta_absolute",
-                        new BandPowerTransformer(bands.band("delta"), false),
+                        new BandPowerTransformer(bands.load("delta"), false),
                         (session, model) -> {
                         })
                 .withHandler("/muse/elements/theta_absolute",
-                        new BandPowerTransformer(bands.band("theta"), false),
+                        new BandPowerTransformer(bands.load("theta"), false),
                         (session, model) -> {
                         })
                 .withHandler("/muse/elements/alpha_absolute",
-                        new BandPowerTransformer(bands.band("alpha"), false),
+                        new BandPowerTransformer(bands.load("alpha"), false),
                         (session, model) -> {
                         })
                 .withHandler("/muse/elements/beta_absolute",
-                        new BandPowerTransformer(bands.band("beta"), false),
+                        new BandPowerTransformer(bands.load("beta"), false),
                         (session, model) -> {
                         })
                 .withHandler("/muse/elements/gamma_absolute",
-                        new BandPowerTransformer(bands.band("gamma"), false),
+                        new BandPowerTransformer(bands.load("gamma"), false),
                         (session, model) -> {
                         })
                 .withHandler("/muse/elements/delta_relative",
-                        new BandPowerTransformer(bands.band("delta"), true),
+                        new BandPowerTransformer(bands.load("delta"), true),
                         (session, model) -> {
                         })
                 .withHandler("/muse/elements/theta_relative",
-                        new BandPowerTransformer(bands.band("theta"), true),
+                        new BandPowerTransformer(bands.load("theta"), true),
                         (session, model) -> {
                         })
                 .withHandler("/muse/elements/alpha_relative",
-                        new BandPowerTransformer(bands.band("alpha"), true),
+                        new BandPowerTransformer(bands.load("alpha"), true),
                         (session, model) -> {
                         })
                 .withHandler("/muse/elements/beta_relative",
-                        new BandPowerTransformer(bands.band("beta"), true),
+                        new BandPowerTransformer(bands.load("beta"), true),
                         (session, model) -> {
                         })
                 .withHandler("/muse/elements/gamma_relative",
-                        new BandPowerTransformer(bands.band("gamma"), true),
+                        new BandPowerTransformer(bands.load("gamma"), true),
                         (session, model) -> {
                         })
-                .withHandler("/muse/eeg",
-                        new EegTransformer(),
+                .withHandler("/muse/elements/delta_session_score",
+                        new SessionScoreTransformer(bands.load("delta")),
+                        (session, model) -> {
+                            System.out.println(model);
+                        })
+                .withHandler("/muse/elements/theta_session_score",
+                        new SessionScoreTransformer(bands.load("theta")),
+                        (session, model) -> {
+                            System.out.println(model);
+                        })
+                .withHandler("/muse/elements/alpha_session_score",
+                        new SessionScoreTransformer(bands.load("alpha")),
+                        (session, model) -> {
+                        })
+                .withHandler("/muse/elements/beta_session_score",
+                        new SessionScoreTransformer(bands.load("beta")),
+                        (session, model) -> {
+                        })
+                .withHandler("/muse/elements/gamma_session_score",
+                        new SessionScoreTransformer(bands.load("gamma")),
                         (session, model) -> {
                         })
                 // TODO: Unimplemented
@@ -203,26 +225,6 @@ public class MessageReceiver {
                         (session, model) -> {
                         })
                 .withHandler("/muse/elements/raw_fft3",
-                        (time, message) -> null,
-                        (session, model) -> {
-                        })
-                .withHandler("/muse/elements/delta_session_score",
-                        (time, message) -> null,
-                        (session, model) -> {
-                        })
-                .withHandler("/muse/elements/theta_session_score",
-                        (time, message) -> null,
-                        (session, model) -> {
-                        })
-                .withHandler("/muse/elements/alpha_session_score",
-                        (time, message) -> null,
-                        (session, model) -> {
-                        })
-                .withHandler("/muse/elements/beta_session_score",
-                        (time, message) -> null,
-                        (session, model) -> {
-                        })
-                .withHandler("/muse/elements/gamma_session_score",
                         (time, message) -> null,
                         (session, model) -> {
                         })
