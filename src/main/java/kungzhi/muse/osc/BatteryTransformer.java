@@ -1,16 +1,17 @@
 package kungzhi.muse.osc;
 
 import de.sciss.net.OSCMessage;
+import kungzhi.muse.model.Battery;
 
 import static kungzhi.muse.osc.MessageHelper.argumentAt;
 
-public class BatteryFactory
-        implements SignalFactory<Battery> {
+public class BatteryTransformer
+        implements MessageTransformer<Battery> {
 
     @Override
-    public Battery create(OSCMessage message)
+    public Battery fromMessage(long time, OSCMessage message)
             throws Exception {
-        return new Battery(message.getName(),
+        return new Battery(time,
                 argumentAt(message, Integer.class, 0),
                 argumentAt(message, Integer.class, 1),
                 argumentAt(message, Integer.class, 2),

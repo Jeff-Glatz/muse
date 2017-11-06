@@ -1,12 +1,12 @@
-package kungzhi.muse.osc;
+package kungzhi.muse.model;
 
 public class DrlReference
-        extends AbstractSignal {
+        extends AbstractModel {
     private final Float drivenRightLegVoltage;
     private final Float referenceVoltage;
 
-    public DrlReference(String path, Float drivenRightLegVoltage, Float referenceVoltage) {
-        super(path);
+    public DrlReference(long time, Float drivenRightLegVoltage, Float referenceVoltage) {
+        super(time);
         this.drivenRightLegVoltage = drivenRightLegVoltage;
         this.referenceVoltage = referenceVoltage;
     }

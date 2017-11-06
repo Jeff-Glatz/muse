@@ -1,16 +1,16 @@
-package kungzhi.muse.osc;
+package kungzhi.muse.model;
 
 public class Battery
-        extends AbstractSignal {
+        extends AbstractModel {
     private final Integer stateOfCharge;
     private final Integer fuelGuageVoltage;
     private final Integer adcVoltage;
     private final Integer temperature;
 
-    public Battery(String path, Integer stateOfCharge,
+    public Battery(long time, Integer stateOfCharge,
                    Integer fuelGuageVoltage, Integer adcVoltage,
                    Integer temperature) {
-        super(path);
+        super(time);
         this.stateOfCharge = stateOfCharge;
         this.fuelGuageVoltage = fuelGuageVoltage;
         this.adcVoltage = adcVoltage;

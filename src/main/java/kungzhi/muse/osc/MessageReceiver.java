@@ -125,6 +125,18 @@ public class MessageReceiver {
                 .withHandler("/muse/config",
                         new ConfigurationTransformer(),
                         new ConfigurationStream())
+                .withHandler("/muse/version",
+                        new VersionTransformer(),
+                        (session, model) -> {
+                        })
+                .withHandler("/muse/batt",
+                        new BatteryTransformer(),
+                        (session, model) -> {
+                        })
+                .withHandler("/muse/drlref",
+                        new DrlReferenceTransformer(),
+                        (session, model) -> {
+                        })
                 .withHandler("/muse/eeg",
                         new EegTransformer(),
                         (session, model) -> {
@@ -257,18 +269,6 @@ public class MessageReceiver {
                         (session, model) -> {
                         })
                 .withHandler("/muse/elements/experimental/mellow",
-                        (time, message) -> null,
-                        (session, model) -> {
-                        })
-                .withHandler("/muse/drlref",
-                        (time, message) -> null,
-                        (session, model) -> {
-                        })
-                .withHandler("/muse/version",
-                        (time, message) -> null,
-                        (session, model) -> {
-                        })
-                .withHandler("/muse/batt",
                         (time, message) -> null,
                         (session, model) -> {
                         })
