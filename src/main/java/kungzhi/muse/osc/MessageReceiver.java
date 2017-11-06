@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.Objects;
 
 import static de.sciss.net.OSCServer.newUsing;
 import static java.lang.Thread.currentThread;
@@ -152,22 +153,48 @@ public class MessageReceiver {
                 .withHandler("/muse/elements/gamma_absolute",
                         new BandPowerTransformer(bands.load("gamma"), false),
                         (session, model) -> {
+                            System.out.println("G:" + model.values()
+                                    .filter(Objects::nonNull)
+                                    .mapToDouble(value -> value)
+                                    .average()
+                                    .getAsDouble());
                         })
                 .withHandler("/muse/elements/delta_relative",
                         new BandPowerTransformer(bands.load("delta"), true),
                         (session, model) -> {
+                            System.out.println("D:" + model.values()
+                                    .filter(Objects::nonNull)
+                                    .mapToDouble(value -> value)
+                                    .average()
+                                    .getAsDouble());
                         })
                 .withHandler("/muse/elements/theta_relative",
                         new BandPowerTransformer(bands.load("theta"), true),
                         (session, model) -> {
+                            System.out.println("T:" + model.values()
+                                    .filter(Objects::nonNull)
+                                    .mapToDouble(value -> value)
+                                    .average()
+                                    .getAsDouble());
+
                         })
                 .withHandler("/muse/elements/alpha_relative",
                         new BandPowerTransformer(bands.load("alpha"), true),
                         (session, model) -> {
+                            System.out.println("A:" + model.values()
+                                    .filter(Objects::nonNull)
+                                    .mapToDouble(value -> value)
+                                    .average()
+                                    .getAsDouble());
                         })
                 .withHandler("/muse/elements/beta_relative",
                         new BandPowerTransformer(bands.load("beta"), true),
                         (session, model) -> {
+                            System.out.println("B:" + model.values()
+                                    .filter(Objects::nonNull)
+                                    .mapToDouble(value -> value)
+                                    .average()
+                                    .getAsDouble());
                         })
                 .withHandler("/muse/elements/gamma_relative",
                         new BandPowerTransformer(bands.load("gamma"), true),
@@ -176,12 +203,10 @@ public class MessageReceiver {
                 .withHandler("/muse/elements/delta_session_score",
                         new SessionScoreTransformer(bands.load("delta")),
                         (session, model) -> {
-                            System.out.println(model);
                         })
                 .withHandler("/muse/elements/theta_session_score",
                         new SessionScoreTransformer(bands.load("theta")),
                         (session, model) -> {
-                            System.out.println(model);
                         })
                 .withHandler("/muse/elements/alpha_session_score",
                         new SessionScoreTransformer(bands.load("alpha")),
