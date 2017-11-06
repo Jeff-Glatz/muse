@@ -1,13 +1,20 @@
 package kungzhi.muse.model;
 
-import java.io.Serializable;
 import java.util.Collection;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
 public class Configuration
-        implements Serializable {
+        extends AbstractModel {
     private final SortedSet<EegChannel> eegChannelLayout = new TreeSet<>();
+
+    public Configuration() {
+        super(0);
+    }
+
+    public Configuration(long time) {
+        super(time);
+    }
 
     public SortedSet<EegChannel> getEegChannelLayout() {
         return eegChannelLayout;
@@ -38,6 +45,7 @@ public class Configuration
     }
 
     public void updateFrom(Configuration that) {
+        setTime(that.getTime());
         setEegChannelLayout(that.eegChannelLayout);
     }
 
@@ -45,6 +53,7 @@ public class Configuration
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
 
         Configuration that = (Configuration) o;
 
@@ -53,6 +62,8 @@ public class Configuration
 
     @Override
     public int hashCode() {
-        return eegChannelLayout.hashCode();
+        int result = super.hashCode();
+        result = 31 * result + eegChannelLayout.hashCode();
+        return result;
     }
 }

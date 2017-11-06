@@ -17,7 +17,7 @@ public class ConfigurationTransformer
     public Configuration fromMessage(OSCMessage message, long time)
             throws Exception {
         Any json = deserialize(argumentAt(message, String.class, 0));
-        Configuration configuration = new Configuration();
+        Configuration configuration = new Configuration(time);
         Stream.of(json.toString("eeg_channel_layout").trim().split(" "))
                 .map(Sensor::valueOf)
                 .forEach(configuration::withEegChannelInLayout);

@@ -2,19 +2,18 @@ package kungzhi.muse.osc;
 
 import de.sciss.net.OSCMessage;
 import kungzhi.muse.controller.Controller;
+import kungzhi.muse.model.Model;
 import kungzhi.muse.model.Session;
 
-import java.io.Serializable;
-
-class DefaultMessageHandler<Model extends Serializable>
+class DefaultMessageHandler<M extends Model>
         implements MessageHandler {
     private final Session session;
-    private final MessageTransformer<Model> transformer;
-    private final Controller<Model> controller;
+    private final MessageTransformer<M> transformer;
+    private final Controller<M> controller;
 
     public DefaultMessageHandler(Session session,
-                                 MessageTransformer<Model> transformer,
-                                 Controller<Model> controller) {
+                                 MessageTransformer<M> transformer,
+                                 Controller<M> controller) {
         this.session = session;
         this.transformer = transformer;
         this.controller = controller;

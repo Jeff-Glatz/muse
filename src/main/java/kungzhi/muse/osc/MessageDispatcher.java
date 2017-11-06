@@ -4,6 +4,7 @@ import de.sciss.net.OSCListener;
 import de.sciss.net.OSCMessage;
 import kungzhi.muse.controller.Controller;
 import kungzhi.muse.model.Configuration;
+import kungzhi.muse.model.Model;
 import kungzhi.muse.model.Session;
 import kungzhi.muse.model.SessionListener;
 import org.slf4j.Logger;
@@ -11,14 +12,8 @@ import org.slf4j.LoggerFactory;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
-import java.io.Serializable;
 import java.net.SocketAddress;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import static de.sciss.net.OSCPacket.printTextOn;
 import static java.lang.String.format;
@@ -36,8 +31,8 @@ public class MessageDispatcher
         this.currentConfiguration = currentConfiguration;
     }
 
-    public <Model extends Serializable> MessageDispatcher withHandler(
-            String path, MessageTransformer<Model> transformer, Controller<Model> controller) {
+    public <M extends Model> MessageDispatcher withHandler(
+            String path, MessageTransformer<M> transformer, Controller<M> controller) {
         messageHandlers.put(path, new DefaultMessageHandler<>(this, transformer, controller));
         return this;
     }
