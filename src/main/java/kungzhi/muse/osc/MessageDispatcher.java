@@ -2,11 +2,11 @@ package kungzhi.muse.osc;
 
 import de.sciss.net.OSCListener;
 import de.sciss.net.OSCMessage;
-import kungzhi.muse.controller.Controller;
 import kungzhi.muse.model.Configuration;
 import kungzhi.muse.model.Model;
 import kungzhi.muse.model.Session;
 import kungzhi.muse.model.SessionListener;
+import kungzhi.muse.stream.ModelStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,8 +32,8 @@ public class MessageDispatcher
     }
 
     public <M extends Model> MessageDispatcher withHandler(
-            String path, MessageTransformer<M> transformer, Controller<M> controller) {
-        messageHandlers.put(path, new DefaultMessageHandler<>(this, transformer, controller));
+            String path, MessageTransformer<M> transformer, ModelStream<M> stream) {
+        messageHandlers.put(path, new DefaultMessageHandler<>(this, transformer, stream));
         return this;
     }
 

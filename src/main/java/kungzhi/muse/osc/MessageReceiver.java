@@ -1,15 +1,14 @@
 package kungzhi.muse.osc;
 
 import de.sciss.net.OSCServer;
-import kungzhi.muse.controller.ConfigurationController;
 import kungzhi.muse.model.Configuration;
 import kungzhi.muse.repository.Bands;
 import kungzhi.muse.repository.BandsImpl;
+import kungzhi.muse.stream.ConfigurationStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.util.Objects;
 
 import static de.sciss.net.OSCServer.newUsing;
 import static java.lang.Thread.currentThread;
@@ -125,7 +124,7 @@ public class MessageReceiver {
         MessageReceiver receiver = new MessageReceiver(new MessageDispatcher(new Configuration())
                 .withHandler("/muse/config",
                         new ConfigurationTransformer(),
-                        new ConfigurationController())
+                        new ConfigurationStream())
                 .withHandler("/muse/eeg",
                         new EegTransformer(),
                         (session, model) -> {
