@@ -153,48 +153,28 @@ public class MessageReceiver {
                 .withHandler("/muse/elements/gamma_absolute",
                         new BandPowerTransformer(bands.load("gamma"), false),
                         (session, model) -> {
-                            System.out.println("G:" + model.values()
-                                    .filter(Objects::nonNull)
-                                    .mapToDouble(value -> value)
-                                    .average()
-                                    .getAsDouble());
+                            System.out.println("G:" + model.average());
                         })
                 .withHandler("/muse/elements/delta_relative",
                         new BandPowerTransformer(bands.load("delta"), true),
                         (session, model) -> {
-                            System.out.println("D:" + model.values()
-                                    .filter(Objects::nonNull)
-                                    .mapToDouble(value -> value)
-                                    .average()
-                                    .getAsDouble());
+                            System.out.println("D:" + model.average());
                         })
                 .withHandler("/muse/elements/theta_relative",
                         new BandPowerTransformer(bands.load("theta"), true),
                         (session, model) -> {
-                            System.out.println("T:" + model.values()
-                                    .filter(Objects::nonNull)
-                                    .mapToDouble(value -> value)
-                                    .average()
-                                    .getAsDouble());
+                            System.out.println("T:" + model.average());
 
                         })
                 .withHandler("/muse/elements/alpha_relative",
                         new BandPowerTransformer(bands.load("alpha"), true),
                         (session, model) -> {
-                            System.out.println("A:" + model.values()
-                                    .filter(Objects::nonNull)
-                                    .mapToDouble(value -> value)
-                                    .average()
-                                    .getAsDouble());
+                            System.out.println("A:" + model.average());
                         })
                 .withHandler("/muse/elements/beta_relative",
                         new BandPowerTransformer(bands.load("beta"), true),
                         (session, model) -> {
-                            System.out.println("B:" + model.values()
-                                    .filter(Objects::nonNull)
-                                    .mapToDouble(value -> value)
-                                    .average()
-                                    .getAsDouble());
+                            System.out.println("B:" + model.average());
                         })
                 .withHandler("/muse/elements/gamma_relative",
                         new BandPowerTransformer(bands.load("gamma"), true),

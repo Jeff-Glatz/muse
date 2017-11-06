@@ -1,5 +1,6 @@
 package kungzhi.muse.model;
 
+import java.util.Objects;
 import java.util.stream.Stream;
 
 public class SessionScore
@@ -23,6 +24,14 @@ public class SessionScore
 
     public Stream<Float> values() {
         return values.streamOf();
+    }
+
+    public Double average() {
+        return values()
+                .filter(Objects::nonNull)
+                .mapToDouble(value -> value)
+                .average()
+                .getAsDouble();
     }
 
     @Override
