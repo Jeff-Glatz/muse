@@ -9,17 +9,20 @@ import kungzhi.muse.model.SessionListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.Resource;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.io.Serializable;
 import java.net.SocketAddress;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import static de.sciss.net.OSCPacket.printTextOn;
 import static java.lang.String.format;
 
-@Resource
 public class MessageDispatcher
         implements Session, OSCListener {
     private final Logger log = LoggerFactory.getLogger(getClass());

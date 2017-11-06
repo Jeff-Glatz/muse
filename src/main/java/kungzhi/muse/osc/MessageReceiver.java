@@ -8,9 +8,6 @@ import kungzhi.muse.repository.BandsImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
-import javax.annotation.Resource;
 import java.io.IOException;
 
 import static de.sciss.net.OSCServer.newUsing;
@@ -68,7 +65,6 @@ import static java.lang.Thread.currentThread;
  * to OSC URL:
  * osc.tcp://127.0.0.1:5000
  */
-@Resource
 public class MessageReceiver {
     private final Logger log = LoggerFactory.getLogger(getClass());
     private final MessageDispatcher dispatcher;
@@ -107,15 +103,15 @@ public class MessageReceiver {
         return this;
     }
 
-    @PostConstruct
     public void on()
             throws IOException {
+        log.info("starting {} receiver on port {}...", protocol, port);
         server = newUsing(protocol, port);
         server.addOSCListener(dispatcher);
         server.start();
+        log.info("started {} receiver on port {}.", protocol, port);
     }
 
-    @PreDestroy
     public void off()
             throws IOException {
         server.stop();
