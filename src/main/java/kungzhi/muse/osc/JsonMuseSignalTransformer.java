@@ -1,5 +1,6 @@
 package kungzhi.muse.osc;
 
+import com.google.protobuf.GeneratedMessageLite;
 import com.jsoniter.any.Any;
 import de.sciss.net.OSCMessage;
 import org.slf4j.Logger;
@@ -8,17 +9,17 @@ import org.slf4j.LoggerFactory;
 import static com.jsoniter.JsonIterator.deserialize;
 import static kungzhi.muse.osc.OSCMessageHelper.argumentAt;
 
-public abstract class JsonSignalFactory<S extends Signal>
-        implements SignalFactory<S> {
+public abstract class JsonMuseSignalTransformer<Payload extends GeneratedMessageLite<?, ?>>
+        implements MuseSignalTransformer<Payload> {
     private final Logger log = LoggerFactory.getLogger(getClass());
 
     @Override
-    public final S create(OSCMessage message)
+    public final MuseSignal<Payload> fromOsc(OSCMessage message)
             throws Exception {
         Any json = deserialize(argumentAt(message, String.class, 0));
-        return create(message.getName(), json);
+        return fromOsc(message.getName(), json);
     }
 
-    protected abstract S create(String path, Any json)
+    protected abstract MuseSignal<Payload> fromOsc(String path, Any json)
             throws Exception;
 }

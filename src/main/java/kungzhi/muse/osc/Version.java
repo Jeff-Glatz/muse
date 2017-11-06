@@ -1,15 +1,17 @@
 package kungzhi.muse.osc;
 
+import kungzhi.muse.osc.SignalSerializer.MuseVersion;
+
 public class Version
         extends AbstractSignal {
-    private final Serializer.MuseVersion delegate;
+    private final MuseVersion delegate;
 
-    public Version(String path, Serializer.MuseVersion delegate) {
+    public Version(String path, MuseVersion delegate) {
         super(path);
         this.delegate = delegate;
     }
 
-    public Serializer.MuseVersion getDelegate() {
+    public MuseVersion getDelegate() {
         return delegate;
     }
 }

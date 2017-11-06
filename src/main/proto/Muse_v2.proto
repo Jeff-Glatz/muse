@@ -78,7 +78,7 @@
 syntax = "proto2";
 package interaxon.muse_data;
 option java_package = "kungzhi.muse.osc";
-option java_outer_classname = "Serializer";
+option java_outer_classname = "SignalSerializer";
 option optimize_for = LITE_RUNTIME;
 
 

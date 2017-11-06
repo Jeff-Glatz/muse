@@ -3,7 +3,7 @@ package kungzhi.muse.osc;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.jsoniter.any.Any;
 
-import static kungzhi.muse.osc.Serializer.MuseConfig.newBuilder;
+import static kungzhi.muse.osc.SignalSerializer.MuseConfig.newBuilder;
 
 public class ConfigurationFactory
         extends JsonSignalFactory<Configuration> {

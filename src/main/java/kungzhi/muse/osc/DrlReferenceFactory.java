@@ -4,7 +4,7 @@ import de.sciss.net.OSCMessage;
 
 import java.io.IOException;
 
-import static kungzhi.muse.osc.MessageHelper.argumentAt;
+import static kungzhi.muse.osc.OSCMessageHelper.argumentAt;
 
 public class DrlReferenceFactory
         implements SignalFactory<DrlReference> {

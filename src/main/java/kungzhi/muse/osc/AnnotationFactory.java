@@ -4,7 +4,7 @@ import com.jsoniter.any.Any;
 
 import java.io.IOException;
 
-import static kungzhi.muse.osc.Serializer.Annotation.newBuilder;
+import static kungzhi.muse.osc.SignalSerializer.Annotation.newBuilder;
 
 public class AnnotationFactory
         extends JsonSignalFactory<Annotation> {

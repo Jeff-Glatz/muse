@@ -21,6 +21,8 @@
                 <version>0.5.1</version>
                 <configuration>
                     <protocExecutable>/usr/local/bin/protoc</protocExecutable>
+                    <outputDirectory>${basedir}/src/main/java</outputDirectory>
+                    <clearOutputDirectory>false</clearOutputDirectory>
                 </configuration>
                 <executions>
                     <execution>

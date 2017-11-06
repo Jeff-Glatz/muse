@@ -1,8 +1,11 @@
 package kungzhi.muse.main;
 
 import de.sciss.net.OSCServer;
-import kungzhi.muse.osc.*;
-import kungzhi.muse.osc.Serializer.MuseVersion;
+import kungzhi.muse.osc.Battery;
+import kungzhi.muse.osc.Signal;
+import kungzhi.muse.osc.SignalMetadata;
+import kungzhi.muse.osc.SignalSerializer.MuseVersion;
+import kungzhi.muse.osc.Version;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,18 +45,18 @@ public class Main {
                     return;
                 }
                 collectPath(metadata);
-                if (metadata.isExperimental() ||
-                        metadata == BATTERY) {
+//                if (metadata.isExperimental() ||
+//                        metadata == BATTERY) {
                     printTextOn(System.out, message);
-                }
-                Signal signal = metadata.create(message);
-                switch (metadata) {
-                    case BATTERY:
-                        printBatteryStatus(as(signal));
-                        break;
-                    case VERSION:
-                        printVersion(as(signal));
-                }
+//                }
+//                Signal signal = metadata.create(message);
+//                switch (metadata) {
+//                    case BATTERY:
+//                        printBatteryStatus(as(signal));
+//                        break;
+//                    case VERSION:
+//                        printVersion(as(signal));
+//                }
             } catch (Exception e) {
                 log.error("Failure processing OSC message", e);
             }
@@ -76,11 +79,11 @@ public class Main {
 
     private void printBatteryStatus(Battery battery) {
         log.info(new StringBuilder("\n")
-                .append("state of charge: {}\n")
-                .append("percent remaining: {}%\n")
-                .append("fuel gauge voltage: {}\n")
-                .append("adc voltage: {}\n")
-                .append("temperature: {}\n").toString(),
+                        .append("state of charge: {}\n")
+                        .append("percent remaining: {}%\n")
+                        .append("fuel gauge voltage: {}\n")
+                        .append("adc voltage: {}\n")
+                        .append("temperature: {}\n").toString(),
                 battery.getStateOfCharge(),
                 battery.getPercentRemaining(),
                 battery.getFuelGuageVoltage(),

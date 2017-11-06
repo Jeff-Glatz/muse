@@ -2,7 +2,7 @@ package kungzhi.muse.osc;
 
 import de.sciss.net.OSCMessage;
 
-import static kungzhi.muse.osc.MessageHelper.argumentAt;
+import static kungzhi.muse.osc.OSCMessageHelper.argumentAt;
 
 public class BatteryFactory
         implements SignalFactory<Battery> {

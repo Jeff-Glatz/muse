@@ -1,10 +1,12 @@
 package kungzhi.muse.osc;
 
+import kungzhi.muse.osc.SignalSerializer.MuseConfig;
+
 public class Configuration
         extends AbstractSignal {
-    private final Serializer.MuseConfig delegate;
+    private final MuseConfig delegate;
 
-    public Configuration(String path, Serializer.MuseConfig delegate) {
+    public Configuration(String path, MuseConfig delegate) {
         super(path);
         this.delegate = delegate;
     }
