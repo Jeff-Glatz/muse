@@ -114,7 +114,9 @@ public class MessageReceiver {
 
     public void off()
             throws IOException {
-        server.stop();
+        if (server != null) {
+            server.stop();
+        }
     }
 
     public static void main(String[] args)
@@ -281,6 +283,8 @@ public class MessageReceiver {
         try {
             receiver.on();
             currentThread().suspend();
+        } catch (Exception e) {
+            receiver.log.error("Failure turning on receiver", e);
         } finally {
             receiver.off();
         }
