@@ -1,11 +1,16 @@
 package kungzhi.muse.osc;
 
 import de.sciss.net.OSCServer;
+import kungzhi.muse.controller.ConfigurationController;
+import kungzhi.muse.model.Configuration;
 import kungzhi.muse.repository.Bands;
 import kungzhi.muse.repository.BandsImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import javax.annotation.Resource;
 import java.io.IOException;
 
 import static de.sciss.net.OSCServer.newUsing;
@@ -63,13 +68,14 @@ import static java.lang.Thread.currentThread;
  * to OSC URL:
  * osc.tcp://127.0.0.1:5000
  */
+@Resource
 public class MessageReceiver {
+    private final Logger log = LoggerFactory.getLogger(getClass());
     private final MessageDispatcher dispatcher;
 
     private String protocol;
     private int port;
     private OSCServer server;
-
 
     public MessageReceiver(MessageDispatcher dispatcher) {
         this.dispatcher = dispatcher;
@@ -119,29 +125,54 @@ public class MessageReceiver {
             throws Exception {
         Bands bands = new BandsImpl()
                 .withStandardBands();
-        MessageReceiver receiver = new MessageReceiver(new MessageDispatcher()
-                .withTransformer("/muse/elements/low_freqs_absolute",
-                        new BandPowerTransformer(bands.band("low"), false))
-                .withTransformer("/muse/elements/delta_absolute",
-                        new BandPowerTransformer(bands.band("delta"), false))
-                .withTransformer("/muse/elements/theta_absolute",
-                        new BandPowerTransformer(bands.band("theta"), false))
-                .withTransformer("/muse/elements/alpha_absolute",
-                        new BandPowerTransformer(bands.band("alpha"), false))
-                .withTransformer("/muse/elements/beta_absolute",
-                        new BandPowerTransformer(bands.band("beta"), false))
-                .withTransformer("/muse/elements/gamma_absolute",
-                        new BandPowerTransformer(bands.band("gamma"), false))
-                .withTransformer("/muse/elements/delta_relative",
-                        new BandPowerTransformer(bands.band("delta"), true))
-                .withTransformer("/muse/elements/theta_relative",
-                        new BandPowerTransformer(bands.band("theta"), true))
-                .withTransformer("/muse/elements/alpha_relative",
-                        new BandPowerTransformer(bands.band("alpha"), true))
-                .withTransformer("/muse/elements/beta_relative",
-                        new BandPowerTransformer(bands.band("beta"), true))
-                .withTransformer("/muse/elements/gamma_relative",
-                        new BandPowerTransformer(bands.band("gamma"), true)));
+        MessageReceiver receiver = new MessageReceiver(new MessageDispatcher(new Configuration())
+                .withHandler("/muse/config",
+                        new ConfigurationTransformer(),
+                        new ConfigurationController())
+                .withHandler("/muse/elements/low_freqs_absolute",
+                        new BandPowerTransformer(bands.band("low"), false),
+                        (session, model) -> {
+                        })
+                .withHandler("/muse/elements/delta_absolute",
+                        new BandPowerTransformer(bands.band("delta"), false),
+                        (session, model) -> {
+                        })
+                .withHandler("/muse/elements/theta_absolute",
+                        new BandPowerTransformer(bands.band("theta"), false),
+                        (session, model) -> {
+                        })
+                .withHandler("/muse/elements/alpha_absolute",
+                        new BandPowerTransformer(bands.band("alpha"), false),
+                        (session, model) -> {
+                        })
+                .withHandler("/muse/elements/beta_absolute",
+                        new BandPowerTransformer(bands.band("beta"), false),
+                        (session, model) -> {
+                        })
+                .withHandler("/muse/elements/gamma_absolute",
+                        new BandPowerTransformer(bands.band("gamma"), false),
+                        (session, model) -> {
+                        })
+                .withHandler("/muse/elements/delta_relative",
+                        new BandPowerTransformer(bands.band("delta"), true),
+                        (session, model) -> {
+                        })
+                .withHandler("/muse/elements/theta_relative",
+                        new BandPowerTransformer(bands.band("theta"), true),
+                        (session, model) -> {
+                        })
+                .withHandler("/muse/elements/alpha_relative",
+                        new BandPowerTransformer(bands.band("alpha"), true),
+                        (session, model) -> {
+                        })
+                .withHandler("/muse/elements/beta_relative",
+                        new BandPowerTransformer(bands.band("beta"), true),
+                        (session, model) -> {
+                        })
+                .withHandler("/muse/elements/gamma_relative",
+                        new BandPowerTransformer(bands.band("gamma"), true),
+                        (session, model) -> {
+                        }));
         receiver.setProtocol("tcp");
         receiver.setPort(5000);
         try {
