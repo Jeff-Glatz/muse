@@ -1,25 +1,20 @@
 package kungzhi.muse.model;
 
 import java.io.Serializable;
-import java.util.List;
-
-import static java.util.Arrays.asList;
+import java.util.Arrays;
+import java.util.stream.Stream;
 
 public class BandPower
         implements Serializable {
     private final Band band;
     private final boolean relative;
-    private final List<Float> values;
+    private final long time;
+    private final Float[] values;
 
-    public BandPower(Band band, boolean relative, Float... values) {
+    public BandPower(Band band, boolean relative, long time, Float... values) {
         this.band = band;
         this.relative = relative;
-        this.values = asList(values);
-    }
-
-    public  BandPower(Band band, boolean relative, List<Float> values) {
-        this.band = band;
-        this.relative = relative;
+        this.time = time;
         this.values = values;
     }
 
@@ -31,17 +26,20 @@ public class BandPower
         return relative;
     }
 
-    public List<Float> getValues() {
+    public long getTime() {
+        return time;
+    }
+
+    public Float[] getValues() {
         return values;
     }
 
-    public void setValues(List<Float> values) {
-        this.values.clear();
-        this.values.addAll(values);
+    public Float forChannel(EegChannel channel) {
+        return values[channel.getIndex()];
     }
 
-    public Float forChannel(EegChannel channel) {
-        return values.get(channel.getIndex());
+    public Stream<Float> values() {
+        return Stream.of(values);
     }
 
     @Override
@@ -52,15 +50,18 @@ public class BandPower
         BandPower bandPower = (BandPower) o;
 
         if (relative != bandPower.relative) return false;
+        if (time != bandPower.time) return false;
         if (band != null ? !band.equals(bandPower.band) : bandPower.band != null) return false;
-        return values != null ? values.equals(bandPower.values) : bandPower.values == null;
+        // Probably incorrect - comparing Object[] arrays with Arrays.equals
+        return Arrays.equals(values, bandPower.values);
     }
 
     @Override
     public int hashCode() {
         int result = band != null ? band.hashCode() : 0;
         result = 31 * result + (relative ? 1 : 0);
-        result = 31 * result + (values != null ? values.hashCode() : 0);
+        result = 31 * result + (int) (time ^ (time >>> 32));
+        result = 31 * result + Arrays.hashCode(values);
         return result;
     }
 }

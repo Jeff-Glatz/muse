@@ -4,10 +4,10 @@ import de.sciss.net.OSCMessage;
 import kungzhi.muse.model.Band;
 import kungzhi.muse.model.BandPower;
 
-import static kungzhi.muse.osc.OSCMessageHelper.collectArguments;
+import static kungzhi.muse.osc.MessageHelper.collectArguments;
 
 public class BandPowerTransformer
-        implements OSCMessageTransformer<BandPower> {
+        implements MessageTransformer<BandPower> {
     private final Band band;
     private final boolean relative;
 
@@ -17,8 +17,8 @@ public class BandPowerTransformer
     }
 
     @Override
-    public BandPower fromMessage(OSCMessage message)
+    public BandPower fromMessage(OSCMessage message, long time)
             throws Exception {
-        return new BandPower(band, relative, collectArguments(message));
+        return new BandPower(band, relative, time, collectArguments(message));
     }
 }

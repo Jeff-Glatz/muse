@@ -7,7 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import static com.jsoniter.JsonIterator.deserialize;
-import static kungzhi.muse.osc.OSCMessageHelper.argumentAt;
+import static kungzhi.muse.osc.MessageHelper.argumentAt;
 
 public abstract class JsonMuseSignalTransformer<Payload extends GeneratedMessageLite<?, ?>>
         implements MuseSignalTransformer<Payload> {

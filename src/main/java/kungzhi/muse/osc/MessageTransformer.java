@@ -4,7 +4,7 @@ import de.sciss.net.OSCMessage;
 
 import java.io.Serializable;
 
-public interface OSCMessageTransformer<D extends Serializable> {
-    D fromMessage(OSCMessage message)
+public interface MessageTransformer<Model extends Serializable> {
+    Model fromMessage(OSCMessage message, long time)
             throws Exception;
 }
