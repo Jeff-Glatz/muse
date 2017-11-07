@@ -20,7 +20,7 @@ import java.util.concurrent.ExecutorService;
 
 import static java.lang.System.currentTimeMillis;
 import static kungzhi.muse.osc.Path.THETA_ABSOLUTE;
-import static kungzhi.muse.ui.AsyncModelStream.onApplicationThread;
+import static kungzhi.muse.ui.AsyncModelStream.onFxApplicationThread;
 
 public class MuseApplication
         extends Application {
@@ -76,7 +76,7 @@ public class MuseApplication
         series.setName("Theta Absolute");
         long start = System.currentTimeMillis();
         dispatcher.withStream(THETA_ABSOLUTE, BandPower.class,
-                onApplicationThread(executorService, (session, model) -> {
+                onFxApplicationThread((session, model) -> {
                     long timestamp = currentTimeMillis() - start;
                     double average = model.average();
                     ObservableList<XYChart.Data<Number, Number>> data = series.getData();
