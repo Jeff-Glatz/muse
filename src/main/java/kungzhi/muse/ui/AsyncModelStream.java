@@ -42,7 +42,7 @@ public class AsyncModelStream<M extends Model>
         });
     }
 
-    public static <M extends Model> ModelStream<M> inBackground(Executor executor, ModelStream<M> delegate) {
+    public static <M extends Model> ModelStream<M> onApplicationThread(Executor executor, ModelStream<M> delegate) {
         return new AsyncModelStream<>(executor, delegate);
     }
 }
