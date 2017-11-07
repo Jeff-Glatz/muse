@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PreDestroy;
 import java.io.IOException;
+import java.net.InetSocketAddress;
 
 import static de.sciss.net.OSCServer.newUsing;
 import static java.lang.Thread.currentThread;
@@ -73,7 +74,9 @@ public class MessageReceiver {
     private final MessageDispatcher dispatcher;
 
     private String protocol;
+    private String host;
     private int port;
+    private InetSocketAddress localAddress;
     private OSCServer server;
 
     public MessageReceiver(MessageDispatcher dispatcher) {
@@ -93,6 +96,19 @@ public class MessageReceiver {
         return this;
     }
 
+    public String getHost() {
+        return host;
+    }
+
+    public void setHost(String host) {
+        this.host = host;
+    }
+
+    public MessageReceiver withHost(String host) {
+        this.host = host;
+        return this;
+    }
+
     public int getPort() {
         return port;
     }
@@ -108,20 +124,21 @@ public class MessageReceiver {
 
     public void on()
             throws IOException {
-        log.info("starting {} receiver on port {}...", protocol, port);
-        server = newUsing(protocol, port);
+        localAddress = new InetSocketAddress(host, port);
+        log.info("starting {} receiver on {}...", protocol, localAddress);
+        server = newUsing(protocol, localAddress);
         server.addOSCListener(dispatcher);
         server.start();
-        log.info("started {} receiver on port {}.", protocol, port);
+        log.info("started {} receiver on {}.", protocol, localAddress);
     }
 
     @PreDestroy
     public void off()
             throws IOException {
         if (server != null) {
-            log.info("stopping {} receiver on port {}...", protocol, port);
+            log.info("stopping {} receiver on {}...", protocol, localAddress);
             server.stop();
-            log.info("stopped {} receiver on port {}.", protocol, port);
+            log.info("stopped {} receiver on {}.", protocol, localAddress);
         }
     }
 

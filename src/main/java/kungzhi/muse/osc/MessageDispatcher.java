@@ -100,6 +100,7 @@ public class MessageDispatcher
     @Override
     public void messageReceived(OSCMessage message, SocketAddress sender, long time) {
         String path = message.getName();
+        log.info("Received message on {} from {}", path, sender);
         try {
             MessageTransformer transformer = transformer(path);
             ModelStream stream = stream(path);
