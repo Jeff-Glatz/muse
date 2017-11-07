@@ -14,6 +14,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.concurrent.ExecutorService;
+
+import static java.lang.Runtime.getRuntime;
+import static java.util.concurrent.Executors.newFixedThreadPool;
+
 @Configuration
 @ComponentScan({
         "kungzhi.muse.config",
@@ -23,6 +28,12 @@ import org.springframework.context.annotation.Configuration;
 })
 @EnableAutoConfiguration
 public class MuseConfiguration {
+
+    @Bean(destroyMethod = "shutdown")
+    public ExecutorService executorService() {
+        return newFixedThreadPool(getRuntime()
+                .availableProcessors());
+    }
 
     @Bean
     public MessageDispatcher messageDispatcher(MuseSession museSession, Bands bands) {

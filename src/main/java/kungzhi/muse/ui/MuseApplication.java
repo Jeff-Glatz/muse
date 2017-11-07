@@ -2,7 +2,9 @@ package kungzhi.muse.ui;
 
 import javafx.application.Application;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.scene.Scene;
+import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
@@ -16,8 +18,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ConfigurableApplicationContext;
 
-import static java.lang.System.nanoTime;
-import static kungzhi.muse.osc.Path.THETA_RELATIVE;
+import java.util.concurrent.ExecutorService;
+
+import static java.lang.String.valueOf;
+import static java.lang.System.currentTimeMillis;
+import static kungzhi.muse.osc.Path.THETA_ABSOLUTE;
 
 public class MuseApplication
         extends Application {
@@ -37,29 +42,58 @@ public class MuseApplication
     @Override
     public void start(Stage stage)
             throws Exception {
-        MessageDispatcher dispatcher = dispatcher();
-        MessageReceiver receiver = receiver()
+        ExecutorService executorService = context.getBean(ExecutorService.class);
+        MessageDispatcher dispatcher = context.getBean(MessageDispatcher.class);
+        MessageReceiver receiver = context.getBean(MessageReceiver.class)
                 .withProtocol("udp")
                 .onAddress(5000);
 
         stage.setTitle("Muse EEG Feed");
-        //defining the axes
-        final NumberAxis xAxis = new NumberAxis();
-        final NumberAxis yAxis = new NumberAxis();
-        xAxis.setLabel("Timestamp");
-        //creating the chart
-        final LineChart<Number, Number> lineChart =
-                new LineChart<>(xAxis, yAxis);
 
+        //defining the axes
+        final CategoryAxis xAxis = new CategoryAxis();
+        xAxis.setLabel("Timestamp");
+        xAxis.setAutoRanging(true);
+        xAxis.setAnimated(true);
+        final NumberAxis yAxis = new NumberAxis();
+        yAxis.setLabel("Absolute Power");
+        yAxis.setAutoRanging(false);
+        yAxis.setLowerBound(0);
+        yAxis.setUpperBound(1);
+        yAxis.setAnimated(true);
+
+        //creating the chart
+        final LineChart<String, Number> lineChart =
+                new LineChart<>(xAxis, yAxis);
         lineChart.setTitle("Brainwave Monitoring");
+        lineChart.setAnimated(true);
+        lineChart.setVerticalGridLinesVisible(false);
+        lineChart.setCreateSymbols(false);
 
         //defining a series
-        XYChart.Series series = new XYChart.Series();
-        series.setName("Theta Relative");
-        dispatcher.withStream(THETA_RELATIVE, BandPower.class, (session, model) -> {
-            log.info("T: {}", model.average());
-            ObservableList data = series.getData();
-            data.add(new XYChart.Data(nanoTime(), model.average()));
+        XYChart.Series<String, Number> series = new XYChart.Series<>();
+        series.setName("Theta Absolute");
+        dispatcher.withStream(THETA_ABSOLUTE, BandPower.class, (session, model) -> {
+            long timestamp = currentTimeMillis();
+            double average = model.average();
+            log.info("{}", average);
+            executorService.submit(new Task<Double>() {
+                @Override
+                protected Double call()
+                        throws Exception {
+                    return average;
+                }
+
+                @Override
+                protected void succeeded() {
+                    ObservableList<XYChart.Data<String, Number>> data = series.getData();
+                    while (data.size() > 100) {
+                        data.remove(0);
+                    }
+                    data.add(new XYChart.Data<>(valueOf(timestamp), average));
+                }
+            });
+
         });
 
         // Start streaming messages
@@ -71,14 +105,6 @@ public class MuseApplication
 
         stage.setScene(scene);
         stage.show();
-    }
-
-    private MessageDispatcher dispatcher() {
-        return context.getBean(MessageDispatcher.class);
-    }
-
-    private MessageReceiver receiver() {
-        return context.getBean(MessageReceiver.class);
     }
 
     public static void main(String[] args) {

@@ -52,7 +52,7 @@ public class MessageDispatcher
 
     public <M extends Model> MessageDispatcher withStream(
             Path path, Class<M> type, ModelStream<M> stream) {
-        return this.withStream(path.getPath(), type, stream);
+        return withStream(path.getPath(), type, stream);
     }
 
     public <M extends Model> MessageDispatcher streaming(
@@ -69,7 +69,6 @@ public class MessageDispatcher
     @Override
     public void messageReceived(OSCMessage message, SocketAddress sender, long time) {
         String path = message.getName();
-        log.info("Received message on {} from {}", path, sender);
         try {
             MessageTransformer transformer = transformer(path);
             ModelStream stream = stream(path);
