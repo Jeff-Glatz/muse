@@ -4,12 +4,14 @@ import com.jsoniter.any.Any;
 import de.sciss.net.OSCMessage;
 import kungzhi.muse.model.Configuration;
 import kungzhi.muse.model.Sensor;
+import org.springframework.stereotype.Component;
 
 import java.util.stream.Stream;
 
 import static com.jsoniter.JsonIterator.deserialize;
 import static kungzhi.muse.osc.MessageHelper.argumentAt;
 
+@Component
 public class ConfigurationTransformer
         implements MessageTransformer<Configuration> {
 

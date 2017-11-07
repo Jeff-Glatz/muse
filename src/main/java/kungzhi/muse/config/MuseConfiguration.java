@@ -1,135 +1,33 @@
-package kungzhi.muse.osc;
+package kungzhi.muse.config;
 
-import de.sciss.net.OSCServer;
-import kungzhi.muse.model.Configuration;
+import kungzhi.muse.osc.BandPowerTransformer;
+import kungzhi.muse.osc.BatteryTransformer;
+import kungzhi.muse.osc.ConfigurationTransformer;
+import kungzhi.muse.osc.DrlReferenceTransformer;
+import kungzhi.muse.osc.EegTransformer;
+import kungzhi.muse.osc.MessageDispatcher;
+import kungzhi.muse.osc.SessionScoreTransformer;
+import kungzhi.muse.osc.VersionTransformer;
 import kungzhi.muse.repository.Bands;
-import kungzhi.muse.repository.BandsImpl;
 import kungzhi.muse.stream.ConfigurationStream;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
 
-import javax.annotation.PreDestroy;
-import java.io.IOException;
+@Configuration
+@ComponentScan({
+        "kungzhi.muse.model",
+        "kungzhi.muse.osc",
+        "kungzhi.muse.repository",
+        "kungzhi.muse.stream"
+})
+@EnableAutoConfiguration
+public class MuseConfiguration {
 
-import static de.sciss.net.OSCServer.newUsing;
-import static java.lang.Thread.currentThread;
-
-/**
- * OSC messages will be emitted over OSC to paths:
- * <p>
- * /muse/eeg
- * /muse/eeg/dropped_samples
- * /muse/eeg/quantization
- * <p>
- * /muse/acc
- * /muse/acc/dropped_samples
- * <p>
- * /muse/elements/raw_fft0
- * /muse/elements/raw_fft1
- * /muse/elements/raw_fft2
- * /muse/elements/raw_fft3
- * /muse/elements/low_freqs_absolute
- * /muse/elements/delta_absolute
- * /muse/elements/theta_absolute
- * /muse/elements/alpha_absolute
- * /muse/elements/beta_absolute
- * /muse/elements/gamma_absolute
- * /muse/elements/delta_relative
- * /muse/elements/theta_relative
- * /muse/elements/alpha_relative
- * /muse/elements/beta_relative
- * /muse/elements/gamma_relative
- * /muse/elements/delta_session_score
- * /muse/elements/theta_session_score
- * /muse/elements/alpha_session_score
- * /muse/elements/beta_session_score
- * /muse/elements/gamma_session_score
- * /muse/elements/touching_forehead
- * /muse/elements/horseshoe
- * /muse/elements/is_good
- * /muse/elements/blink
- * /muse/elements/jaw_clench
- * <p>
- * /muse/elements/experimental/concentration
- * /muse/elements/experimental/mellow
- * <p>
- * /muse/batt
- * /muse/drlref
- * /muse/config
- * /muse/version
- * /muse/annotation
- * <p>
- * <p>
- * <p>
- * <p>
- * <p>
- * to OSC URL:
- * osc.tcp://127.0.0.1:5000
- */
-@Component
-public class MessageReceiver {
-    private final Logger log = LoggerFactory.getLogger(getClass());
-    private final MessageDispatcher dispatcher;
-
-    private String protocol;
-    private int port;
-    private OSCServer server;
-
-    public MessageReceiver(MessageDispatcher dispatcher) {
-        this.dispatcher = dispatcher;
-    }
-
-    public String getProtocol() {
-        return protocol;
-    }
-
-    public void setProtocol(String protocol) {
-        this.protocol = protocol;
-    }
-
-    public MessageReceiver withProtocol(String protocol) {
-        this.protocol = protocol;
-        return this;
-    }
-
-    public int getPort() {
-        return port;
-    }
-
-    public void setPort(int port) {
-        this.port = port;
-    }
-
-    public MessageReceiver withPort(int port) {
-        this.port = port;
-        return this;
-    }
-
-    public void on()
-            throws IOException {
-        log.info("starting {} receiver on port {}...", protocol, port);
-        server = newUsing(protocol, port);
-        server.addOSCListener(dispatcher);
-        server.start();
-        log.info("started {} receiver on port {}.", protocol, port);
-    }
-
-    @PreDestroy
-    public void off()
-            throws IOException {
-        if (server != null) {
-            log.info("stopping {} receiver on port {}...", protocol, port);
-            server.stop();
-            log.info("stopped {} receiver on port {}.", protocol, port);
-        }
-    }
-
-    public static void main(String[] args)
-            throws Exception {
-        Bands bands = new BandsImpl()
-                .withStandardBands();
-        MessageReceiver receiver = new MessageReceiver(new MessageDispatcher(new Configuration())
+    @Bean
+    public MessageDispatcher messageDispatcher(Bands bands) {
+        return new MessageDispatcher()
                 .streaming("/muse/config",
                         new ConfigurationTransformer(),
                         new ConfigurationStream())
@@ -283,16 +181,6 @@ public class MessageReceiver {
                 .streaming("/muse/annotation",
                         (time, message) -> null,
                         (session, model) -> {
-                        }));
-        receiver.setProtocol("tcp");
-        receiver.setPort(5000);
-        try {
-            receiver.on();
-            currentThread().suspend();
-        } catch (Exception e) {
-            receiver.log.error("Failure turning on receiver", e);
-        } finally {
-            receiver.off();
-        }
+                        });
     }
 }

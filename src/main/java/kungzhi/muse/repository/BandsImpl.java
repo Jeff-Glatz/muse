@@ -2,12 +2,15 @@ package kungzhi.muse.repository;
 
 import kungzhi.muse.model.Band;
 import kungzhi.muse.model.FrequencyRange;
+import org.springframework.stereotype.Repository;
 
+import javax.annotation.PostConstruct;
 import java.util.HashMap;
 import java.util.Map;
 
 import static java.lang.String.format;
 
+@Repository
 public class BandsImpl
         implements Bands {
     private final Map<String, Band> bands = new HashMap<>();
@@ -19,6 +22,7 @@ public class BandsImpl
         return this;
     }
 
+    @PostConstruct
     public BandsImpl withStandardBands() {
         return withBand("gamma", "30.0", "44.0").
                 withBand("beta", "13.0", "30.0").
