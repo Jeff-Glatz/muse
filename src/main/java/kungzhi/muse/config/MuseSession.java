@@ -15,6 +15,10 @@ public class MuseSession
     private final List<SessionListener> sessionListeners = new ArrayList<>();
     private final Configuration configuration;
 
+    private Version version;
+    private Battery battery;
+    private DrlReference drlReference;
+
     public MuseSession() {
         this(new Configuration());
     }
@@ -38,6 +42,21 @@ public class MuseSession
         return configuration;
     }
 
+    @Override
+    public Version getVersion() {
+        return version;
+    }
+
+    @Override
+    public Battery getBattery() {
+        return battery;
+    }
+
+    @Override
+    public DrlReference getDrlReference() {
+        return drlReference;
+    }
+
     public ModelStream<Configuration> asConfigurationStream() {
         return (session, configuration) -> {
             if (!this.configuration.equals(configuration)) {
@@ -52,16 +71,19 @@ public class MuseSession
 
     public ModelStream<Version> asVersionStream() {
         return (session, version) -> {
+            this.version = version;
         };
     }
 
     public ModelStream<Battery> asBatteryStream() {
         return (session, battery) -> {
+            this.battery = battery;
         };
     }
 
     public ModelStream<DrlReference> asDrlReferenceStream() {
         return (session, drlReference) -> {
+            this.drlReference = drlReference;
         };
     }
 }

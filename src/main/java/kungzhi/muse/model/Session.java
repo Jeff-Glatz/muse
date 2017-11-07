@@ -7,4 +7,10 @@ public interface Session {
     void removeSessionListener(SessionListener listener);
 
     Configuration getConfiguration();
+
+    Version getVersion();
+
+    Battery getBattery();
+
+    DrlReference getDrlReference();
 }
