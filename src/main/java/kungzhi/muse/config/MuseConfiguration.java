@@ -1,8 +1,14 @@
 package kungzhi.muse.config;
 
-import kungzhi.muse.osc.*;
+import kungzhi.muse.osc.BandPowerTransformer;
+import kungzhi.muse.osc.BatteryTransformer;
+import kungzhi.muse.osc.ConfigurationTransformer;
+import kungzhi.muse.osc.DrlReferenceTransformer;
+import kungzhi.muse.osc.EegTransformer;
+import kungzhi.muse.osc.MessageDispatcher;
+import kungzhi.muse.osc.SessionScoreTransformer;
+import kungzhi.muse.osc.VersionTransformer;
 import kungzhi.muse.repository.Bands;
-import kungzhi.muse.stream.ConfigurationStream;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -10,32 +16,29 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @ComponentScan({
+        "kungzhi.muse.config",
         "kungzhi.muse.model",
         "kungzhi.muse.osc",
-        "kungzhi.muse.repository",
-        "kungzhi.muse.stream"
+        "kungzhi.muse.repository"
 })
 @EnableAutoConfiguration
 public class MuseConfiguration {
 
     @Bean
-    public MessageDispatcher messageDispatcher(Bands bands) {
-        return new MessageDispatcher()
+    public MessageDispatcher messageDispatcher(MuseSession museSession, Bands bands) {
+        return new MessageDispatcher(museSession)
                 .streaming("/muse/config",
                         new ConfigurationTransformer(),
-                        new ConfigurationStream())
+                        museSession.asConfigurationStream())
                 .streaming("/muse/version",
                         new VersionTransformer(),
-                        (session, model) -> {
-                        })
+                        museSession.asVersionStream())
                 .streaming("/muse/batt",
                         new BatteryTransformer(),
-                        (session, model) -> {
-                        })
+                        museSession.asBatteryStream())
                 .streaming("/muse/drlref",
                         new DrlReferenceTransformer(),
-                        (session, model) -> {
-                        })
+                        museSession.asDrlReferenceStream())
                 .streaming("/muse/eeg",
                         new EegTransformer(),
                         (session, model) -> {

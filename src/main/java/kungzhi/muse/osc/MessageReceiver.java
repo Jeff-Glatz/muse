@@ -1,10 +1,6 @@
 package kungzhi.muse.osc;
 
 import de.sciss.net.OSCServer;
-import kungzhi.muse.model.Configuration;
-import kungzhi.muse.repository.Bands;
-import kungzhi.muse.repository.BandsImpl;
-import kungzhi.muse.stream.ConfigurationStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -14,7 +10,6 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 
 import static de.sciss.net.OSCServer.newUsing;
-import static java.lang.Thread.currentThread;
 
 /**
  * OSC messages will be emitted over OSC to paths:
@@ -74,9 +69,7 @@ public class MessageReceiver {
     private final MessageDispatcher dispatcher;
 
     private String protocol;
-    private String host;
-    private int port;
-    private InetSocketAddress localAddress;
+    private InetSocketAddress address;
     private OSCServer server;
 
     public MessageReceiver(MessageDispatcher dispatcher) {
@@ -96,220 +89,43 @@ public class MessageReceiver {
         return this;
     }
 
-    public String getHost() {
-        return host;
+    public InetSocketAddress getAddress() {
+        return address;
     }
 
-    public void setHost(String host) {
-        this.host = host;
+    public void setAddress(InetSocketAddress address) {
+        this.address = address;
     }
 
-    public MessageReceiver withHost(String host) {
-        this.host = host;
+    public MessageReceiver onAddress(InetSocketAddress address) {
+        this.address = address;
         return this;
     }
 
-    public int getPort() {
-        return port;
+    public MessageReceiver onAddress(int port) {
+        return onAddress(new InetSocketAddress(port));
     }
 
-    public void setPort(int port) {
-        this.port = port;
-    }
-
-    public MessageReceiver withPort(int port) {
-        this.port = port;
-        return this;
+    public MessageReceiver onAddress(String hostname, int port) {
+        return onAddress(new InetSocketAddress(hostname, port));
     }
 
     public void on()
             throws IOException {
-        localAddress = new InetSocketAddress(host, port);
-        log.info("starting {} receiver on {}...", protocol, localAddress);
-        server = newUsing(protocol, localAddress);
+        log.info("starting {} receiver on {}...", protocol, address);
+        server = newUsing(protocol, address);
         server.addOSCListener(dispatcher);
         server.start();
-        log.info("started {} receiver on {}.", protocol, localAddress);
+        log.info("started {} receiver on {}.", protocol, address);
     }
 
     @PreDestroy
     public void off()
             throws IOException {
         if (server != null) {
-            log.info("stopping {} receiver on {}...", protocol, localAddress);
+            log.info("stopping {} receiver on {}...", protocol, address);
             server.stop();
-            log.info("stopped {} receiver on {}.", protocol, localAddress);
-        }
-    }
-
-    public static void main(String[] args)
-            throws Exception {
-        Bands bands = new BandsImpl()
-                .withStandardBands();
-        MessageReceiver receiver = new MessageReceiver(new MessageDispatcher(new Configuration())
-                .streaming("/muse/config",
-                        new ConfigurationTransformer(),
-                        new ConfigurationStream())
-                .streaming("/muse/version",
-                        new VersionTransformer(),
-                        (session, model) -> {
-                        })
-                .streaming("/muse/batt",
-                        new BatteryTransformer(),
-                        (session, model) -> {
-                        })
-                .streaming("/muse/drlref",
-                        new DrlReferenceTransformer(),
-                        (session, model) -> {
-                        })
-                .streaming("/muse/eeg",
-                        new EegTransformer(),
-                        (session, model) -> {
-                        })
-                .streaming("/muse/elements/low_freqs_absolute",
-                        new BandPowerTransformer(bands.load("low"), false),
-                        (session, model) -> {
-                        })
-                .streaming("/muse/elements/delta_absolute",
-                        new BandPowerTransformer(bands.load("delta"), false),
-                        (session, model) -> {
-                        })
-                .streaming("/muse/elements/theta_absolute",
-                        new BandPowerTransformer(bands.load("theta"), false),
-                        (session, model) -> {
-                        })
-                .streaming("/muse/elements/alpha_absolute",
-                        new BandPowerTransformer(bands.load("alpha"), false),
-                        (session, model) -> {
-                        })
-                .streaming("/muse/elements/beta_absolute",
-                        new BandPowerTransformer(bands.load("beta"), false),
-                        (session, model) -> {
-                        })
-                .streaming("/muse/elements/gamma_absolute",
-                        new BandPowerTransformer(bands.load("gamma"), false),
-                        (session, model) -> {
-                            System.out.println("G:" + model.average());
-                        })
-                .streaming("/muse/elements/delta_relative",
-                        new BandPowerTransformer(bands.load("delta"), true),
-                        (session, model) -> {
-                            System.out.println("D:" + model.average());
-                        })
-                .streaming("/muse/elements/theta_relative",
-                        new BandPowerTransformer(bands.load("theta"), true),
-                        (session, model) -> {
-                            System.out.println("T:" + model.average());
-
-                        })
-                .streaming("/muse/elements/alpha_relative",
-                        new BandPowerTransformer(bands.load("alpha"), true),
-                        (session, model) -> {
-                            System.out.println("A:" + model.average());
-                        })
-                .streaming("/muse/elements/beta_relative",
-                        new BandPowerTransformer(bands.load("beta"), true),
-                        (session, model) -> {
-                            System.out.println("B:" + model.average());
-                        })
-                .streaming("/muse/elements/gamma_relative",
-                        new BandPowerTransformer(bands.load("gamma"), true),
-                        (session, model) -> {
-                        })
-                .streaming("/muse/elements/delta_session_score",
-                        new SessionScoreTransformer(bands.load("delta")),
-                        (session, model) -> {
-                        })
-                .streaming("/muse/elements/theta_session_score",
-                        new SessionScoreTransformer(bands.load("theta")),
-                        (session, model) -> {
-                        })
-                .streaming("/muse/elements/alpha_session_score",
-                        new SessionScoreTransformer(bands.load("alpha")),
-                        (session, model) -> {
-                        })
-                .streaming("/muse/elements/beta_session_score",
-                        new SessionScoreTransformer(bands.load("beta")),
-                        (session, model) -> {
-                        })
-                .streaming("/muse/elements/gamma_session_score",
-                        new SessionScoreTransformer(bands.load("gamma")),
-                        (session, model) -> {
-                        })
-                // TODO: Unimplemented
-                .streaming("/muse/eeg/dropped_samples",
-                        (time, message) -> null,
-                        (session, model) -> {
-                        })
-                .streaming("/muse/eeg/quantization",
-                        (time, message) -> null,
-                        (session, model) -> {
-                        })
-                .streaming("/muse/acc",
-                        (time, message) -> null,
-                        (session, model) -> {
-                        })
-                .streaming("/muse/acc/dropped_samples",
-                        (time, message) -> null,
-                        (session, model) -> {
-                        })
-                .streaming("/muse/elements/raw_fft0",
-                        (time, message) -> null,
-                        (session, model) -> {
-                        })
-                .streaming("/muse/elements/raw_fft1",
-                        (time, message) -> null,
-                        (session, model) -> {
-                        })
-                .streaming("/muse/elements/raw_fft2",
-                        (time, message) -> null,
-                        (session, model) -> {
-                        })
-                .streaming("/muse/elements/raw_fft3",
-                        (time, message) -> null,
-                        (session, model) -> {
-                        })
-                .streaming("/muse/elements/touching_forehead",
-                        (time, message) -> null,
-                        (session, model) -> {
-                        })
-                .streaming("/muse/elements/horseshoe",
-                        (time, message) -> null,
-                        (session, model) -> {
-                        })
-                .streaming("/muse/elements/is_good",
-                        (time, message) -> null,
-                        (session, model) -> {
-                        })
-                .streaming("/muse/elements/blink",
-                        (time, message) -> null,
-                        (session, model) -> {
-                        })
-                .streaming("/muse/elements/jaw_clench",
-                        (time, message) -> null,
-                        (session, model) -> {
-                        })
-                .streaming("/muse/elements/experimental/concentration",
-                        (time, message) -> null,
-                        (session, model) -> {
-                        })
-                .streaming("/muse/elements/experimental/mellow",
-                        (time, message) -> null,
-                        (session, model) -> {
-                        })
-                .streaming("/muse/annotation",
-                        (time, message) -> null,
-                        (session, model) -> {
-                        }));
-        receiver.setProtocol("tcp");
-        receiver.setPort(5000);
-        try {
-            receiver.on();
-            currentThread().suspend();
-        } catch (Exception e) {
-            receiver.log.error("Failure turning on receiver", e);
-        } finally {
-            receiver.off();
+            log.info("stopped {} receiver on {}.", protocol, address);
         }
     }
 }

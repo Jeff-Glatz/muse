@@ -2,11 +2,9 @@ package kungzhi.muse.osc;
 
 import de.sciss.net.OSCListener;
 import de.sciss.net.OSCMessage;
-import kungzhi.muse.model.Configuration;
 import kungzhi.muse.model.Model;
+import kungzhi.muse.model.ModelStream;
 import kungzhi.muse.model.Session;
-import kungzhi.muse.model.SessionListener;
-import kungzhi.muse.stream.ModelStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -14,28 +12,25 @@ import org.springframework.stereotype.Component;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.net.SocketAddress;
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 import static de.sciss.net.OSCPacket.printTextOn;
 import static java.lang.String.format;
 
 @Component
 public class MessageDispatcher
-        implements Session, OSCListener {
+        implements OSCListener {
     private final Logger log = LoggerFactory.getLogger(getClass());
     private final Set<String> availablePaths = new HashSet<>();
     private final Map<String, MessageTransformer<? extends Model>> transformers = new HashMap<>();
     private final Map<String, ModelStream<? extends Model>> streams = new HashMap<>();
-    private final List<SessionListener> sessionListeners = new ArrayList<>();
+    private final Session session;
 
-    private final Configuration configuration;
-
-    MessageDispatcher(Configuration configuration) {
-        this.configuration = configuration;
-    }
-
-    public MessageDispatcher() {
-        this(new Configuration());
+    public MessageDispatcher(Session session) {
+        this.session = session;
     }
 
     public <M extends Model> MessageDispatcher withTransformer(
@@ -72,32 +67,6 @@ public class MessageDispatcher
     }
 
     @Override
-    public void addSessionListener(SessionListener listener) {
-        sessionListeners.add(listener);
-    }
-
-    @Override
-    public void removeSessionListener(SessionListener listener) {
-        sessionListeners.remove(listener);
-    }
-
-    @Override
-    public Configuration getConfiguration() {
-        return configuration;
-    }
-
-    @Override
-    public void setConfiguration(Configuration configuration) {
-        if (!this.configuration.equals(configuration)) {
-            Configuration previous = this.configuration.copyOf();
-            this.configuration.updateFrom(configuration);
-            log.info("Current configuration has been updated: {}", configuration);
-            sessionListeners.forEach(listener ->
-                    listener.configurationChanged(previous, this.configuration));
-        }
-    }
-
-    @Override
     public void messageReceived(OSCMessage message, SocketAddress sender, long time) {
         String path = message.getName();
         log.info("Received message on {} from {}", path, sender);
@@ -105,7 +74,7 @@ public class MessageDispatcher
             MessageTransformer transformer = transformer(path);
             ModelStream stream = stream(path);
             availablePaths.add(path);
-            stream.next(this, transformer.fromMessage(time, message));
+            stream.next(session, transformer.fromMessage(time, message));
         } catch (Exception e) {
             log.error(format("Failure dispatching message: %s", toString(message)), e);
         }

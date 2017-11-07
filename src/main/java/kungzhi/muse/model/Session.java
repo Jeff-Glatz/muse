@@ -7,6 +7,4 @@ public interface Session {
     void removeSessionListener(SessionListener listener);
 
     Configuration getConfiguration();
-
-    void setConfiguration(Configuration configuration);
 }

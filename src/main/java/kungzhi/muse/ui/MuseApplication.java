@@ -39,10 +39,8 @@ public class MuseApplication
             throws Exception {
         MessageDispatcher dispatcher = dispatcher();
         MessageReceiver receiver = receiver()
-                .withProtocol("tcp")
-                .withHost("192.168.1.157")
-                .withHost("192.168.1.0")
-                .withPort(5000);
+                .withProtocol("udp")
+                .onAddress(5000);
 
         stage.setTitle("Muse EEG Feed");
         //defining the axes
@@ -59,6 +57,7 @@ public class MuseApplication
         XYChart.Series series = new XYChart.Series();
         series.setName("Theta Relative");
         dispatcher.withStream(THETA_RELATIVE, BandPower.class, (session, model) -> {
+            log.info("T: {}", model.average());
             ObservableList data = series.getData();
             data.add(new XYChart.Data(nanoTime(), model.average()));
         });
