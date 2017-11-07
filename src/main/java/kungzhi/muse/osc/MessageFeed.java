@@ -1,6 +1,7 @@
 package kungzhi.muse.osc;
 
 import de.sciss.net.OSCMessage;
+import kungzhi.muse.model.EmptyModelStream;
 import kungzhi.muse.model.Model;
 import kungzhi.muse.model.ModelStream;
 import kungzhi.muse.model.Session;
@@ -15,13 +16,11 @@ public class MessageFeed<M extends Model> {
     private ModelStream<M> stream;
 
     public MessageFeed(Path path) {
-        this(path, (time, message) -> null, (session, m) -> {
-        });
+        this(path, new EmptyMessageTransformer<>(), new EmptyModelStream<>());
     }
 
     public MessageFeed(Path path, MessageTransformer<M> transformer) {
-        this(path, transformer, (session, m) -> {
-        });
+        this(path, transformer, new EmptyModelStream<>());
     }
 
     public MessageFeed(Path path, MessageTransformer<M> transformer, ModelStream<M> stream) {
