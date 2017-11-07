@@ -19,7 +19,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 import static java.lang.System.nanoTime;
 import static kungzhi.muse.osc.Path.THETA_RELATIVE;
 
-public class LineChartExample
+public class MuseApplication
         extends Application {
     private final Logger log = LoggerFactory.getLogger(getClass());
     private ConfigurableApplicationContext context;
