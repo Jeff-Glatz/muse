@@ -37,33 +37,33 @@ public class LineChartExample
     @Override
     public void start(Stage stage)
             throws Exception {
-        stage.setTitle("Line Chart Sample");
+        MessageDispatcher dispatcher = dispatcher();
+        MessageReceiver receiver = receiver()
+                .withProtocol("tcp")
+                .withPort(5000);
+
+
+        stage.setTitle("Muse EEG Feed");
         //defining the axes
         final NumberAxis xAxis = new NumberAxis();
         final NumberAxis yAxis = new NumberAxis();
-        xAxis.setLabel("Number of Month");
+        xAxis.setLabel("Timestamp");
         //creating the chart
         final LineChart<Number, Number> lineChart =
                 new LineChart<>(xAxis, yAxis);
 
-        lineChart.setTitle("Stock Monitoring, 2010");
+        lineChart.setTitle("Brainwave Monitoring");
+
         //defining a series
         XYChart.Series series = new XYChart.Series();
-        series.setName("My portfolio");
-
-
-        // Register streams
-        dispatcher()
-                .withStream(THETA_RELATIVE, BandPower.class, (session, model) -> {
-                    ObservableList data = series.getData();
-                    data.add(new XYChart.Data(nanoTime(), model.average()));
-                });
+        series.setName("Theta Relative");
+        dispatcher.withStream(THETA_RELATIVE, BandPower.class, (session, model) -> {
+            ObservableList data = series.getData();
+            data.add(new XYChart.Data(nanoTime(), model.average()));
+        });
 
         // Start streaming messages
-        receiver()
-                .withProtocol("tcp")
-                .withPort(5000)
-                .on();
+        receiver.on();
 
 
         Scene scene = new Scene(lineChart, 800, 600);
