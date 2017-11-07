@@ -31,7 +31,7 @@ public class MuseApplication
         context = new SpringApplicationBuilder(MuseConfiguration.class)
                 .headless(false)
                 .registerShutdownHook(true)
-                .run();
+                .run(getParameters().getRaw().toArray(new String[0]));
     }
 
     @Override
@@ -41,7 +41,6 @@ public class MuseApplication
         MessageReceiver receiver = receiver()
                 .withProtocol("tcp")
                 .withPort(5000);
-
 
         stage.setTitle("Muse EEG Feed");
         //defining the axes
