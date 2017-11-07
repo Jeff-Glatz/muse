@@ -4,7 +4,6 @@ import javafx.application.Application;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.scene.Scene;
-import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
@@ -20,7 +19,6 @@ import org.springframework.context.ConfigurableApplicationContext;
 
 import java.util.concurrent.ExecutorService;
 
-import static java.lang.String.valueOf;
 import static java.lang.System.currentTimeMillis;
 import static kungzhi.muse.osc.Path.THETA_ABSOLUTE;
 
@@ -49,12 +47,15 @@ public class MuseApplication
                 .onAddress(5000);
 
         stage.setTitle("Muse EEG Feed");
+        stage.setOnCloseRequest(event -> {
+        });
 
         //defining the axes
-        final CategoryAxis xAxis = new CategoryAxis();
+        final NumberAxis xAxis = new NumberAxis();
         xAxis.setLabel("Timestamp");
         xAxis.setAutoRanging(true);
         xAxis.setAnimated(true);
+        xAxis.setForceZeroInRange(false);
         final NumberAxis yAxis = new NumberAxis();
         yAxis.setLabel("Absolute Power");
         yAxis.setAutoRanging(false);
@@ -63,7 +64,7 @@ public class MuseApplication
         yAxis.setAnimated(true);
 
         //creating the chart
-        final LineChart<String, Number> lineChart =
+        final LineChart<Number, Number> lineChart =
                 new LineChart<>(xAxis, yAxis);
         lineChart.setTitle("Brainwave Monitoring");
         lineChart.setAnimated(true);
@@ -71,10 +72,11 @@ public class MuseApplication
         lineChart.setCreateSymbols(false);
 
         //defining a series
-        XYChart.Series<String, Number> series = new XYChart.Series<>();
+        XYChart.Series<Number, Number> series = new XYChart.Series<>();
         series.setName("Theta Absolute");
+        long start = System.currentTimeMillis();
         dispatcher.withStream(THETA_ABSOLUTE, BandPower.class, (session, model) -> {
-            long timestamp = currentTimeMillis();
+            long timestamp = currentTimeMillis() - start;
             double average = model.average();
             log.info("{}", average);
             executorService.submit(new Task<Double>() {
@@ -86,11 +88,11 @@ public class MuseApplication
 
                 @Override
                 protected void succeeded() {
-                    ObservableList<XYChart.Data<String, Number>> data = series.getData();
+                    ObservableList<XYChart.Data<Number, Number>> data = series.getData();
                     while (data.size() > 100) {
                         data.remove(0);
                     }
-                    data.add(new XYChart.Data<>(valueOf(timestamp), average));
+                    data.add(new XYChart.Data<>(timestamp, average));
                 }
             });
 
