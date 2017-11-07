@@ -57,7 +57,7 @@ public class MuseSession
         return drlReference;
     }
 
-    public ModelStream<Configuration> asConfigurationStream() {
+    public ModelStream<Configuration> configurationStream() {
         return (session, configuration) -> {
             if (!this.configuration.equals(configuration)) {
                 Configuration previous = this.configuration.copyOf();
@@ -69,19 +69,19 @@ public class MuseSession
         };
     }
 
-    public ModelStream<Version> asVersionStream() {
+    public ModelStream<Version> versionStream() {
         return (session, version) -> {
             this.version = version;
         };
     }
 
-    public ModelStream<Battery> asBatteryStream() {
+    public ModelStream<Battery> batteryStream() {
         return (session, battery) -> {
             this.battery = battery;
         };
     }
 
-    public ModelStream<DrlReference> asDrlReferenceStream() {
+    public ModelStream<DrlReference> drlReferenceStream() {
         return (session, drlReference) -> {
             this.drlReference = drlReference;
         };

@@ -2,7 +2,6 @@ package kungzhi.muse.ui;
 
 import javafx.application.Application;
 import javafx.collections.ObservableList;
-import javafx.concurrent.Task;
 import javafx.scene.Scene;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
@@ -21,6 +20,7 @@ import java.util.concurrent.ExecutorService;
 
 import static java.lang.System.currentTimeMillis;
 import static kungzhi.muse.osc.Path.THETA_ABSOLUTE;
+import static kungzhi.muse.ui.AsyncModelStream.inBackground;
 
 public class MuseApplication
         extends Application {
@@ -75,28 +75,16 @@ public class MuseApplication
         XYChart.Series<Number, Number> series = new XYChart.Series<>();
         series.setName("Theta Absolute");
         long start = System.currentTimeMillis();
-        dispatcher.withStream(THETA_ABSOLUTE, BandPower.class, (session, model) -> {
-            long timestamp = currentTimeMillis() - start;
-            double average = model.average();
-            log.info("{}", average);
-            executorService.submit(new Task<Double>() {
-                @Override
-                protected Double call()
-                        throws Exception {
-                    return average;
-                }
-
-                @Override
-                protected void succeeded() {
+        dispatcher.withStream(THETA_ABSOLUTE, BandPower.class,
+                inBackground(executorService, (session, model) -> {
+                    long timestamp = currentTimeMillis() - start;
+                    double average = model.average();
                     ObservableList<XYChart.Data<Number, Number>> data = series.getData();
                     while (data.size() > 100) {
                         data.remove(0);
                     }
                     data.add(new XYChart.Data<>(timestamp, average));
-                }
-            });
-
-        });
+                }));
 
         // Start streaming messages
         receiver.on();

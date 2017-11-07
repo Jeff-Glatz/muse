@@ -40,16 +40,16 @@ public class MuseConfiguration {
         return new MessageDispatcher(museSession)
                 .streaming("/muse/config",
                         new ConfigurationTransformer(),
-                        museSession.asConfigurationStream())
+                        museSession.configurationStream())
                 .streaming("/muse/version",
                         new VersionTransformer(),
-                        museSession.asVersionStream())
+                        museSession.versionStream())
                 .streaming("/muse/batt",
                         new BatteryTransformer(),
-                        museSession.asBatteryStream())
+                        museSession.batteryStream())
                 .streaming("/muse/drlref",
                         new DrlReferenceTransformer(),
-                        museSession.asDrlReferenceStream())
+                        museSession.drlReferenceStream())
                 .streaming("/muse/eeg",
                         new EegTransformer(),
                         (session, model) -> {
