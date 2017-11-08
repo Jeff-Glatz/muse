@@ -1,6 +1,12 @@
 package kungzhi.muse.config;
 
-import kungzhi.muse.model.*;
+import kungzhi.muse.model.Battery;
+import kungzhi.muse.model.Configuration;
+import kungzhi.muse.model.DrlReference;
+import kungzhi.muse.model.ModelStream;
+import kungzhi.muse.model.Session;
+import kungzhi.muse.model.SessionListener;
+import kungzhi.muse.model.Version;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
