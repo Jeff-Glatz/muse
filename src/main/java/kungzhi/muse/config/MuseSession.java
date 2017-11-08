@@ -75,7 +75,13 @@ public class MuseSession
 
     public ModelStream<Version> versionStream() {
         return (session, version) -> {
-            this.version = version;
+            if (!this.version.needsUpdate(version)) {
+                Version previous = this.version.copyOf();
+                this.version.updateFrom(version);
+                log.info("Current version has been updated: {}", version);
+                sessionListeners.forEach(listener ->
+                        listener.versionChanged(previous, this.version));
+            }
         };
     }
 

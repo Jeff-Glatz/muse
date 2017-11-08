@@ -1,14 +1,18 @@
 package kungzhi.muse.model;
 
 public class Version
-        extends AbstractModel {
-
+        extends AbstractModel
+        implements LiveModel<Version> {
     private String buildNumber;
     private String firmwareType;
     private String hardwareVersion;
     private String firmwareHeadsetVersion;
     private String firmwareBootloaderVersion;
     private String protocolVersion;
+
+    public Version() {
+        this(0);
+    }
 
     public Version(long time) {
         super(time);
@@ -83,8 +87,48 @@ public class Version
         return protocolVersion;
     }
 
+    public void setProtocolVersion(String protocolVersion) {
+        this.protocolVersion = protocolVersion;
+    }
+
     public Version withProtocolVersion(String protocolVersion) {
         this.protocolVersion = protocolVersion;
+        return this;
+    }
+
+    @Override
+    public Version copyOf() {
+        Version version = new Version();
+        version.updateFrom(this);
+        return version;
+    }
+
+    @Override
+    public boolean needsUpdate(Version version) {
+        if (this == version) return true;
+        if (version == null || getClass() != version.getClass()) return false;
+
+        if (buildNumber != null ? !buildNumber.equals(version.buildNumber) : version.buildNumber != null) return false;
+        if (firmwareType != null ? !firmwareType.equals(version.firmwareType) : version.firmwareType != null)
+            return false;
+        if (hardwareVersion != null ? !hardwareVersion.equals(version.hardwareVersion) : version.hardwareVersion != null)
+            return false;
+        if (firmwareHeadsetVersion != null ? !firmwareHeadsetVersion.equals(version.firmwareHeadsetVersion) : version.firmwareHeadsetVersion != null)
+            return false;
+        if (protocolVersion != null ? !protocolVersion.equals(version.protocolVersion) : version.protocolVersion != null)
+            return false;
+        return firmwareBootloaderVersion != null ? firmwareBootloaderVersion.equals(version.firmwareBootloaderVersion) : version.firmwareBootloaderVersion == null;
+    }
+
+    @Override
+    public Version updateFrom(Version version) {
+        setTime(version.time);
+        setBuildNumber(version.buildNumber);
+        setFirmwareBootloaderVersion(version.firmwareBootloaderVersion);
+        setFirmwareHeadsetVersion(version.firmwareHeadsetVersion);
+        setFirmwareType(version.firmwareType);
+        setHardwareVersion(version.hardwareVersion);
+        setProtocolVersion(version.protocolVersion);
         return this;
     }
 

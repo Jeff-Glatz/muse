@@ -5,7 +5,8 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 public class Configuration
-        extends AbstractModel {
+        extends AbstractModel
+        implements LiveModel<Configuration> {
     private final SortedSet<EegChannel> eegChannelLayout = new TreeSet<>();
 
     public Configuration() {
@@ -44,15 +45,16 @@ public class Configuration
         return configuration;
     }
 
-    public void updateFrom(Configuration that) {
-        setTime(that.time);
-        setEegChannelLayout(that.eegChannelLayout);
+    public boolean needsUpdate(Configuration configuration) {
+        if (this == configuration) return true;
+        if (configuration == null || getClass() != configuration.getClass()) return false;
+        return eegChannelLayout.equals(configuration.eegChannelLayout);
     }
 
-    public boolean needsUpdate(Configuration that) {
-        if (this == that) return true;
-        if (that == null || getClass() != that.getClass()) return false;
-        return eegChannelLayout.equals(that.eegChannelLayout);
+    public Configuration updateFrom(Configuration configuration) {
+        setTime(configuration.time);
+        setEegChannelLayout(configuration.eegChannelLayout);
+        return this;
     }
 
     @Override
