@@ -3,16 +3,8 @@
   <component name="ChangeListManager">
     <list id="b16c742a-5fef-4235-9e8b-10d8b5f404fe" name="Revert: Muse: Initial message Dispatching Framework" comment="" />
     <list default="true" id="8875f668-51ba-4219-9897-02f9b0283692" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/kungzhi/muse/osc/MessageClient.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/kungzhi/muse/osc/MuseSimulator.java" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/kungzhi/muse/osc/MessageReceiver.java" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/muse.iml" afterPath="$PROJECT_DIR$/muse.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/pom.xml" afterPath="$PROJECT_DIR$/pom.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/kungzhi/muse/config/MuseConfiguration.java" afterPath="$PROJECT_DIR$/src/main/java/kungzhi/muse/config/MuseConfiguration.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/kungzhi/muse/config/MuseSession.java" afterPath="$PROJECT_DIR$/src/main/java/kungzhi/muse/config/MuseSession.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/kungzhi/muse/model/Configuration.java" afterPath="$PROJECT_DIR$/src/main/java/kungzhi/muse/model/Configuration.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/kungzhi/muse/osc/MessageDispatcher.java" afterPath="$PROJECT_DIR$/src/main/java/kungzhi/muse/osc/MessageDispatcher.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/kungzhi/muse/ui/MuseApplication.java" afterPath="$PROJECT_DIR$/src/main/java/kungzhi/muse/ui/MuseApplication.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/proto/Muse_v2.proto" afterPath="$PROJECT_DIR$/src/main/proto/Muse_v2.proto" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -28,120 +20,115 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="MessageClient.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/kungzhi/muse/osc/MessageClient.java">
+      <file leaf-file-name="Bands.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/kungzhi/muse/repository/Bands.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="105">
-              <caret line="152" column="0" lean-forward="false" selection-start-line="152" selection-start-column="0" selection-end-line="152" selection-end-column="0" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#2290#2291#0" expanded="true" />
-                <element signature="e#2330#2331#0" expanded="true" />
-                <element signature="method#receivingOn#2;class#MessageClient#0" expanded="false" />
-                <element signature="method#transmittingOn#0;class#MessageClient#0" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="MuseApplication.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/kungzhi/muse/ui/MuseApplication.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-164">
-              <caret line="41" column="32" lean-forward="false" selection-start-line="41" selection-start-column="32" selection-end-line="41" selection-end-column="32" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="pom.xml" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/pom.xml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="163">
-              <caret line="47" column="52" lean-forward="false" selection-start-line="47" selection-start-column="52" selection-end-line="47" selection-end-column="52" />
+            <state relative-caret-position="60">
+              <caret line="4" column="17" lean-forward="false" selection-start-line="4" selection-start-column="17" selection-end-line="4" selection-end-column="17" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Configuration.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/kungzhi/muse/model/Configuration.java">
+      <file leaf-file-name="Sensor.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/kungzhi/muse/model/Sensor.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="328">
-              <caret line="54" column="62" lean-forward="false" selection-start-line="54" selection-start-column="62" selection-end-line="54" selection-end-column="62" />
+            <state relative-caret-position="45">
+              <caret line="3" column="45" lean-forward="false" selection-start-line="3" selection-start-column="45" selection-end-line="3" selection-end-column="45" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="MuseSession.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/kungzhi/muse/config/MuseSession.java">
+      <file leaf-file-name="Preset.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/kungzhi/muse/model/Preset.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="150">
-              <caret line="65" column="44" lean-forward="false" selection-start-line="65" selection-start-column="44" selection-end-line="65" selection-end-column="44" />
+            <state relative-caret-position="285">
+              <caret line="19" column="27" lean-forward="false" selection-start-line="19" selection-start-column="27" selection-end-line="19" selection-end-column="27" />
               <folding>
                 <element signature="imports" expanded="true" />
+                <element signature="e#1126#1127#0" expanded="true" />
+                <element signature="e#1151#1152#0" expanded="true" />
+                <element signature="e#1194#1195#0" expanded="true" />
+                <element signature="e#1224#1225#0" expanded="true" />
+                <element signature="e#1259#1260#0" expanded="true" />
+                <element signature="e#1289#1290#0" expanded="true" />
+                <element signature="e#1327#1328#0" expanded="true" />
+                <element signature="e#1362#1363#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="MessageDispatcher.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/main/java/kungzhi/muse/osc/MessageDispatcher.java">
+      <file leaf-file-name="SignalSerializer.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/java/kungzhi/muse/io/SignalSerializer.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="168">
-              <caret line="76" column="60" lean-forward="false" selection-start-line="76" selection-start-column="60" selection-end-line="76" selection-end-column="60" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="MuseSimulator.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/kungzhi/muse/osc/MuseSimulator.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="154">
-              <caret line="20" column="28" lean-forward="false" selection-start-line="20" selection-start-column="28" selection-end-line="20" selection-end-column="28" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="MuseConfiguration.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/kungzhi/muse/config/MuseConfiguration.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="162">
-              <caret line="47" column="72" lean-forward="false" selection-start-line="47" selection-start-column="72" selection-end-line="47" selection-end-column="72" />
-              <folding>
-                <element signature="e#1769#1966#0" expanded="false" />
-                <element signature="e#2070#2071#0" expanded="true" />
-                <element signature="e#2131#2132#0" expanded="true" />
-                <marker date="1510121540000" expanded="true" signature="8658:8666" ph="{...}" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="GenericConversionService.java" pinned="false" current-in-tab="false">
-        <entry file="jar://$MAVEN_REPOSITORY$/org/springframework/spring-core/4.3.12.RELEASE/spring-core-4.3.12.RELEASE-sources.jar!/org/springframework/core/convert/support/GenericConversionService.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="129">
-              <caret line="111" column="82" lean-forward="false" selection-start-line="111" selection-start-column="82" selection-end-line="111" selection-end-column="82" />
+            <state relative-caret-position="60">
+              <caret line="5" column="19" lean-forward="false" selection-start-line="5" selection-start-column="19" selection-end-line="5" selection-end-column="19" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Converter.java" pinned="false" current-in-tab="false">
-        <entry file="jar://$MAVEN_REPOSITORY$/org/springframework/spring-core/4.3.12.RELEASE/spring-core-4.3.12.RELEASE-sources.jar!/org/springframework/core/convert/converter/Converter.java">
+      <file leaf-file-name="SignalSerializer.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/kungzhi/muse/osc/SignalSerializer.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="224">
-              <caret line="36" column="39" lean-forward="false" selection-start-line="36" selection-start-column="15" selection-end-line="36" selection-end-column="39" />
+            <state relative-caret-position="60">
+              <caret line="5" column="19" lean-forward="false" selection-start-line="5" selection-start-column="19" selection-end-line="5" selection-end-column="19" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Muse_v2.proto" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/proto/Muse_v2.proto">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="60">
+              <caret line="79" column="38" lean-forward="false" selection-start-line="79" selection-start-column="38" selection-end-line="79" selection-end-column="38" />
+              <folding>
+                <element signature="e#2968#2970#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="BandsImpl.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/kungzhi/muse/repository/BandsImpl.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-27">
+              <caret line="13" column="13" lean-forward="false" selection-start-line="13" selection-start-column="13" selection-end-line="13" selection-end-column="13" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Session.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/kungzhi/muse/model/Session.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="180">
+              <caret line="12" column="7" lean-forward="false" selection-start-line="12" selection-start-column="7" selection-end-line="12" selection-end-column="7" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="SessionListener.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/kungzhi/muse/model/SessionListener.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="90">
+              <caret line="6" column="77" lean-forward="false" selection-start-line="6" selection-start-column="77" selection-end-line="6" selection-end-column="77" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="SessionScore.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/kungzhi/muse/model/SessionScore.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="390">
+              <caret line="33" column="31" lean-forward="false" selection-start-line="33" selection-start-column="31" selection-end-line="33" selection-end-column="31" />
               <folding />
             </state>
           </provider>
@@ -194,12 +181,9 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/main/java/kungzhi/muse/model/Values.java" />
-        <option value="$PROJECT_DIR$/src/main/java/kungzhi/muse/osc/SessionScoreTransformer.java" />
         <option value="$PROJECT_DIR$/src/main/java/kungzhi/muse/model/Band.java" />
         <option value="$PROJECT_DIR$/src/main/java/kungzhi/muse/model/FrequencyRange.java" />
         <option value="$PROJECT_DIR$/src/main/java/kungzhi/muse/osc/MessageHandler.java" />
-        <option value="$PROJECT_DIR$/src/main/java/kungzhi/muse/model/SessionScore.java" />
         <option value="$PROJECT_DIR$/src/main/java/kungzhi/muse/model/Eeg.java" />
         <option value="$PROJECT_DIR$/src/main/java/kungzhi/muse/model/BandPower.java" />
         <option value="$PROJECT_DIR$/src/main/java/kungzhi/muse/controller/ModelFeed.java" />
@@ -245,6 +229,9 @@
         <option value="$PROJECT_DIR$/src/main/java/kungzhi/muse/config/MuseConfiguration.java" />
         <option value="$PROJECT_DIR$/src/main/java/kungzhi/muse/ui/MuseApplication.java" />
         <option value="$PROJECT_DIR$/src/main/java/kungzhi/muse/osc/MessageClient.java" />
+        <option value="$PROJECT_DIR$/src/main/java/kungzhi/muse/model/SessionScore.java" />
+        <option value="$PROJECT_DIR$/src/main/java/kungzhi/muse/model/Preset.java" />
+        <option value="$PROJECT_DIR$/src/main/proto/Muse_v2.proto" />
       </list>
     </option>
   </component>
@@ -470,7 +457,7 @@
               <item name="java" type="462c0819:PsiDirectoryNode" />
               <item name="kungzhi" type="462c0819:PsiDirectoryNode" />
               <item name="muse" type="462c0819:PsiDirectoryNode" />
-              <item name="config" type="462c0819:PsiDirectoryNode" />
+              <item name="io" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="muse" type="b2602c69:ProjectViewProjectNode" />
@@ -481,26 +468,6 @@
               <item name="kungzhi" type="462c0819:PsiDirectoryNode" />
               <item name="muse" type="462c0819:PsiDirectoryNode" />
               <item name="model" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="muse" type="b2602c69:ProjectViewProjectNode" />
-              <item name="muse" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="kungzhi" type="462c0819:PsiDirectoryNode" />
-              <item name="muse" type="462c0819:PsiDirectoryNode" />
-              <item name="osc" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="muse" type="b2602c69:ProjectViewProjectNode" />
-              <item name="muse" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="kungzhi" type="462c0819:PsiDirectoryNode" />
-              <item name="muse" type="462c0819:PsiDirectoryNode" />
-              <item name="repository" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="muse" type="b2602c69:ProjectViewProjectNode" />
@@ -900,7 +867,7 @@
       <workItem from="1509837043366" duration="6100000" />
       <workItem from="1509855960368" duration="5050000" />
       <workItem from="1509861299265" duration="64066000" />
-      <workItem from="1510117254065" duration="4144000" />
+      <workItem from="1510117254065" duration="5411000" />
     </task>
     <servers />
   </component>
@@ -937,7 +904,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="118648000" />
+    <option name="totallyTimeSpent" value="119915000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-6" y="23" width="1435" height="785" extended-state="0" />
@@ -958,13 +925,13 @@
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.1874063" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.4317841" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1844078" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24887556" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Spring" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3298351" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Run with VisualVM" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3298351" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2656138" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.21139431" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3137114" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.20089956" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Debug with VisualVM" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
@@ -1045,120 +1012,10 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/java/kungzhi/muse/stream/ConfigurationStream.java" />
-    <entry file="file://$PROJECT_DIR$/src/main/java/kungzhi/muse/osc/MessageFeed.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="165">
-          <caret line="11" column="0" lean-forward="true" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar:///Library/Java/JavaVirtualMachines/jdk-9.0.1.jdk/Contents/Home/lib/src.zip!/javafx.controls/javafx/scene/chart/XYChart.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="128">
-          <caret line="1583" column="46" lean-forward="true" selection-start-line="1583" selection-start-column="35" selection-end-line="1583" selection-end-column="46" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar:///Library/Java/JavaVirtualMachines/jdk-9.0.1.jdk/Contents/Home/lib/src.zip!/javafx.controls/javafx/scene/chart/NumberAxis.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="128">
-          <caret line="62" column="19" lean-forward="false" selection-start-line="62" selection-start-column="19" selection-end-line="62" selection-end-column="19" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar:///Library/Java/JavaVirtualMachines/jdk-9.0.1.jdk/Contents/Home/lib/src.zip!/javafx.controls/javafx/scene/chart/ValueAxis.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="135">
-          <caret line="55" column="22" lean-forward="false" selection-start-line="55" selection-start-column="22" selection-end-line="55" selection-end-column="22" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar:///Library/Java/JavaVirtualMachines/jdk-9.0.1.jdk/Contents/Home/lib/src.zip!/javafx.controls/javafx/scene/chart/Axis.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="135">
-          <caret line="80" column="22" lean-forward="false" selection-start-line="80" selection-start-column="22" selection-end-line="80" selection-end-column="22" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar:///Library/Java/JavaVirtualMachines/jdk-9.0.1.jdk/Contents/Home/lib/src.zip!/javafx.controls/javafx/scene/chart/CategoryAxis.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="135">
-          <caret line="66" column="31" lean-forward="false" selection-start-line="66" selection-start-column="19" selection-end-line="66" selection-end-column="31" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar:///Library/Java/JavaVirtualMachines/jdk-9.0.1.jdk/Contents/Home/lib/src.zip!/java.base/java/util/concurrent/ExecutorService.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="172">
-          <caret line="137" column="17" lean-forward="false" selection-start-line="137" selection-start-column="17" selection-end-line="137" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$MAVEN_REPOSITORY$/org/springframework/boot/spring-boot-starter-parent/1.5.8.RELEASE/spring-boot-starter-parent-1.5.8.RELEASE.pom">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-325">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$MAVEN_REPOSITORY$/org/springframework/boot/spring-boot-dependencies/1.5.8.RELEASE/spring-boot-dependencies-1.5.8.RELEASE.pom">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3855">
-          <caret line="548" column="47" lean-forward="false" selection-start-line="548" selection-start-column="28" selection-end-line="548" selection-end-column="47" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/springframework/spring-context/4.3.12.RELEASE/spring-context-4.3.12.RELEASE.jar!/org/springframework/stereotype/Repository.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="17" column="18" lean-forward="false" selection-start-line="17" selection-start-column="18" selection-end-line="17" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/kungzhi/muse/repository/BandsImpl.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="6" column="12" lean-forward="false" selection-start-line="6" selection-start-column="12" selection-end-line="6" selection-end-column="12" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/kungzhi/muse/model/ModelStream.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="4" column="17" lean-forward="false" selection-start-line="4" selection-start-column="17" selection-end-line="4" selection-end-column="17" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/kungzhi/muse/model/Battery.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="30">
           <caret line="2" column="13" lean-forward="false" selection-start-line="2" selection-start-column="13" selection-end-line="2" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/kungzhi/muse/model/SessionListener.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="6" column="77" lean-forward="false" selection-start-line="6" selection-start-column="77" selection-end-line="6" selection-end-column="77" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/kungzhi/muse/model/Session.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="12" column="7" lean-forward="false" selection-start-line="12" selection-start-column="7" selection-end-line="12" selection-end-column="7" />
           <folding />
         </state>
       </provider>
@@ -1216,16 +1073,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/kungzhi/muse/ui/AsyncModelStream.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="376">
-          <caret line="40" column="11" lean-forward="false" selection-start-line="40" selection-start-column="11" selection-end-line="40" selection-end-column="11" />
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/kungzhi/muse/osc/MessageTransmitter.java" />
     <entry file="jar:///Library/Java/JavaVirtualMachines/jdk-9.0.1.jdk/Contents/Home/lib/src.zip!/java.base/java/net/SocketAddress.java">
       <provider selected="true" editor-type-id="text-editor">
@@ -1258,22 +1105,6 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/kungzhi/muse/osc/MessageService.java" />
-    <entry file="file://$PROJECT_DIR$/src/main/java/kungzhi/muse/osc/ConfigurationTransformer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="22" column="51" lean-forward="false" selection-start-line="22" selection-start-column="33" selection-end-line="22" selection-end-column="51" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/kungzhi/muse/model/Sensor.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="30">
-          <caret line="2" column="12" lean-forward="false" selection-start-line="2" selection-start-column="12" selection-end-line="2" selection-end-column="12" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$MAVEN_REPOSITORY$/org/springframework/spring-beans/4.3.12.RELEASE/spring-beans-4.3.12.RELEASE-sources.jar!/org/springframework/beans/PropertyEditorRegistrar.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="115">
@@ -1388,19 +1219,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/kungzhi/muse/config/MuseConfiguration.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="162">
-          <caret line="47" column="72" lean-forward="false" selection-start-line="47" selection-start-column="72" selection-end-line="47" selection-end-column="72" />
-          <folding>
-            <element signature="e#1769#1966#0" expanded="false" />
-            <element signature="e#2070#2071#0" expanded="true" />
-            <element signature="e#2131#2132#0" expanded="true" />
-            <marker date="1510121540000" expanded="true" signature="8658:8666" ph="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/kungzhi/muse/osc/MessageClient.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="105">
@@ -1425,16 +1243,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/kungzhi/muse/config/MuseSession.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="65" column="44" lean-forward="false" selection-start-line="65" selection-start-column="44" selection-end-line="65" selection-end-column="44" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/kungzhi/muse/osc/MessageDispatcher.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="168">
@@ -1442,6 +1250,185 @@
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/kungzhi/muse/osc/MessageFeed.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="11" column="0" lean-forward="true" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/kungzhi/muse/ui/AsyncModelStream.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="495">
+          <caret line="40" column="11" lean-forward="false" selection-start-line="40" selection-start-column="11" selection-end-line="40" selection-end-column="11" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/kungzhi/muse/osc/BandPowerTransformer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="8" column="13" lean-forward="false" selection-start-line="8" selection-start-column="13" selection-end-line="8" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/kungzhi/muse/osc/BatteryTransformer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="9" column="13" lean-forward="false" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/kungzhi/muse/osc/ConfigurationTransformer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="21" column="29" lean-forward="true" selection-start-line="21" selection-start-column="29" selection-end-line="21" selection-end-column="29" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/kungzhi/muse/osc/DrlReferenceTransformer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="9" column="13" lean-forward="false" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/kungzhi/muse/osc/EegTransformer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="9" column="13" lean-forward="false" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/kungzhi/muse/config/MuseConfiguration.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-952">
+          <caret line="47" column="72" lean-forward="false" selection-start-line="47" selection-start-column="72" selection-end-line="47" selection-end-column="72" />
+          <folding>
+            <element signature="e#1769#1966#0" expanded="false" />
+            <marker date="1510121540000" expanded="true" signature="8658:8666" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/kungzhi/muse/model/DrlReference.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="30">
+          <caret line="2" column="13" lean-forward="false" selection-start-line="2" selection-start-column="13" selection-end-line="2" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/kungzhi/muse/config/MuseSession.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-448">
+          <caret line="26" column="19" lean-forward="false" selection-start-line="26" selection-start-column="19" selection-end-line="26" selection-end-column="19" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/kungzhi/muse/repository/Bands.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="4" column="17" lean-forward="false" selection-start-line="4" selection-start-column="17" selection-end-line="4" selection-end-column="17" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/kungzhi/muse/repository/BandsImpl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-27">
+          <caret line="13" column="13" lean-forward="false" selection-start-line="13" selection-start-column="13" selection-end-line="13" selection-end-column="13" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/kungzhi/muse/model/Session.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="12" column="7" lean-forward="false" selection-start-line="12" selection-start-column="7" selection-end-line="12" selection-end-column="7" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/kungzhi/muse/model/SessionListener.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="6" column="77" lean-forward="false" selection-start-line="6" selection-start-column="77" selection-end-line="6" selection-end-column="77" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/kungzhi/muse/model/SessionScore.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="390">
+          <caret line="33" column="31" lean-forward="false" selection-start-line="33" selection-start-column="31" selection-end-line="33" selection-end-column="31" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/kungzhi/muse/model/Sensor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="45">
+          <caret line="3" column="45" lean-forward="false" selection-start-line="3" selection-start-column="45" selection-end-line="3" selection-end-column="45" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/kungzhi/muse/osc/SignalSerializer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="5" column="19" lean-forward="false" selection-start-line="5" selection-start-column="19" selection-end-line="5" selection-end-column="19" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/proto/Muse_v2.proto">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="79" column="38" lean-forward="false" selection-start-line="79" selection-start-column="38" selection-end-line="79" selection-end-column="38" />
+          <folding>
+            <element signature="e#2968#2970#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/kungzhi/muse/model/Preset.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="285">
+          <caret line="19" column="27" lean-forward="false" selection-start-line="19" selection-start-column="27" selection-end-line="19" selection-end-column="27" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#1126#1127#0" expanded="true" />
+            <element signature="e#1151#1152#0" expanded="true" />
+            <element signature="e#1194#1195#0" expanded="true" />
+            <element signature="e#1224#1225#0" expanded="true" />
+            <element signature="e#1259#1260#0" expanded="true" />
+            <element signature="e#1289#1290#0" expanded="true" />
+            <element signature="e#1327#1328#0" expanded="true" />
+            <element signature="e#1362#1363#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/kungzhi/muse/io/SignalSerializer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="5" column="19" lean-forward="false" selection-start-line="5" selection-start-column="19" selection-end-line="5" selection-end-column="19" />
+          <folding />
         </state>
       </provider>
     </entry>
