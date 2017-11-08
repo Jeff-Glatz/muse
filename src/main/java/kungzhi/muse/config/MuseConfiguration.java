@@ -15,10 +15,15 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.convert.ConversionService;
+import org.springframework.core.convert.support.DefaultConversionService;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.concurrent.ExecutorService;
 
 import static java.lang.Runtime.getRuntime;
+import static java.net.InetAddress.getByName;
 import static java.util.concurrent.Executors.newFixedThreadPool;
 
 @Configuration
@@ -35,6 +40,24 @@ public class MuseConfiguration {
     public ExecutorService executorService() {
         return newFixedThreadPool(getRuntime()
                 .availableProcessors());
+    }
+
+    @Bean
+    public ConversionService conversionService() {
+        DefaultConversionService service = new DefaultConversionService();
+        service.addConverter(String.class, InetAddress.class, source -> {
+            try {
+                return getByName(source);
+            } catch (UnknownHostException e) {
+                throw new IllegalArgumentException(e);
+            }
+        });
+        return service;
+    }
+
+    @Bean
+    public kungzhi.muse.model.Configuration configuration() {
+        return new kungzhi.muse.model.Configuration();
     }
 
     @Bean

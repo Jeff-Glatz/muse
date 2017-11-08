@@ -19,6 +19,7 @@ import java.util.Set;
 
 import static de.sciss.net.OSCPacket.printTextOn;
 import static java.lang.String.format;
+import static java.lang.System.nanoTime;
 
 @Component
 public class MessageDispatcher
@@ -73,7 +74,7 @@ public class MessageDispatcher
             MessageTransformer transformer = transformer(path);
             ModelStream stream = stream(path);
             availablePaths.add(path);
-            stream.next(session, transformer.fromMessage(time, message));
+            stream.next(session, transformer.fromMessage(nanoTime(), message));
         } catch (Exception e) {
             log.error(format("Failure dispatching message: %s", toString(message)), e);
         }

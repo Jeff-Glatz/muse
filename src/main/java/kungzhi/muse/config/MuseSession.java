@@ -9,6 +9,7 @@ import kungzhi.muse.model.SessionListener;
 import kungzhi.muse.model.Version;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -25,11 +26,8 @@ public class MuseSession
     private Battery battery;
     private DrlReference drlReference;
 
-    public MuseSession() {
-        this(new Configuration());
-    }
-
-    MuseSession(Configuration configuration) {
+    @Autowired
+    public MuseSession(Configuration configuration) {
         this.configuration = configuration;
     }
 
@@ -65,7 +63,7 @@ public class MuseSession
 
     public ModelStream<Configuration> configurationStream() {
         return (session, configuration) -> {
-            if (!this.configuration.equals(configuration)) {
+            if (!this.configuration.needsUpdate(configuration)) {
                 Configuration previous = this.configuration.copyOf();
                 this.configuration.updateFrom(configuration);
                 log.info("Current configuration has been updated: {}", configuration);

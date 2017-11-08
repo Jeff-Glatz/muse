@@ -49,6 +49,12 @@ public class Configuration
         setEegChannelLayout(that.eegChannelLayout);
     }
 
+    public boolean needsUpdate(Configuration that) {
+        if (this == that) return true;
+        if (that == null || getClass() != that.getClass()) return false;
+        return eegChannelLayout.equals(that.eegChannelLayout);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

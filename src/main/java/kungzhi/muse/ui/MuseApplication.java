@@ -12,14 +12,15 @@ import kungzhi.muse.model.BandPower;
 import kungzhi.muse.model.Configuration;
 import kungzhi.muse.model.Session;
 import kungzhi.muse.model.SessionListener;
+import kungzhi.muse.osc.MessageClient;
 import kungzhi.muse.osc.MessageDispatcher;
-import kungzhi.muse.osc.MessageReceiver;
 import kungzhi.muse.osc.Path;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ConfigurableApplicationContext;
 
+import java.util.HashMap;
 import java.util.concurrent.ExecutorService;
 
 import static java.lang.System.currentTimeMillis;
@@ -36,10 +37,9 @@ public class MuseApplication
     private final Logger log = LoggerFactory.getLogger(getClass());
     private long start;
     private ConfigurableApplicationContext context;
-    private Session session;
     private ExecutorService executor;
     private MessageDispatcher dispatcher;
-    private MessageReceiver receiver;
+    private MessageClient client;
     private Configuration configuration;
 
     @Override
@@ -52,19 +52,17 @@ public class MuseApplication
             throws Exception {
         super.init();
         start = currentTimeMillis();
+        // TODO: ParametersPropertySource
         context = new SpringApplicationBuilder(MuseConfiguration.class)
                 .headless(false)
                 .registerShutdownHook(true)
+                .properties(new HashMap<>(getParameters().getNamed()))
                 .run(getParameters().getRaw().toArray(new String[0]));
-        session = context.getBean(Session.class);
-        session.addSessionListener((previous, current) -> {
-
-        });
+        context.getBean(Session.class)
+                .addSessionListener((previous, current) -> configuration = current);
         executor = context.getBean(ExecutorService.class);
         dispatcher = context.getBean(MessageDispatcher.class);
-        receiver = context.getBean(MessageReceiver.class)
-                .withProtocol("udp")
-                .onAddress(5000);
+        client = context.getBean(MessageClient.class);
     }
 
     @Override
@@ -105,7 +103,7 @@ public class MuseApplication
         data.add(bandPowerSeries(DELTA_ABSOLUTE));
 
         // Start streaming messages
-        receiver.on();
+        client.on();
 
         stage.setScene(scene);
         stage.show();
