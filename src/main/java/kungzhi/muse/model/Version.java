@@ -104,18 +104,6 @@ public class Version
     }
 
     @Override
-    public Version copyFrom(Version that) {
-        this.time = that.time;
-        this.buildNumber = that.buildNumber;
-        this.firmwareBootloaderVersion = that.firmwareBootloaderVersion;
-        this.firmwareHeadsetVersion = that.firmwareHeadsetVersion;
-        this.firmwareType = that.firmwareType;
-        this.hardwareVersion = that.hardwareVersion;
-        this.protocolVersion = that.protocolVersion;
-        return this;
-    }
-
-    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -152,6 +140,18 @@ public class Version
     @Override
     protected Version newInstance() {
         return new Version();
+    }
+
+    @Override
+    protected Version update(Version that) {
+        this.time = that.time;
+        this.buildNumber = that.buildNumber;
+        this.firmwareBootloaderVersion = that.firmwareBootloaderVersion;
+        this.firmwareHeadsetVersion = that.firmwareHeadsetVersion;
+        this.firmwareType = that.firmwareType;
+        this.hardwareVersion = that.hardwareVersion;
+        this.protocolVersion = that.protocolVersion;
+        return this;
     }
 
     private boolean sameAs(Version version) {

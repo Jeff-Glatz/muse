@@ -30,16 +30,16 @@ public abstract class ActiveModel<M extends ActiveItem<M> & Model>
     @Override
     public final M copy() {
         return newInstance()
-                .copyFrom((M) this);
+                .update((M) this);
     }
 
     @Override
     public final boolean updateFrom(M model) {
         if (differsFrom(model)) {
             M previous = copy();
-            M current = copyFrom(model);
+            M current = update(model);
             log.info("{} has been modified: {}", getClass().getSimpleName(), current);
-            support.modified(previous, current);
+            support.modified(current, previous);
             return true;
         }
         return false;
@@ -50,7 +50,7 @@ public abstract class ActiveModel<M extends ActiveItem<M> & Model>
         return time == 0;
     }
 
-    protected abstract M copyFrom(M item);
+    protected abstract M update(M item);
 
 
     protected abstract ActiveModel<M> newInstance();

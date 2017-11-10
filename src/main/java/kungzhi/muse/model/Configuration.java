@@ -45,13 +45,6 @@ public class Configuration
         return !this.sameAs(that);
     }
 
-    public Configuration copyFrom(Configuration that) {
-        this.time = that.time;
-        this.eegChannelLayout.clear();
-        this.eegChannelLayout.addAll(that.eegChannelLayout);
-        return this;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -79,6 +72,13 @@ public class Configuration
     @Override
     protected Configuration newInstance() {
         return new Configuration();
+    }
+
+    protected Configuration update(Configuration that) {
+        this.time = that.time;
+        this.eegChannelLayout.clear();
+        this.eegChannelLayout.addAll(that.eegChannelLayout);
+        return this;
     }
 
     private boolean sameAs(Configuration that) {

@@ -57,7 +57,7 @@ public class MuseApplication
                 .properties(new HashMap<>(getParameters().getNamed()))
                 .run(getParameters().getRaw().toArray(new String[0]));
         configuration = context.getBean(Configuration.class);
-        configuration.addActiveItemListener((previous, current) -> {
+        configuration.addActiveItemListener((current, previous) -> {
             if (previous.initial()) {
                 log.info("Configuration received, processing queued data...");
                 powers.stream().forEachOrdered(data -> addTo(data.series, data.model));

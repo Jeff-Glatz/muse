@@ -80,16 +80,6 @@ public class Battery
     }
 
     @Override
-    public Battery copyFrom(Battery that) {
-        this.time = that.time;
-        this.adcVoltage = that.adcVoltage;
-        this.fuelGaugeVoltage = that.fuelGaugeVoltage;
-        this.stateOfCharge = that.stateOfCharge;
-        this.temperature = that.temperature;
-        return this;
-    }
-
-    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -122,6 +112,16 @@ public class Battery
     @Override
     protected Battery newInstance() {
         return new Battery();
+    }
+
+    @Override
+    protected Battery update(Battery that) {
+        this.time = that.time;
+        this.adcVoltage = that.adcVoltage;
+        this.fuelGaugeVoltage = that.fuelGaugeVoltage;
+        this.stateOfCharge = that.stateOfCharge;
+        this.temperature = that.temperature;
+        return this;
     }
 
     private boolean sameAs(Battery battery) {

@@ -48,14 +48,6 @@ public class DrlReference
     }
 
     @Override
-    public DrlReference copyFrom(DrlReference that) {
-        this.time = that.time;
-        this.drivenRightLegVoltage = that.drivenRightLegVoltage;
-        this.referenceVoltage = that.referenceVoltage;
-        return this;
-    }
-
-    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -84,6 +76,14 @@ public class DrlReference
     @Override
     protected DrlReference newInstance() {
         return new DrlReference();
+    }
+
+    @Override
+    protected DrlReference update(DrlReference that) {
+        this.time = that.time;
+        this.drivenRightLegVoltage = that.drivenRightLegVoltage;
+        this.referenceVoltage = that.referenceVoltage;
+        return this;
     }
 
     private boolean sameAs(DrlReference drlReference) {
