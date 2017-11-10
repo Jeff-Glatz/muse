@@ -13,4 +13,6 @@ public interface ActiveItem<Item extends ActiveItem<Item> & Serializable> {
     Item copy();
 
     boolean updateFrom(Item item);
+
+    boolean initial();
 }

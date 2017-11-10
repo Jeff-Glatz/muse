@@ -41,14 +41,14 @@ public class Configuration
                 .orElseThrow(IllegalArgumentException::new);
     }
 
-    public boolean differsFrom(Configuration configuration) {
-        return !sameAs(configuration);
+    public boolean differsFrom(Configuration that) {
+        return !this.sameAs(that);
     }
 
-    public Configuration copyFrom(Configuration configuration) {
-        this.time = configuration.time;
+    public Configuration copyFrom(Configuration that) {
+        this.time = that.time;
         this.eegChannelLayout.clear();
-        this.eegChannelLayout.addAll(configuration.eegChannelLayout);
+        this.eegChannelLayout.addAll(that.eegChannelLayout);
         return this;
     }
 

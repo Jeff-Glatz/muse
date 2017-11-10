@@ -43,15 +43,15 @@ public class DrlReference
     }
 
     @Override
-    public boolean differsFrom(DrlReference drlReference) {
-        return !sameAs(drlReference);
+    public boolean differsFrom(DrlReference that) {
+        return !this.sameAs(that);
     }
 
     @Override
-    public DrlReference copyFrom(DrlReference drlReference) {
-        this.time = drlReference.time;
-        this.drivenRightLegVoltage = drlReference.drivenRightLegVoltage;
-        this.referenceVoltage = drlReference.referenceVoltage;
+    public DrlReference copyFrom(DrlReference that) {
+        this.time = that.time;
+        this.drivenRightLegVoltage = that.drivenRightLegVoltage;
+        this.referenceVoltage = that.referenceVoltage;
         return this;
     }
 

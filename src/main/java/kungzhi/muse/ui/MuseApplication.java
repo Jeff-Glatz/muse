@@ -56,8 +56,14 @@ public class MuseApplication
                 .registerShutdownHook(true)
                 .properties(new HashMap<>(getParameters().getNamed()))
                 .run(getParameters().getRaw().toArray(new String[0]));
-        context.getBean(Configuration.class)
-                .addActiveItemListener((previous, current) -> initialize(current));
+        configuration = context.getBean(Configuration.class);
+        configuration.addActiveItemListener((previous, current) -> {
+            if (previous.initial()) {
+                log.info("Configuration received, processing queued data...");
+                powers.stream().forEachOrdered(data -> addTo(data.series, data.model));
+                log.info("Queued data processed.");
+            }
+        });
         executor = context.getBean(ExecutorService.class);
         dispatcher = context.getBean(MessageDispatcher.class);
         client = context.getBean(MessageClient.class);
@@ -107,21 +113,12 @@ public class MuseApplication
         stage.show();
     }
 
-    private void initialize(Configuration current) {
-        if (configuration == null) {
-            configuration = current;
-            log.info("Configuration received, processing queued data...");
-            powers.stream().forEachOrdered(data -> addTo(data.series, data.model));
-            log.info("Queued data processed.");
-        }
-    }
-
     private XYChart.Series<Number, Number> bandPowerSeries(Path path) {
         XYChart.Series<Number, Number> series = new XYChart.Series<>();
         series.setName(path.name());
         dispatcher.withStream(path, BandPower.class,
                 asynchronously(executor, (session, power) -> {
-                    if (configuration == null) {
+                    if (configuration.initial()) {
                         log.warn("Configuration not yet received, queueing data");
                         powers.offer(new QueuedData<>(series, power));
                         return;

@@ -75,17 +75,17 @@ public class Battery
     }
 
     @Override
-    public boolean differsFrom(Battery battery) {
-        return !sameAs(battery);
+    public boolean differsFrom(Battery that) {
+        return !this.sameAs(that);
     }
 
     @Override
-    public Battery copyFrom(Battery battery) {
-        this.time = battery.time;
-        this.adcVoltage = battery.adcVoltage;
-        this.fuelGaugeVoltage = battery.fuelGaugeVoltage;
-        this.stateOfCharge = battery.stateOfCharge;
-        this.temperature = battery.temperature;
+    public Battery copyFrom(Battery that) {
+        this.time = that.time;
+        this.adcVoltage = that.adcVoltage;
+        this.fuelGaugeVoltage = that.fuelGaugeVoltage;
+        this.stateOfCharge = that.stateOfCharge;
+        this.temperature = that.temperature;
         return this;
     }
 

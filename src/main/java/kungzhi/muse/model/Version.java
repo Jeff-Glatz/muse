@@ -99,19 +99,19 @@ public class Version
     }
 
     @Override
-    public boolean differsFrom(Version version) {
-        return !sameAs(version);
+    public boolean differsFrom(Version that) {
+        return !this.sameAs(that);
     }
 
     @Override
-    public Version copyFrom(Version version) {
-        this.time = version.time;
-        this.buildNumber = version.buildNumber;
-        this.firmwareBootloaderVersion = version.firmwareBootloaderVersion;
-        this.firmwareHeadsetVersion = version.firmwareHeadsetVersion;
-        this.firmwareType = version.firmwareType;
-        this.hardwareVersion = version.hardwareVersion;
-        this.protocolVersion = version.protocolVersion;
+    public Version copyFrom(Version that) {
+        this.time = that.time;
+        this.buildNumber = that.buildNumber;
+        this.firmwareBootloaderVersion = that.firmwareBootloaderVersion;
+        this.firmwareHeadsetVersion = that.firmwareHeadsetVersion;
+        this.firmwareType = that.firmwareType;
+        this.hardwareVersion = that.hardwareVersion;
+        this.protocolVersion = that.protocolVersion;
         return this;
     }
 

@@ -39,10 +39,15 @@ public abstract class ActiveModel<M extends ActiveItem<M> & Model>
             M previous = copy();
             M current = copyFrom(model);
             log.info("{} has been modified: {}", getClass().getSimpleName(), current);
-            support.modified(current, previous);
+            support.modified(previous, current);
             return true;
         }
         return false;
+    }
+
+    @Override
+    public boolean initial() {
+        return time == 0;
     }
 
     protected abstract M copyFrom(M item);
