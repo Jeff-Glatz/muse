@@ -1,8 +1,10 @@
 package kungzhi.muse.model;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class Version
-        extends AbstractModel
-        implements LiveModel<Version> {
+        extends ActiveModel<Version> {
     private String buildNumber;
     private String firmwareType;
     private String hardwareVersion;
@@ -97,38 +99,19 @@ public class Version
     }
 
     @Override
-    public Version copyOf() {
-        Version version = new Version();
-        version.updateFrom(this);
-        return version;
-    }
-
-    @Override
     public boolean needsUpdate(Version version) {
-        if (this == version) return true;
-        if (version == null || getClass() != version.getClass()) return false;
-
-        if (buildNumber != null ? !buildNumber.equals(version.buildNumber) : version.buildNumber != null) return false;
-        if (firmwareType != null ? !firmwareType.equals(version.firmwareType) : version.firmwareType != null)
-            return false;
-        if (hardwareVersion != null ? !hardwareVersion.equals(version.hardwareVersion) : version.hardwareVersion != null)
-            return false;
-        if (firmwareHeadsetVersion != null ? !firmwareHeadsetVersion.equals(version.firmwareHeadsetVersion) : version.firmwareHeadsetVersion != null)
-            return false;
-        if (protocolVersion != null ? !protocolVersion.equals(version.protocolVersion) : version.protocolVersion != null)
-            return false;
-        return firmwareBootloaderVersion != null ? firmwareBootloaderVersion.equals(version.firmwareBootloaderVersion) : version.firmwareBootloaderVersion == null;
+        return !sameAs(version);
     }
 
     @Override
     public Version updateFrom(Version version) {
-        setTime(version.time);
-        setBuildNumber(version.buildNumber);
-        setFirmwareBootloaderVersion(version.firmwareBootloaderVersion);
-        setFirmwareHeadsetVersion(version.firmwareHeadsetVersion);
-        setFirmwareType(version.firmwareType);
-        setHardwareVersion(version.hardwareVersion);
-        setProtocolVersion(version.protocolVersion);
+        this.time = version.time;
+        this.buildNumber = version.buildNumber;
+        this.firmwareBootloaderVersion = version.firmwareBootloaderVersion;
+        this.firmwareHeadsetVersion = version.firmwareHeadsetVersion;
+        this.firmwareType = version.firmwareType;
+        this.hardwareVersion = version.hardwareVersion;
+        this.protocolVersion = version.protocolVersion;
         return this;
     }
 
@@ -138,18 +121,7 @@ public class Version
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
 
-        Version version = (Version) o;
-
-        if (buildNumber != null ? !buildNumber.equals(version.buildNumber) : version.buildNumber != null) return false;
-        if (firmwareType != null ? !firmwareType.equals(version.firmwareType) : version.firmwareType != null)
-            return false;
-        if (hardwareVersion != null ? !hardwareVersion.equals(version.hardwareVersion) : version.hardwareVersion != null)
-            return false;
-        if (firmwareHeadsetVersion != null ? !firmwareHeadsetVersion.equals(version.firmwareHeadsetVersion) : version.firmwareHeadsetVersion != null)
-            return false;
-        if (protocolVersion != null ? !protocolVersion.equals(version.protocolVersion) : version.protocolVersion != null)
-            return false;
-        return firmwareBootloaderVersion != null ? firmwareBootloaderVersion.equals(version.firmwareBootloaderVersion) : version.firmwareBootloaderVersion == null;
+        return sameAs((Version) o);
     }
 
     @Override
@@ -175,5 +147,23 @@ public class Version
                 ", firmwareBootloaderVersion='" + firmwareBootloaderVersion + '\'' +
                 ", protocolVersion='" + protocolVersion + '\'' +
                 '}';
+    }
+
+    @Override
+    protected Version newInstance() {
+        return new Version();
+    }
+
+    private boolean sameAs(Version version) {
+        if (buildNumber != null ? !buildNumber.equals(version.buildNumber) : version.buildNumber != null) return false;
+        if (firmwareType != null ? !firmwareType.equals(version.firmwareType) : version.firmwareType != null)
+            return false;
+        if (hardwareVersion != null ? !hardwareVersion.equals(version.hardwareVersion) : version.hardwareVersion != null)
+            return false;
+        if (firmwareHeadsetVersion != null ? !firmwareHeadsetVersion.equals(version.firmwareHeadsetVersion) : version.firmwareHeadsetVersion != null)
+            return false;
+        if (protocolVersion != null ? !protocolVersion.equals(version.protocolVersion) : version.protocolVersion != null)
+            return false;
+        return firmwareBootloaderVersion != null ? firmwareBootloaderVersion.equals(version.firmwareBootloaderVersion) : version.firmwareBootloaderVersion == null;
     }
 }

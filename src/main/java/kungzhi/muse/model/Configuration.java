@@ -1,12 +1,14 @@
 package kungzhi.muse.model;
 
+import org.springframework.stereotype.Component;
+
 import java.util.Collection;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+@Component
 public class Configuration
-        extends AbstractModel
-        implements LiveModel<Configuration> {
+        extends ActiveModel<Configuration> {
     private final SortedSet<EegChannel> eegChannelLayout = new TreeSet<>();
 
     public Configuration() {
@@ -39,21 +41,14 @@ public class Configuration
                 .orElseThrow(IllegalArgumentException::new);
     }
 
-    public Configuration copyOf() {
-        Configuration configuration = new Configuration();
-        configuration.updateFrom(this);
-        return configuration;
-    }
-
     public boolean needsUpdate(Configuration configuration) {
-        if (this == configuration) return true;
-        if (configuration == null || getClass() != configuration.getClass()) return false;
-        return eegChannelLayout.equals(configuration.eegChannelLayout);
+        return !sameAs(configuration);
     }
 
     public Configuration updateFrom(Configuration configuration) {
-        setTime(configuration.time);
-        setEegChannelLayout(configuration.eegChannelLayout);
+        this.time = configuration.time;
+        this.eegChannelLayout.clear();
+        this.eegChannelLayout.addAll(configuration.eegChannelLayout);
         return this;
     }
 
@@ -63,9 +58,7 @@ public class Configuration
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
 
-        Configuration that = (Configuration) o;
-
-        return eegChannelLayout.equals(that.eegChannelLayout);
+        return sameAs((Configuration) o);
     }
 
     @Override
@@ -81,5 +74,14 @@ public class Configuration
                 "time=" + time +
                 ", eegChannelLayout=" + eegChannelLayout +
                 '}';
+    }
+
+    @Override
+    protected Configuration newInstance() {
+        return new Configuration();
+    }
+
+    private boolean sameAs(Configuration that) {
+        return eegChannelLayout.equals(that.eegChannelLayout);
     }
 }

@@ -1,40 +1,92 @@
 package kungzhi.muse.model;
 
-public class Battery
-        extends AbstractModel {
-    private final Integer stateOfCharge;
-    private final Integer fuelGuageVoltage;
-    private final Integer adcVoltage;
-    private final Integer temperature;
+import org.springframework.stereotype.Component;
 
-    public Battery(long time, Integer stateOfCharge,
-                   Integer fuelGuageVoltage, Integer adcVoltage,
-                   Integer temperature) {
+@Component
+public class Battery
+        extends ActiveModel<Battery> {
+    private Integer stateOfCharge = 0;
+    private Integer fuelGaugeVoltage = 0;
+    private Integer adcVoltage = 0;
+    private Integer temperature = 0;
+
+    public Battery() {
+        this(0);
+    }
+
+    public Battery(long time) {
         super(time);
-        this.stateOfCharge = stateOfCharge;
-        this.fuelGuageVoltage = fuelGuageVoltage;
-        this.adcVoltage = adcVoltage;
-        this.temperature = temperature;
     }
 
     public Integer getStateOfCharge() {
         return stateOfCharge;
     }
 
-    public Float getPercentRemaining() {
-        return stateOfCharge / 100f;
+    public void setStateOfCharge(Integer stateOfCharge) {
+        this.stateOfCharge = stateOfCharge;
     }
 
-    public Integer getFuelGuageVoltage() {
-        return fuelGuageVoltage;
+    public Battery withStateOfCharge(Integer stateOfCharge) {
+        this.stateOfCharge = stateOfCharge;
+        return this;
+    }
+
+    public Integer getFuelGaugeVoltage() {
+        return fuelGaugeVoltage;
+    }
+
+    public void setFuelGaugeVoltage(Integer fuelGaugeVoltage) {
+        this.fuelGaugeVoltage = fuelGaugeVoltage;
+    }
+
+    public Battery withFuelGaugeVoltage(Integer fuelGaugeVoltage) {
+        this.fuelGaugeVoltage = fuelGaugeVoltage;
+        return this;
     }
 
     public Integer getAdcVoltage() {
         return adcVoltage;
     }
 
+    public void setAdcVoltage(Integer adcVoltage) {
+        this.adcVoltage = adcVoltage;
+    }
+
+    public Battery withAdcVoltage(Integer adcVoltage) {
+        this.adcVoltage = adcVoltage;
+        return this;
+    }
+
     public Integer getTemperature() {
         return temperature;
+    }
+
+    public void setTemperature(Integer temperature) {
+        this.temperature = temperature;
+    }
+
+    public Battery withTemperature(Integer temperature) {
+        this.temperature = temperature;
+        return this;
+    }
+
+    public Float getPercentRemaining() {
+        return stateOfCharge / 100f;
+    }
+
+    @Override
+    public boolean needsUpdate(Battery battery) {
+        return !sameAs(battery);
+    }
+
+    @Override
+    public Battery updateFrom(Battery battery) {
+        this.time = battery.time;
+        this.adcVoltage = battery.adcVoltage;
+        this.fuelGaugeVoltage = battery.fuelGaugeVoltage;
+        this.stateOfCharge = battery.stateOfCharge;
+        this.temperature = battery.temperature;
+        return this;
     }
 
     @Override
@@ -43,23 +95,30 @@ public class Battery
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
 
-        Battery battery = (Battery) o;
-
-        if (stateOfCharge != null ? !stateOfCharge.equals(battery.stateOfCharge) : battery.stateOfCharge != null)
-            return false;
-        if (fuelGuageVoltage != null ? !fuelGuageVoltage.equals(battery.fuelGuageVoltage) : battery.fuelGuageVoltage != null)
-            return false;
-        if (adcVoltage != null ? !adcVoltage.equals(battery.adcVoltage) : battery.adcVoltage != null) return false;
-        return temperature != null ? temperature.equals(battery.temperature) : battery.temperature == null;
+        return sameAs((Battery) o);
     }
 
     @Override
     public int hashCode() {
         int result = super.hashCode();
         result = 31 * result + (stateOfCharge != null ? stateOfCharge.hashCode() : 0);
-        result = 31 * result + (fuelGuageVoltage != null ? fuelGuageVoltage.hashCode() : 0);
+        result = 31 * result + (fuelGaugeVoltage != null ? fuelGaugeVoltage.hashCode() : 0);
         result = 31 * result + (adcVoltage != null ? adcVoltage.hashCode() : 0);
         result = 31 * result + (temperature != null ? temperature.hashCode() : 0);
         return result;
+    }
+
+    @Override
+    protected Battery newInstance() {
+        return new Battery();
+    }
+
+    private boolean sameAs(Battery battery) {
+        if (stateOfCharge != null ? !stateOfCharge.equals(battery.stateOfCharge) : battery.stateOfCharge != null)
+            return false;
+        if (fuelGaugeVoltage != null ? !fuelGaugeVoltage.equals(battery.fuelGaugeVoltage) : battery.fuelGaugeVoltage != null)
+            return false;
+        if (adcVoltage != null ? !adcVoltage.equals(battery.adcVoltage) : battery.adcVoltage != null) return false;
+        return temperature != null ? temperature.equals(battery.temperature) : battery.temperature == null;
     }
 }

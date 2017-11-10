@@ -56,11 +56,6 @@ public class MuseConfiguration {
     }
 
     @Bean
-    public kungzhi.muse.model.Configuration configuration() {
-        return new kungzhi.muse.model.Configuration();
-    }
-
-    @Bean
     public MessageDispatcher messageDispatcher(MuseSession museSession, Bands bands) {
         return new MessageDispatcher(museSession)
                 .streaming("/muse/config",

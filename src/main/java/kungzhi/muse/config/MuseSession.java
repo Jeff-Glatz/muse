@@ -5,40 +5,28 @@ import kungzhi.muse.model.Configuration;
 import kungzhi.muse.model.DrlReference;
 import kungzhi.muse.model.ModelStream;
 import kungzhi.muse.model.Session;
-import kungzhi.muse.model.SessionListener;
 import kungzhi.muse.model.Version;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Component
 public class MuseSession
         implements Session {
     private final Logger log = LoggerFactory.getLogger(getClass());
-    private final List<SessionListener> sessionListeners = new ArrayList<>();
     private final Configuration configuration;
-
-    private Version version;
-    private Battery battery;
-    private DrlReference drlReference;
+    private final Version version;
+    private final Battery battery;
+    private final DrlReference drlReference;
 
     @Autowired
-    public MuseSession(Configuration configuration) {
+    public MuseSession(Configuration configuration, Version version,
+                       Battery battery, DrlReference drlReference) {
         this.configuration = configuration;
-    }
-
-    @Override
-    public void addSessionListener(SessionListener listener) {
-        sessionListeners.add(listener);
-    }
-
-    @Override
-    public void removeSessionListener(SessionListener listener) {
-        sessionListeners.remove(listener);
+        this.version = version;
+        this.battery = battery;
+        this.drlReference = drlReference;
     }
 
     @Override
@@ -63,37 +51,25 @@ public class MuseSession
 
     public ModelStream<Configuration> configurationStream() {
         return (session, configuration) -> {
-            if (!this.configuration.needsUpdate(configuration)) {
-                Configuration previous = this.configuration.copyOf();
-                this.configuration.updateFrom(configuration);
-                log.info("Current configuration has been updated: {}", configuration);
-                sessionListeners.forEach(listener ->
-                        listener.configurationChanged(previous, this.configuration));
-            }
+            this.configuration.maybeUpdateFrom(configuration);
         };
     }
 
     public ModelStream<Version> versionStream() {
         return (session, version) -> {
-            if (!this.version.needsUpdate(version)) {
-                Version previous = this.version.copyOf();
-                this.version.updateFrom(version);
-                log.info("Current version has been updated: {}", version);
-                sessionListeners.forEach(listener ->
-                        listener.versionChanged(previous, this.version));
-            }
+            this.version.maybeUpdateFrom(version);
         };
     }
 
     public ModelStream<Battery> batteryStream() {
         return (session, battery) -> {
-            this.battery = battery;
+            this.battery.maybeUpdateFrom(battery);
         };
     }
 
     public ModelStream<DrlReference> drlReferenceStream() {
         return (session, drlReference) -> {
-            this.drlReference = drlReference;
+            this.drlReference.maybeUpdateFrom(drlReference);
         };
     }
 }

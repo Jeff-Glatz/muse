@@ -13,8 +13,8 @@ public class DrlReferenceTransformer
     @Override
     public DrlReference fromMessage(long time, OSCMessage message)
             throws Exception {
-        return new DrlReference(time,
-                argumentAt(message, Float.class, 0),
-                argumentAt(message, Float.class, 1));
+        return new DrlReference(time)
+                .withDrivenRightLegVoltage(argumentAt(message, Float.class, 0))
+                .withReferenceVoltage(argumentAt(message, Float.class, 1));
     }
 }

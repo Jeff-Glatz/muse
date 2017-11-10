@@ -8,10 +8,10 @@ import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.stage.Stage;
 import kungzhi.muse.config.MuseConfiguration;
+import kungzhi.muse.model.Band;
 import kungzhi.muse.model.BandPower;
 import kungzhi.muse.model.Configuration;
-import kungzhi.muse.model.Session;
-import kungzhi.muse.model.SessionListener;
+import kungzhi.muse.model.EegChannel;
 import kungzhi.muse.osc.MessageClient;
 import kungzhi.muse.osc.MessageDispatcher;
 import kungzhi.muse.osc.Path;
@@ -21,6 +21,9 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ConfigurableApplicationContext;
 
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.SortedSet;
 import java.util.concurrent.ExecutorService;
 
 import static java.lang.System.currentTimeMillis;
@@ -32,8 +35,7 @@ import static kungzhi.muse.osc.Path.THETA_ABSOLUTE;
 import static kungzhi.muse.ui.AsyncModelStream.asynchronously;
 
 public class MuseApplication
-        extends Application
-        implements SessionListener {
+        extends Application {
     private final Logger log = LoggerFactory.getLogger(getClass());
     private long start;
     private ConfigurableApplicationContext context;
@@ -43,23 +45,17 @@ public class MuseApplication
     private Configuration configuration;
 
     @Override
-    public void configurationChanged(Configuration previous, Configuration current) {
-        this.configuration = current;
-    }
-
-    @Override
     public void init()
             throws Exception {
         super.init();
         start = currentTimeMillis();
-        // TODO: ParametersPropertySource
         context = new SpringApplicationBuilder(MuseConfiguration.class)
                 .headless(false)
                 .registerShutdownHook(true)
                 .properties(new HashMap<>(getParameters().getNamed()))
                 .run(getParameters().getRaw().toArray(new String[0]));
-        context.getBean(Session.class)
-                .addSessionListener((previous, current) -> configuration = current);
+        context.getBean(Configuration.class)
+                .addActiveItemListener((previous, current) -> configuration = current);
         executor = context.getBean(ExecutorService.class);
         dispatcher = context.getBean(MessageDispatcher.class);
         client = context.getBean(MessageClient.class);
@@ -109,23 +105,34 @@ public class MuseApplication
         stage.show();
     }
 
+    private final Queue<BandPower> powers = new LinkedList<>();
+
     private XYChart.Series<Number, Number> bandPowerSeries(Path path) {
-        XYChart.Series<Number, Number> band = new XYChart.Series<>();
-        band.setName(path.name());
+        XYChart.Series<Number, Number> series = new XYChart.Series<>();
+        series.setName(path.name());
         dispatcher.withStream(path, BandPower.class,
-                asynchronously(executor, (session, model) -> {
+                asynchronously(executor, (session, power) -> {
                     if (configuration == null) {
+                        log.warn("Configuration not received, storing data");
+                        powers.offer(power);
                         return;
                     }
-                    double seconds = (currentTimeMillis() - start) / 1000D;
-                    double average = model.average();
-                    ObservableList<XYChart.Data<Number, Number>> data = band.getData();
-                    data.add(new XYChart.Data<>(seconds, average));
-                    while (data.size() > 100) {
-                        data.remove(0);
-                    }
+                    powers.stream().forEachOrdered(bandPower -> addTo(series, power));
+                    addTo(series, power);
                 }));
-        return band;
+        return series;
+    }
+
+    private void addTo(XYChart.Series<Number, Number> series, BandPower power) {
+        double seconds = (currentTimeMillis() - start) / 1000D;
+        SortedSet<EegChannel> channels = configuration.getEegChannelLayout();
+        Band band = power.getBand();
+        double average = power.average();
+        ObservableList<XYChart.Data<Number, Number>> data = series.getData();
+        data.add(new XYChart.Data<>(seconds, average));
+        while (data.size() > 100) {
+            data.remove(0);
+        }
     }
 
     public static void main(String[] args) {
