@@ -38,7 +38,7 @@ public abstract class ActiveModel<M extends ActiveItem<M> & Model>
         if (differsFrom(model)) {
             M previous = copy();
             M current = copyFrom(model);
-            log.info("Current item has been modified: {}", current);
+            log.info("{} has been modified: {}", getClass().getSimpleName(), current);
             support.modified(current, previous);
             return true;
         }
