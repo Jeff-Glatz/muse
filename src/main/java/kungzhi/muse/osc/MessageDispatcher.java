@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.net.SocketAddress;
+import java.time.Clock;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -19,7 +20,6 @@ import java.util.Set;
 
 import static de.sciss.net.OSCPacket.printTextOn;
 import static java.lang.String.format;
-import static java.lang.System.nanoTime;
 
 @Component
 public class MessageDispatcher
@@ -28,9 +28,11 @@ public class MessageDispatcher
     private final Set<String> availablePaths = new HashSet<>();
     private final Map<String, MessageTransformer<? extends Model>> transformers = new HashMap<>();
     private final Map<String, ModelStream<? extends Model>> streams = new HashMap<>();
+    private final Clock clock;
     private final Session session;
 
-    public MessageDispatcher(Session session) {
+    public MessageDispatcher(Clock clock, Session session) {
+        this.clock = clock;
         this.session = session;
     }
 
@@ -74,7 +76,7 @@ public class MessageDispatcher
             MessageTransformer transformer = transformer(path);
             ModelStream stream = stream(path);
             availablePaths.add(path);
-            stream.next(session, transformer.fromMessage(nanoTime(), message));
+            stream.next(session, transformer.fromMessage(clock.millis(), message));
         } catch (Exception e) {
             log.error(format("Failure dispatching message: %s", toString(message)), e);
         }

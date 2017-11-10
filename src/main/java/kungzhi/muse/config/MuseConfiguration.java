@@ -20,6 +20,7 @@ import org.springframework.core.convert.support.DefaultConversionService;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.time.Clock;
 import java.util.concurrent.ExecutorService;
 
 import static java.lang.Runtime.getRuntime;
@@ -35,6 +36,11 @@ import static java.util.concurrent.Executors.newFixedThreadPool;
 })
 @EnableAutoConfiguration
 public class MuseConfiguration {
+
+    @Bean
+    public Clock clock() {
+        return Clock.systemUTC();
+    }
 
     @Bean(destroyMethod = "shutdown")
     public ExecutorService executorService() {
@@ -56,8 +62,8 @@ public class MuseConfiguration {
     }
 
     @Bean
-    public MessageDispatcher messageDispatcher(MuseSession museSession, Bands bands) {
-        return new MessageDispatcher(museSession)
+    public MessageDispatcher messageDispatcher(Clock clock, MuseSession museSession, Bands bands) {
+        return new MessageDispatcher(clock, museSession)
                 .streaming("/muse/config",
                         new ConfigurationTransformer(),
                         museSession.configurationStream())
