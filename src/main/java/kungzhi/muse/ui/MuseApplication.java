@@ -12,6 +12,7 @@ import kungzhi.muse.model.Band;
 import kungzhi.muse.model.BandPower;
 import kungzhi.muse.model.Configuration;
 import kungzhi.muse.model.EegChannel;
+import kungzhi.muse.model.Model;
 import kungzhi.muse.osc.MessageClient;
 import kungzhi.muse.osc.MessageDispatcher;
 import kungzhi.muse.osc.Path;
@@ -37,6 +38,7 @@ import static kungzhi.muse.ui.AsyncModelStream.asynchronously;
 public class MuseApplication
         extends Application {
     private final Logger log = LoggerFactory.getLogger(getClass());
+    private final Queue<QueuedData<BandPower>> powers = new LinkedList<>();
     private long start;
     private ConfigurableApplicationContext context;
     private ExecutorService executor;
@@ -55,7 +57,7 @@ public class MuseApplication
                 .properties(new HashMap<>(getParameters().getNamed()))
                 .run(getParameters().getRaw().toArray(new String[0]));
         context.getBean(Configuration.class)
-                .addActiveItemListener((previous, current) -> configuration = current);
+                .addActiveItemListener((previous, current) -> initialize(current));
         executor = context.getBean(ExecutorService.class);
         dispatcher = context.getBean(MessageDispatcher.class);
         client = context.getBean(MessageClient.class);
@@ -105,7 +107,14 @@ public class MuseApplication
         stage.show();
     }
 
-    private final Queue<BandPower> powers = new LinkedList<>();
+    private void initialize(Configuration current) {
+        if (configuration == null) {
+            configuration = current;
+            log.info("Configuration received, processing queued data...");
+            powers.stream().forEachOrdered(data -> addTo(data.series, data.model));
+            log.info("Queued data processed.");
+        }
+    }
 
     private XYChart.Series<Number, Number> bandPowerSeries(Path path) {
         XYChart.Series<Number, Number> series = new XYChart.Series<>();
@@ -113,11 +122,10 @@ public class MuseApplication
         dispatcher.withStream(path, BandPower.class,
                 asynchronously(executor, (session, power) -> {
                     if (configuration == null) {
-                        log.warn("Configuration not received, storing data");
-                        powers.offer(power);
+                        log.warn("Configuration not yet received, queueing data");
+                        powers.offer(new QueuedData<>(series, power));
                         return;
                     }
-                    powers.stream().forEachOrdered(bandPower -> addTo(series, power));
                     addTo(series, power);
                 }));
         return series;
@@ -137,5 +145,15 @@ public class MuseApplication
 
     public static void main(String[] args) {
         launch(args);
+    }
+
+    private static class QueuedData<M extends Model> {
+        final XYChart.Series<Number, Number> series;
+        final M model;
+
+        public QueuedData(XYChart.Series<Number, Number> series, M model) {
+            this.series = series;
+            this.model = model;
+        }
     }
 }
