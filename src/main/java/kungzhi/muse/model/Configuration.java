@@ -408,7 +408,7 @@ public class Configuration
     @Override
     public String toString() {
         return "Configuration{" +
-                ", time=" + time +
+                "time=" + time +
                 ", eegChannelLayout=" + eegChannelLayout +
                 ", macAddress='" + macAddress + '\'' +
                 ", serialNumber='" + serialNumber + '\'' +

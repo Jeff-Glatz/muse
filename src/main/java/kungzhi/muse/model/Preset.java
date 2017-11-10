@@ -4,7 +4,6 @@ import java.util.EnumSet;
 import java.util.stream.Stream;
 
 import static java.lang.Float.parseFloat;
-import static java.lang.String.format;
 import static java.util.EnumSet.of;
 import static kungzhi.muse.model.Sensor.AF7;
 import static kungzhi.muse.model.Sensor.AF8;
@@ -52,8 +51,6 @@ public enum Preset {
         return Stream.of(values())
                 .filter(preset -> preset.id == fastString)
                 .findFirst()
-                .orElseThrow(() -> {
-                    throw new IllegalArgumentException(format("Preset[id:%s] not defined", id));
-                });
+                .orElse(null);
     }
 }
