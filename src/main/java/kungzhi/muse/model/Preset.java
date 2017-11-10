@@ -1,8 +1,10 @@
 package kungzhi.muse.model;
 
 import java.util.EnumSet;
+import java.util.stream.Stream;
 
 import static java.lang.Float.parseFloat;
+import static java.lang.String.format;
 import static java.util.EnumSet.of;
 import static kungzhi.muse.model.Sensor.AF7;
 import static kungzhi.muse.model.Sensor.AF8;
@@ -23,7 +25,7 @@ public enum Preset {
     private final Float eegFrequency;
 
     Preset(String id, EnumSet<Sensor> sensors, Integer eegBits, String eegFrequency) {
-        this.id = id;
+        this.id = id.intern();
         this.sensors = sensors;
         this.eegBits = eegBits;
         this.eegFrequency = parseFloat(eegFrequency);
@@ -43,5 +45,15 @@ public enum Preset {
 
     public Float getEegFrequency() {
         return eegFrequency;
+    }
+
+    public static Preset fromId(String id) {
+        String fastString = id.intern();
+        return Stream.of(values())
+                .filter(preset -> preset.id == fastString)
+                .findFirst()
+                .orElseThrow(() -> {
+                    throw new IllegalArgumentException(format("Preset[id:%s] not defined", id));
+                });
     }
 }
