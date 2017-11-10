@@ -409,7 +409,6 @@ public class Configuration
     public String toString() {
         return "Configuration{" +
                 "time=" + time +
-                ", eegChannelLayout=" + eegChannelLayout +
                 ", macAddress='" + macAddress + '\'' +
                 ", serialNumber='" + serialNumber + '\'' +
                 ", preset=" + preset +
@@ -419,6 +418,7 @@ public class Configuration
                 ", eegSampleFrequencyInHz=" + eegSampleFrequencyInHz +
                 ", eegOutputFrequencyInHz=" + eegOutputFrequencyInHz +
                 ", eegChannelCount=" + eegChannelCount +
+                ", eegChannelLayout=" + eegChannelLayout +
                 ", eegSamplesBitWidth=" + eegSamplesBitWidth +
                 ", eegDownSample=" + eegDownSample +
                 ", afeGain=" + afeGain +

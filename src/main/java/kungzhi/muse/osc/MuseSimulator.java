@@ -64,9 +64,16 @@ public class MuseSimulator {
     }
 
     @ManagedOperation
-    public void sendConfiguration(String eegChannelLayout)
+    public void sendConfiguration(String mac, String serial, String preset, String eegChannelLayout)
             throws IOException {
-        send("/muse/config", format("{\"eeg_channel_layout\":\"%s\"}", eegChannelLayout));
+        int eegChannelCount = eegChannelLayout.trim().split(" ").length;
+        send("/muse/config", format("{" +
+                "\"mac_addr\":\"%s\"," +
+                "\"serial_number\":\"%s\"," +
+                "\"preset\":\"%s\"," +
+                "\"eeg_channel_count\":\"%s\"," +
+                "\"eeg_channel_layout\":\"%s\"" +
+                "}", mac, serial, preset, eegChannelCount, eegChannelLayout));
     }
 
     @ManagedOperation
