@@ -4,7 +4,7 @@ import de.sciss.net.OSCMessage;
 import kungzhi.muse.model.Band;
 import kungzhi.muse.model.SessionScore;
 
-import static kungzhi.muse.osc.MessageHelper.collectArguments;
+import static kungzhi.muse.osc.MessageHelper.extractArguments;
 
 public class SessionScoreTransformer
         implements MessageTransformer<SessionScore> {
@@ -17,6 +17,6 @@ public class SessionScoreTransformer
     @Override
     public SessionScore fromMessage(long time, OSCMessage message)
             throws Exception {
-        return new SessionScore(time, band, collectArguments(message, Float.class));
+        return new SessionScore(time, band, extractArguments(message, Float.class));
     }
 }

@@ -5,6 +5,7 @@ import kungzhi.muse.model.Model;
 
 public class EmptyMessageTransformer<M extends Model>
         implements MessageTransformer<M> {
+
     @Override
     public M fromMessage(long time, OSCMessage message)
             throws Exception {

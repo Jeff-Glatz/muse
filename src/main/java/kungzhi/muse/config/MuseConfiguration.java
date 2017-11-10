@@ -1,14 +1,18 @@
 package kungzhi.muse.config;
 
 import kungzhi.muse.model.EmptyModelStream;
+import kungzhi.muse.osc.AccelerometerTransformer;
 import kungzhi.muse.osc.BandPowerTransformer;
 import kungzhi.muse.osc.BatteryTransformer;
 import kungzhi.muse.osc.ConfigurationTransformer;
 import kungzhi.muse.osc.DrlReferenceTransformer;
 import kungzhi.muse.osc.EegTransformer;
 import kungzhi.muse.osc.EmptyMessageTransformer;
+import kungzhi.muse.osc.FftTransformer;
+import kungzhi.muse.osc.HorseshoeTransformer;
 import kungzhi.muse.osc.MessageDispatcher;
 import kungzhi.muse.osc.SessionScoreTransformer;
+import kungzhi.muse.osc.SingleValueTransformer;
 import kungzhi.muse.osc.VersionTransformer;
 import kungzhi.muse.repository.Bands;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -76,8 +80,20 @@ public class MuseConfiguration {
                 .streaming("/muse/drlref",
                         new DrlReferenceTransformer(),
                         museSession.drlReferenceStream())
+                .streaming("/muse/acc",
+                        new AccelerometerTransformer(),
+                        new EmptyModelStream<>())
+                .streaming("/muse/acc/dropped_samples",
+                        new SingleValueTransformer<>(Integer.class),
+                        new EmptyModelStream<>())
                 .streaming("/muse/eeg",
                         new EegTransformer(),
+                        new EmptyModelStream<>())
+                .streaming("/muse/eeg/dropped_samples",
+                        new SingleValueTransformer<>(Integer.class),
+                        new EmptyModelStream<>())
+                .streaming("/muse/eeg/quantization",
+                        new SingleValueTransformer<>(Integer.class),
                         new EmptyModelStream<>())
                 .streaming("/muse/elements/low_freqs_absolute",
                         new BandPowerTransformer(bands.load("low"), false),
@@ -127,35 +143,29 @@ public class MuseConfiguration {
                 .streaming("/muse/elements/gamma_session_score",
                         new SessionScoreTransformer(bands.load("gamma")),
                         new EmptyModelStream<>())
-                // TODO: Unimplemented
-                .streaming("/muse/eeg/dropped_samples",
-                        new EmptyMessageTransformer<>(),
+                .streaming("/muse/elements/experimental/concentration",
+                        new SingleValueTransformer<>(Float.class),
                         new EmptyModelStream<>())
-                .streaming("/muse/eeg/quantization",
-                        new EmptyMessageTransformer<>(),
-                        new EmptyModelStream<>())
-                .streaming("/muse/acc",
-                        new EmptyMessageTransformer<>(),
-                        new EmptyModelStream<>())
-                .streaming("/muse/acc/dropped_samples",
-                        new EmptyMessageTransformer<>(),
+                .streaming("/muse/elements/experimental/mellow",
+                        new SingleValueTransformer<>(Float.class),
                         new EmptyModelStream<>())
                 .streaming("/muse/elements/raw_fft0",
-                        new EmptyMessageTransformer<>(),
+                        new FftTransformer(0),
                         new EmptyModelStream<>())
                 .streaming("/muse/elements/raw_fft1",
-                        new EmptyMessageTransformer<>(),
+                        new FftTransformer(1),
                         new EmptyModelStream<>())
                 .streaming("/muse/elements/raw_fft2",
-                        new EmptyMessageTransformer<>(),
+                        new FftTransformer(2),
                         new EmptyModelStream<>())
                 .streaming("/muse/elements/raw_fft3",
-                        new EmptyMessageTransformer<>(),
-                        new EmptyModelStream<>())
-                .streaming("/muse/elements/touching_forehead",
-                        new EmptyMessageTransformer<>(),
+                        new FftTransformer(3),
                         new EmptyModelStream<>())
                 .streaming("/muse/elements/horseshoe",
+                        new HorseshoeTransformer(),
+                        new EmptyModelStream<>())
+                // TODO: Unimplemented
+                .streaming("/muse/elements/touching_forehead",
                         new EmptyMessageTransformer<>(),
                         new EmptyModelStream<>())
                 .streaming("/muse/elements/is_good",
@@ -165,12 +175,6 @@ public class MuseConfiguration {
                         new EmptyMessageTransformer<>(),
                         new EmptyModelStream<>())
                 .streaming("/muse/elements/jaw_clench",
-                        new EmptyMessageTransformer<>(),
-                        new EmptyModelStream<>())
-                .streaming("/muse/elements/experimental/concentration",
-                        new EmptyMessageTransformer<>(),
-                        new EmptyModelStream<>())
-                .streaming("/muse/elements/experimental/mellow",
                         new EmptyMessageTransformer<>(),
                         new EmptyModelStream<>())
                 .streaming("/muse/annotation",

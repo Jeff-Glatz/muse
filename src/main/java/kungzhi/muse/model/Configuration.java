@@ -182,8 +182,8 @@ public class Configuration
     }
 
     public Configuration withEegChannelInLayout(Sensor sensor) {
-        this.eegChannelLayout.add(new EegChannel(sensor,
-                this.eegChannelLayout.size()));
+        this.eegChannelLayout.add(new EegChannel(this.eegChannelLayout.size(), sensor
+        ));
         return this;
     }
 
@@ -354,6 +354,13 @@ public class Configuration
     public Configuration withErrorDataEnabled(Boolean errorDataEnabled) {
         this.errorDataEnabled = errorDataEnabled;
         return this;
+    }
+
+    public EegChannel eegChannel(int index) {
+        return eegChannelLayout.stream()
+                .filter(eegChannel -> eegChannel.getIndex() == index)
+                .findFirst()
+                .orElseThrow(IllegalArgumentException::new);
     }
 
     public EegChannel eegChannel(Sensor channelId) {

@@ -4,20 +4,20 @@ import java.io.Serializable;
 
 public class EegChannel
         implements Serializable, Comparable<EegChannel> {
-    private final Sensor sensor;
     private final int index;
+    private final Sensor sensor;
 
-    public EegChannel(Sensor sensor, int index) {
-        this.sensor = sensor;
+    public EegChannel(int index, Sensor sensor) {
         this.index = index;
-    }
-
-    public Sensor getSensor() {
-        return sensor;
+        this.sensor = sensor;
     }
 
     public int getIndex() {
         return index;
+    }
+
+    public Sensor getSensor() {
+        return sensor;
     }
 
     @Override
@@ -51,8 +51,8 @@ public class EegChannel
     @Override
     public String toString() {
         return "EegChannel{" +
-                "sensor=" + sensor +
-                ", index=" + index +
+                "index=" + index +
+                ", sensor=" + sensor +
                 '}';
     }
 }

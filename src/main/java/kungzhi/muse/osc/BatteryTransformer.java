@@ -6,7 +6,6 @@ import org.springframework.stereotype.Component;
 
 import static kungzhi.muse.osc.MessageHelper.argumentAt;
 
-@Component
 public class BatteryTransformer
         implements MessageTransformer<Battery> {
 

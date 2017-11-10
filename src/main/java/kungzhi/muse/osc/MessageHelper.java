@@ -16,7 +16,7 @@ public class MessageHelper {
         return type.cast(message.getArg(index));
     }
 
-    public static <T> Values<T> collectArguments(OSCMessage message, Class<T> type) {
+    public static <T> Values<T> extractArguments(OSCMessage message, Class<T> type) {
         try {
             Object[] args = (Object[]) MessageHelper.args.get(message);
             return new Values<T>(type, args);
