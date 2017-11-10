@@ -43,12 +43,12 @@ public class DrlReference
     }
 
     @Override
-    public boolean needsUpdate(DrlReference drlReference) {
+    public boolean differsFrom(DrlReference drlReference) {
         return !sameAs(drlReference);
     }
 
     @Override
-    public DrlReference updateFrom(DrlReference drlReference) {
+    public DrlReference copyFrom(DrlReference drlReference) {
         this.drivenRightLegVoltage = drlReference.drivenRightLegVoltage;
         this.referenceVoltage = drlReference.referenceVoltage;
         return this;
@@ -69,6 +69,15 @@ public class DrlReference
         result = 31 * result + (drivenRightLegVoltage != null ? drivenRightLegVoltage.hashCode() : 0);
         result = 31 * result + (referenceVoltage != null ? referenceVoltage.hashCode() : 0);
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return "DrlReference{" +
+                "time=" + time +
+                ", drivenRightLegVoltage=" + drivenRightLegVoltage +
+                ", referenceVoltage=" + referenceVoltage +
+                '}';
     }
 
     @Override

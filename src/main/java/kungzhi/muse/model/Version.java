@@ -99,12 +99,12 @@ public class Version
     }
 
     @Override
-    public boolean needsUpdate(Version version) {
+    public boolean differsFrom(Version version) {
         return !sameAs(version);
     }
 
     @Override
-    public Version updateFrom(Version version) {
+    public Version copyFrom(Version version) {
         this.time = version.time;
         this.buildNumber = version.buildNumber;
         this.firmwareBootloaderVersion = version.firmwareBootloaderVersion;

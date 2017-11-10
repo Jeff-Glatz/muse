@@ -8,11 +8,9 @@ public interface ActiveItem<Item extends ActiveItem<Item> & Serializable> {
 
     void removeActiveItemListener(ActiveItemListener<Item> listener);
 
-    boolean needsUpdate(Item item);
+    boolean differsFrom(Item item);
 
-    Item copyOf();
+    Item copy();
 
-    Item updateFrom(Item item);
-
-    boolean maybeUpdateFrom(Item item);
+    boolean updateFrom(Item item);
 }

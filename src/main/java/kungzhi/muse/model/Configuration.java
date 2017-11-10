@@ -41,11 +41,11 @@ public class Configuration
                 .orElseThrow(IllegalArgumentException::new);
     }
 
-    public boolean needsUpdate(Configuration configuration) {
+    public boolean differsFrom(Configuration configuration) {
         return !sameAs(configuration);
     }
 
-    public Configuration updateFrom(Configuration configuration) {
+    public Configuration copyFrom(Configuration configuration) {
         this.time = configuration.time;
         this.eegChannelLayout.clear();
         this.eegChannelLayout.addAll(configuration.eegChannelLayout);

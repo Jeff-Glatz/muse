@@ -6,11 +6,11 @@ import kungzhi.muse.active.ActiveItemSupport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public abstract class ActiveModel<Item extends ActiveItem<Item> & Model>
+public abstract class ActiveModel<M extends ActiveItem<M> & Model>
         extends AbstractModel
-        implements ActiveItem<Item> {
+        implements ActiveItem<M> {
     protected final Logger log = LoggerFactory.getLogger(getClass());
-    private final transient ActiveItemSupport<Item> support =
+    private final transient ActiveItemSupport<M> support =
             new ActiveItemSupport<>();
 
     public ActiveModel(long time) {
@@ -18,26 +18,26 @@ public abstract class ActiveModel<Item extends ActiveItem<Item> & Model>
     }
 
     @Override
-    public void addActiveItemListener(ActiveItemListener<Item> listener) {
+    public void addActiveItemListener(ActiveItemListener<M> listener) {
         support.addActiveItemListener(listener);
     }
 
     @Override
-    public void removeActiveItemListener(ActiveItemListener<Item> listener) {
+    public void removeActiveItemListener(ActiveItemListener<M> listener) {
         support.removeActiveItemListener(listener);
     }
 
     @Override
-    public final Item copyOf() {
+    public final M copy() {
         return newInstance()
-                .updateFrom((Item) this);
+                .copyFrom((M) this);
     }
 
     @Override
-    public final boolean maybeUpdateFrom(Item update) {
-        if (needsUpdate(update)) {
-            Item previous = copyOf();
-            Item current = updateFrom(update);
+    public final boolean updateFrom(M model) {
+        if (differsFrom(model)) {
+            M previous = copy();
+            M current = copyFrom(model);
             log.info("Current item has been modified: {}", current);
             support.modified(current, previous);
             return true;
@@ -45,5 +45,8 @@ public abstract class ActiveModel<Item extends ActiveItem<Item> & Model>
         return false;
     }
 
-    protected abstract Item newInstance();
+    protected abstract M copyFrom(M item);
+
+
+    protected abstract ActiveModel<M> newInstance();
 }

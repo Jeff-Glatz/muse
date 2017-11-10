@@ -51,25 +51,25 @@ public class MuseSession
 
     public ModelStream<Configuration> configurationStream() {
         return (session, configuration) -> {
-            this.configuration.maybeUpdateFrom(configuration);
+            this.configuration.updateFrom(configuration);
         };
     }
 
     public ModelStream<Version> versionStream() {
         return (session, version) -> {
-            this.version.maybeUpdateFrom(version);
+            this.version.updateFrom(version);
         };
     }
 
     public ModelStream<Battery> batteryStream() {
         return (session, battery) -> {
-            this.battery.maybeUpdateFrom(battery);
+            this.battery.updateFrom(battery);
         };
     }
 
     public ModelStream<DrlReference> drlReferenceStream() {
         return (session, drlReference) -> {
-            this.drlReference.maybeUpdateFrom(drlReference);
+            this.drlReference.updateFrom(drlReference);
         };
     }
 }

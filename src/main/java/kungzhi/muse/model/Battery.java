@@ -75,12 +75,12 @@ public class Battery
     }
 
     @Override
-    public boolean needsUpdate(Battery battery) {
+    public boolean differsFrom(Battery battery) {
         return !sameAs(battery);
     }
 
     @Override
-    public Battery updateFrom(Battery battery) {
+    public Battery copyFrom(Battery battery) {
         this.time = battery.time;
         this.adcVoltage = battery.adcVoltage;
         this.fuelGaugeVoltage = battery.fuelGaugeVoltage;
@@ -106,6 +106,17 @@ public class Battery
         result = 31 * result + (adcVoltage != null ? adcVoltage.hashCode() : 0);
         result = 31 * result + (temperature != null ? temperature.hashCode() : 0);
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return "Battery{" +
+                "time=" + time +
+                ", stateOfCharge=" + stateOfCharge +
+                ", fuelGaugeVoltage=" + fuelGaugeVoltage +
+                ", adcVoltage=" + adcVoltage +
+                ", temperature=" + temperature +
+                '}';
     }
 
     @Override
