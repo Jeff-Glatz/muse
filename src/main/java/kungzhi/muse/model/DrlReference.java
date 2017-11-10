@@ -49,6 +49,7 @@ public class DrlReference
 
     @Override
     public DrlReference copyFrom(DrlReference drlReference) {
+        this.time = drlReference.time;
         this.drivenRightLegVoltage = drlReference.drivenRightLegVoltage;
         this.referenceVoltage = drlReference.referenceVoltage;
         return this;
