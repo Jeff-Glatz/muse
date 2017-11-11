@@ -58,7 +58,7 @@ public class MuseSimulator {
     @ManagedOperation
     public void sendDefaultConfiguration()
             throws IOException {
-        sendConfiguration("AA:BB:CC:DD:EE:00:FF", "Muse-4833", "14", "TP9, AF7, AF8, TP10");
+        sendConfiguration("AA:BB:CC:DD:EE:00:FF", "Muse-4833", "14", "TP9 AF7 AF8 TP10");
     }
 
     @ManagedOperation
