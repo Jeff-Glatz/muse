@@ -1,4 +1,4 @@
-package kungzhi.muse.osc;
+package kungzhi.muse.osc.transform;
 
 import de.sciss.net.OSCMessage;
 import kungzhi.muse.model.Model;

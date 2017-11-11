@@ -1,4 +1,4 @@
-package kungzhi.muse.config;
+package kungzhi.muse.runtime;
 
 import kungzhi.muse.model.Battery;
 import kungzhi.muse.model.Configuration;

@@ -1,9 +1,9 @@
-package kungzhi.muse.osc;
+package kungzhi.muse.osc.transform;
 
 import de.sciss.net.OSCMessage;
 import kungzhi.muse.model.SingleValue;
 
-import static kungzhi.muse.osc.MessageHelper.argumentAt;
+import static kungzhi.muse.osc.transform.MessageHelper.argumentAt;
 
 public class SingleValueTransformer<V>
         implements MessageTransformer<SingleValue<V>> {

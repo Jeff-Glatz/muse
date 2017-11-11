@@ -7,15 +7,15 @@ import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.stage.Stage;
-import kungzhi.muse.config.MuseConfiguration;
+import kungzhi.muse.runtime.MuseConfiguration;
 import kungzhi.muse.model.Band;
 import kungzhi.muse.model.BandPower;
 import kungzhi.muse.model.Configuration;
 import kungzhi.muse.model.EegChannel;
 import kungzhi.muse.model.Model;
-import kungzhi.muse.osc.MessageClient;
-import kungzhi.muse.osc.MessageDispatcher;
-import kungzhi.muse.osc.Path;
+import kungzhi.muse.osc.service.MessageClient;
+import kungzhi.muse.osc.service.MessageDispatcher;
+import kungzhi.muse.osc.service.Path;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -28,11 +28,11 @@ import java.util.SortedSet;
 import java.util.concurrent.ExecutorService;
 
 import static java.lang.System.currentTimeMillis;
-import static kungzhi.muse.osc.Path.ALPHA_ABSOLUTE;
-import static kungzhi.muse.osc.Path.BETA_ABSOLUTE;
-import static kungzhi.muse.osc.Path.DELTA_ABSOLUTE;
-import static kungzhi.muse.osc.Path.GAMMA_ABSOLUTE;
-import static kungzhi.muse.osc.Path.THETA_ABSOLUTE;
+import static kungzhi.muse.osc.service.Path.ALPHA_ABSOLUTE;
+import static kungzhi.muse.osc.service.Path.BETA_ABSOLUTE;
+import static kungzhi.muse.osc.service.Path.DELTA_ABSOLUTE;
+import static kungzhi.muse.osc.service.Path.GAMMA_ABSOLUTE;
+import static kungzhi.muse.osc.service.Path.THETA_ABSOLUTE;
 import static kungzhi.muse.ui.AsyncModelStream.asynchronously;
 
 public class MuseApplication

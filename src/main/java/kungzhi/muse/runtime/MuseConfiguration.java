@@ -1,20 +1,25 @@
-package kungzhi.muse.config;
+package kungzhi.muse.runtime;
 
 import kungzhi.muse.model.EmptyModelStream;
-import kungzhi.muse.osc.AccelerometerTransformer;
-import kungzhi.muse.osc.BandPowerTransformer;
-import kungzhi.muse.osc.BatteryTransformer;
-import kungzhi.muse.osc.ConfigurationTransformer;
-import kungzhi.muse.osc.DrlReferenceTransformer;
-import kungzhi.muse.osc.EegTransformer;
-import kungzhi.muse.osc.EmptyMessageTransformer;
-import kungzhi.muse.osc.FftTransformer;
-import kungzhi.muse.osc.HorseshoeTransformer;
-import kungzhi.muse.osc.MessageDispatcher;
-import kungzhi.muse.osc.SessionScoreTransformer;
-import kungzhi.muse.osc.SingleValueTransformer;
-import kungzhi.muse.osc.VersionTransformer;
+import kungzhi.muse.model.Fft;
+import kungzhi.muse.osc.service.MessageDispatcher;
+import kungzhi.muse.osc.service.MissingTransformerException;
+import kungzhi.muse.osc.transform.AccelerometerTransformer;
+import kungzhi.muse.osc.transform.BandPowerTransformer;
+import kungzhi.muse.osc.transform.BatteryTransformer;
+import kungzhi.muse.osc.transform.ConfigurationTransformer;
+import kungzhi.muse.osc.transform.DrlReferenceTransformer;
+import kungzhi.muse.osc.transform.EegTransformer;
+import kungzhi.muse.osc.transform.EmptyMessageTransformer;
+import kungzhi.muse.osc.transform.FftTransformer;
+import kungzhi.muse.osc.transform.HeadbandStatusStrictTransformer;
+import kungzhi.muse.osc.transform.HeadbandStatusTransformer;
+import kungzhi.muse.osc.transform.SessionScoreTransformer;
+import kungzhi.muse.osc.transform.SingleValueTransformer;
+import kungzhi.muse.osc.transform.VersionTransformer;
 import kungzhi.muse.repository.Bands;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -27,19 +32,21 @@ import java.net.UnknownHostException;
 import java.time.Clock;
 import java.util.concurrent.ExecutorService;
 
+import static java.lang.Integer.parseInt;
 import static java.lang.Runtime.getRuntime;
 import static java.net.InetAddress.getByName;
 import static java.util.concurrent.Executors.newFixedThreadPool;
 
 @Configuration
 @ComponentScan({
-        "kungzhi.muse.config",
         "kungzhi.muse.model",
         "kungzhi.muse.osc",
-        "kungzhi.muse.repository"
+        "kungzhi.muse.repository",
+        "kungzhi.muse.runtime"
 })
 @EnableAutoConfiguration
 public class MuseConfiguration {
+    private final Logger log = LoggerFactory.getLogger(MuseConfiguration.class);
 
     @Bean
     public Clock clock() {
@@ -162,21 +169,34 @@ public class MuseConfiguration {
                         new FftTransformer(3),
                         new EmptyModelStream<>())
                 .streaming("/muse/elements/horseshoe",
-                        new HorseshoeTransformer(),
-                        new EmptyModelStream<>())
-                // TODO: Unimplemented
-                .streaming("/muse/elements/touching_forehead",
-                        new EmptyMessageTransformer<>(),
+                        new HeadbandStatusTransformer(),
                         new EmptyModelStream<>())
                 .streaming("/muse/elements/is_good",
-                        new EmptyMessageTransformer<>(),
+                        new HeadbandStatusStrictTransformer(),
+                        new EmptyModelStream<>())
+                .streaming("/muse/elements/touching_forehead",
+                        new SingleValueTransformer<>(Integer.class),
                         new EmptyModelStream<>())
                 .streaming("/muse/elements/blink",
-                        new EmptyMessageTransformer<>(),
+                        new SingleValueTransformer<>(Integer.class),
                         new EmptyModelStream<>())
                 .streaming("/muse/elements/jaw_clench",
-                        new EmptyMessageTransformer<>(),
+                        new SingleValueTransformer<>(Integer.class),
                         new EmptyModelStream<>())
+                // Error Handling
+                .handling(MissingTransformerException.class,
+                        (dispatcher, message, error) -> {
+                            String path = message.getName();
+                            if (path.startsWith("/muse/elements/raw_fft")) {
+                                int channelIndex = parseInt(path.substring(
+                                        "/muse/elements/raw_fft".length(),
+                                        path.length()));
+                                log.info("Discovered new raw FFT channel with index: {}", channelIndex);
+                                dispatcher.withTransformer(path, Fft.class,
+                                        new FftTransformer(channelIndex));
+                            }
+                        })
+                // TODO: Unimplemented
                 .streaming("/muse/annotation",
                         new EmptyMessageTransformer<>(),
                         new EmptyModelStream<>());

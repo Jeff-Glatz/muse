@@ -1,4 +1,4 @@
-package kungzhi.muse.osc;
+package kungzhi.muse.osc.service;
 
 import de.sciss.net.OSCClient;
 import de.sciss.net.OSCPacket;

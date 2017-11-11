@@ -1,4 +1,4 @@
-package kungzhi.muse.osc;
+package kungzhi.muse.osc.transform;
 
 import de.sciss.net.OSCMessage;
 import kungzhi.muse.model.Values;
@@ -7,10 +7,6 @@ import java.lang.reflect.Field;
 
 public class MessageHelper {
     private static final Field args = messageField("args");
-
-    public static <T> T as(Object object) {
-        return (T) object;
-    }
 
     public static <T> T argumentAt(OSCMessage message, Class<T> type, int index) {
         return type.cast(message.getArg(index));

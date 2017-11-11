@@ -1,4 +1,4 @@
-package kungzhi.muse.osc;
+package kungzhi.muse.osc.transform;
 
 import com.jsoniter.any.Any;
 import de.sciss.net.OSCMessage;
@@ -6,7 +6,7 @@ import kungzhi.muse.model.Version;
 import org.springframework.stereotype.Component;
 
 import static com.jsoniter.JsonIterator.deserialize;
-import static kungzhi.muse.osc.MessageHelper.argumentAt;
+import static kungzhi.muse.osc.transform.MessageHelper.argumentAt;
 
 @Component
 public class VersionTransformer

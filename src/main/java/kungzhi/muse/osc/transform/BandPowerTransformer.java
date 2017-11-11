@@ -1,10 +1,10 @@
-package kungzhi.muse.osc;
+package kungzhi.muse.osc.transform;
 
 import de.sciss.net.OSCMessage;
 import kungzhi.muse.model.Band;
 import kungzhi.muse.model.BandPower;
 
-import static kungzhi.muse.osc.MessageHelper.extractArguments;
+import static kungzhi.muse.osc.transform.MessageHelper.extractArguments;
 
 public class BandPowerTransformer
         implements MessageTransformer<BandPower> {

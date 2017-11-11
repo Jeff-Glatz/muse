@@ -1,12 +1,12 @@
 package kungzhi.muse.model;
 
-import static kungzhi.muse.model.Horseshoe.Status.fromValue;
+import static kungzhi.muse.model.HeadbandStatusStrict.Status.fromValue;
 
-public class Horseshoe
+public class HeadbandStatusStrict
         extends AbstractModel {
     private final Values<Float> values;
 
-    public Horseshoe(long time, Values<Float> values) {
+    public HeadbandStatusStrict(long time, Values<Float> values) {
         super(time);
         this.values = values;
     }
@@ -21,7 +21,7 @@ public class Horseshoe
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
 
-        Horseshoe eeg = (Horseshoe) o;
+        HeadbandStatusStrict eeg = (HeadbandStatusStrict) o;
 
         return values != null ? values.equals(eeg.values) : eeg.values == null;
     }
@@ -35,14 +35,14 @@ public class Horseshoe
 
     @Override
     public String toString() {
-        return "Eeg{" +
+        return "HeadbandStatusStrict{" +
                 "time=" + time +
                 ", values=" + values +
                 '}';
     }
 
     public enum Status {
-        GOOD(1), OK(2), BAD(3);
+        GOOD(0), BAD(1);
 
         private final int value;
 
@@ -56,11 +56,9 @@ public class Horseshoe
 
         public static Status fromValue(int value) {
             switch (value) {
-                case 1:
+                case 0:
                     return GOOD;
-                case 2:
-                    return OK;
-                case 3:
+                case 1:
                     return BAD;
                 default:
                     return null;

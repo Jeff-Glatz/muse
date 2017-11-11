@@ -1,4 +1,4 @@
-package kungzhi.muse.osc;
+package kungzhi.muse.osc.service;
 
 import de.sciss.net.OSCMessage;
 import org.slf4j.Logger;
@@ -10,10 +10,11 @@ import org.springframework.jmx.export.annotation.ManagedResource;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
 
+import static java.lang.Class.forName;
 import static java.lang.Float.parseFloat;
 import static java.lang.String.format;
+import static java.lang.reflect.Array.newInstance;
 import static java.util.Arrays.stream;
 
 @Component
@@ -36,31 +37,9 @@ public class MuseSimulator {
     }
 
     @ManagedOperation
-    public void send(String path, Float[] args)
-            throws IOException {
-        client.send(new OSCMessage(path, args));
-    }
-
-    @ManagedOperation
-    public void send(String path, Integer[] args)
-            throws IOException {
-        client.send(new OSCMessage(path, args));
-    }
-
-    @ManagedOperation
-    public void send(String path, String[] args)
-            throws IOException {
-        client.send(new OSCMessage(path, args));
-    }
-
-    @ManagedOperation
     public void sendTypedArray(String path, String type, String args)
             throws Exception {
-        Class componentType = Class.forName(type);
-        client.send(new OSCMessage(path,
-                stream(args.split("\\s*,\\s*"))
-                        .map(arg -> conversionService.convert(arg, componentType))
-                        .toArray(length -> (Object[]) Array.newInstance(componentType, length))));
+        client.send(new OSCMessage(path, args(forName(type), args)));
     }
 
     @ManagedOperation
@@ -74,6 +53,12 @@ public class MuseSimulator {
                 "\"eeg_channel_count\":\"%s\"," +
                 "\"eeg_channel_layout\":\"%s\"" +
                 "}", mac, serial, preset, eegChannelCount, eegChannelLayout));
+    }
+
+    @ManagedOperation
+    public void sendDefaultConfiguration()
+            throws IOException {
+        sendConfiguration("AA:BB:CC:DD:EE:00:FF", "Muse-4833", "14", "TP9, AF7, AF8, TP10");
     }
 
     @ManagedOperation
@@ -105,5 +90,95 @@ public class MuseSimulator {
     public void sendDrlReference(String drl, String ref)
             throws IOException {
         send("/muse/drlref", new Float[]{parseFloat(drl), parseFloat(ref)});
+    }
+
+    @ManagedOperation
+    public void sendHeadbandStatus(boolean strict, String args)
+            throws IOException {
+        send(strict ? "/muse/elements/is_good" : "/muse/elements/horseshoe",
+                args(Float.class, args));
+    }
+
+    @ManagedOperation
+    public void sendIsGood(String args)
+            throws IOException {
+        send("/muse/elements/is_good", args(Integer.class, args));
+    }
+
+    @ManagedOperation
+    public void sendBandPower(String band, boolean relative, String args)
+            throws IOException {
+        send(format("/muse/elements/%s_%s", band, relative ? "relative" : "absolute"),
+                args(Float.class, args));
+    }
+
+    @ManagedOperation
+    public void sendSessionScore(String band, String args)
+            throws IOException {
+        send(format("/muse/elements/%s_session_score", band),
+                args(Float.class, args));
+    }
+
+    @ManagedOperation
+    public void sendFFT(int channelIndex, String args)
+            throws IOException {
+        send(format("/muse/elements/raw_fft%s", channelIndex),
+                args(Float.class, args));
+    }
+
+    @ManagedOperation
+    public void sendConcentration(Float value)
+            throws IOException {
+        send("/muse/elements/experimental/concentration", new Float[]{value});
+    }
+
+    @ManagedOperation
+    public void sendMellow(Float value)
+            throws IOException {
+        send("/muse/elements/experimental/mellow", new Float[]{value});
+    }
+
+    @ManagedOperation
+    public void sendTouchingForehead(Integer value)
+            throws IOException {
+        send("/muse/elements/touching_forehead", new Integer[]{value});
+    }
+
+    @ManagedOperation
+    public void sendBlink(Integer blink)
+            throws IOException {
+        send("/muse/elements/blink", new Integer[]{blink});
+    }
+
+    @ManagedOperation
+    public void sendJawClench(Integer blink)
+            throws IOException {
+        send("/muse/elements/jaw_clench", new Integer[]{blink});
+    }
+
+    private <T> T[] args(Class<T> componentType, String args) {
+        return stream(args.split("\\s*,\\s*"))
+                .map(arg -> conversionService.convert(arg, componentType))
+                .toArray(length -> (T[]) newInstance(componentType, length));
+    }
+
+    private void send(String path, Float[] args)
+            throws IOException {
+        client.send(new OSCMessage(path, args));
+    }
+
+    private void send(String path, Integer[] args)
+            throws IOException {
+        client.send(new OSCMessage(path, args));
+    }
+
+    private void send(String path, Boolean[] args)
+            throws IOException {
+        client.send(new OSCMessage(path, args));
+    }
+
+    private void send(String path, String[] args)
+            throws IOException {
+        client.send(new OSCMessage(path, args));
     }
 }

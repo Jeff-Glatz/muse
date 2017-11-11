@@ -1,10 +1,12 @@
-package kungzhi.muse.osc;
+package kungzhi.muse.osc.service;
 
 import de.sciss.net.OSCMessage;
 import kungzhi.muse.model.EmptyModelStream;
 import kungzhi.muse.model.Model;
 import kungzhi.muse.model.ModelStream;
 import kungzhi.muse.model.Session;
+import kungzhi.muse.osc.transform.EmptyMessageTransformer;
+import kungzhi.muse.osc.transform.MessageTransformer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

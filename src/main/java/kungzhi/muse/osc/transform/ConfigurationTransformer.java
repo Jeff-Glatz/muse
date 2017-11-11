@@ -1,4 +1,4 @@
-package kungzhi.muse.osc;
+package kungzhi.muse.osc.transform;
 
 import com.jsoniter.any.Any;
 import de.sciss.net.OSCMessage;
@@ -9,7 +9,7 @@ import kungzhi.muse.model.Sensor;
 import java.util.stream.Stream;
 
 import static com.jsoniter.JsonIterator.deserialize;
-import static kungzhi.muse.osc.MessageHelper.argumentAt;
+import static kungzhi.muse.osc.transform.MessageHelper.argumentAt;
 
 public class ConfigurationTransformer
         implements MessageTransformer<Configuration> {

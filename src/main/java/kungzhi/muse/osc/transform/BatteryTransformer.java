@@ -1,10 +1,9 @@
-package kungzhi.muse.osc;
+package kungzhi.muse.osc.transform;
 
 import de.sciss.net.OSCMessage;
 import kungzhi.muse.model.Battery;
-import org.springframework.stereotype.Component;
 
-import static kungzhi.muse.osc.MessageHelper.argumentAt;
+import static kungzhi.muse.osc.transform.MessageHelper.argumentAt;
 
 public class BatteryTransformer
         implements MessageTransformer<Battery> {

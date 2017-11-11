@@ -1,4 +1,4 @@
-package kungzhi.muse.osc;
+package kungzhi.muse.osc.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
