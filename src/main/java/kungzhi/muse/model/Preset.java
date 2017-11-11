@@ -4,7 +4,8 @@ import java.util.EnumSet;
 import java.util.stream.Stream;
 
 import static java.lang.Float.parseFloat;
-import static java.util.EnumSet.of;
+import static java.util.Arrays.asList;
+import static java.util.EnumSet.copyOf;
 import static kungzhi.muse.model.Sensor.AF7;
 import static kungzhi.muse.model.Sensor.AF8;
 import static kungzhi.muse.model.Sensor.AUX_LEFT;
@@ -13,11 +14,11 @@ import static kungzhi.muse.model.Sensor.TP10;
 import static kungzhi.muse.model.Sensor.TP9;
 
 public enum Preset {
-    TEN("10", of(TP9, AF7, AF8, TP10), 10, "220"),
-    TWELVE("12", of(TP9, AF7, AF8, TP10), 10, "220"),
-    FOURTEEN("14", of(TP9, AF7, AF8, TP10), 10, "220"),
-    AB("AB", of(TP9, AF7, AF8, TP10, AUX_LEFT, AUX_RIGHT), 16, "500"),
-    AD("AD", of(TP9, AF7, AF8, TP10), 16, "500");
+    TEN("10", sensors(TP9, AF7, AF8, TP10), 10, "220"),
+    TWELVE("12", sensors(TP9, AF7, AF8, TP10), 10, "220"),
+    FOURTEEN("14", sensors(TP9, AF7, AF8, TP10), 10, "220"),
+    AB("AB", sensors(TP9, AF7, AF8, TP10, AUX_LEFT, AUX_RIGHT), 16, "500"),
+    AD("AD", sensors(TP9, AF7, AF8, TP10), 16, "500");
     private final String id;
     private final EnumSet<Sensor> sensors;
     private final Integer eegBits;
@@ -52,5 +53,9 @@ public enum Preset {
                 .filter(preset -> preset.id == fastString)
                 .findFirst()
                 .orElse(null);
+    }
+
+    private static EnumSet<Sensor> sensors(Sensor... sensors) {
+        return copyOf(asList(sensors));
     }
 }
