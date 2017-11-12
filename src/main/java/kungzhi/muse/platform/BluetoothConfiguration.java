@@ -17,7 +17,7 @@ public class BluetoothConfiguration {
     private final Logger log = LoggerFactory.getLogger(BluetoothConfiguration.class);
 
     @Bean
-    LocalDevice localDevice()
+    public LocalDevice localDevice()
             throws BluetoothStateException {
         LocalDevice device = LocalDevice.getLocalDevice();
         log.info("Retrieved local bluetooth device named {}", device.getFriendlyName());
