@@ -11,8 +11,8 @@ import kungzhi.muse.model.Band;
 import kungzhi.muse.model.BandPower;
 import kungzhi.muse.model.Configuration;
 import kungzhi.muse.model.EegChannel;
-import kungzhi.muse.model.Model;
 import kungzhi.muse.model.Headband;
+import kungzhi.muse.model.Model;
 import kungzhi.muse.osc.service.MessageClient;
 import kungzhi.muse.osc.service.MessageDispatcher;
 import kungzhi.muse.osc.service.MessagePath;
@@ -45,7 +45,7 @@ public class MuseApplication
     private ExecutorService executor;
     private MessageDispatcher dispatcher;
     private MessageClient client;
-    private Configuration configuration;
+    private Headband headband;
 
     @Override
     public void init()
@@ -55,10 +55,15 @@ public class MuseApplication
         context = new SpringApplicationBuilder(MuseConfiguration.class)
                 .headless(false)
                 .registerShutdownHook(true)
+                .initializers(context -> context.getBeanFactory()
+                        .registerSingleton("application", MuseApplication.this))
                 .properties(new HashMap<>(getParameters().getNamed()))
                 .run(getParameters().getRaw().toArray(new String[0]));
-        Headband headband = context.getBean(Headband.class);
-        configuration = headband.getConfiguration();
+        executor = context.getBean(ExecutorService.class);
+        dispatcher = context.getBean(MessageDispatcher.class);
+        client = context.getBean(MessageClient.class);
+        headband = context.getBean(Headband.class);
+        Configuration configuration = headband.getConfiguration();
         configuration.addActiveItemListener((current, previous) -> {
             if (previous.initial()) {
                 log.info("Configuration received, processing queued data...");
@@ -66,9 +71,6 @@ public class MuseApplication
                 log.info("Queued data processed.");
             }
         });
-        executor = context.getBean(ExecutorService.class);
-        dispatcher = context.getBean(MessageDispatcher.class);
-        client = context.getBean(MessageClient.class);
     }
 
     @Override
@@ -121,6 +123,7 @@ public class MuseApplication
         series.setName(path.name());
         dispatcher.withStream(path, BandPower.class,
                 asynchronously(executor, (session, power) -> {
+                    Configuration configuration = headband.getConfiguration();
                     if (configuration.initial()) {
                         log.warn("Configuration not yet received, queueing data");
                         powers.offer(new QueuedData<>(series, power));
@@ -133,6 +136,7 @@ public class MuseApplication
 
     private void addTo(XYChart.Series<Number, Number> series, BandPower power) {
         double seconds = (currentTimeMillis() - start) / 1000D;
+        Configuration configuration = headband.getConfiguration();
         SortedSet<EegChannel> channels = configuration.getEegChannelLayout();
         Band band = power.getBand();
         double average = power.average();
