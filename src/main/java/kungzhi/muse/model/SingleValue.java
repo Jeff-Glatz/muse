@@ -9,7 +9,7 @@ public class SingleValue<V>
         this.value = value;
     }
 
-    public V getValue() {
+    public V get() {
         return value;
     }
 

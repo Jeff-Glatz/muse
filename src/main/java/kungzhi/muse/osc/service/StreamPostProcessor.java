@@ -1,13 +1,14 @@
 package kungzhi.muse.osc.service;
 
-import kungzhi.muse.model.ModelStream;
+import kungzhi.muse.model.Model;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
-import org.springframework.beans.TypeMismatchException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.stereotype.Component;
+
+import static java.util.Arrays.stream;
 
 @Component
 public class StreamPostProcessor
@@ -30,16 +31,20 @@ public class StreamPostProcessor
     @SuppressWarnings("unchecked")
     public Object postProcessAfterInitialization(Object bean, String beanName)
             throws BeansException {
-        Stream stream = bean.getClass().getAnnotation(Stream.class);
-        if (stream != null) {
-            if (!(bean instanceof ModelStream)) {
-                throw new TypeMismatchException(bean, ModelStream.class);
-            }
-            dispatcher.withStream(stream.path(), stream.type(), (ModelStream) bean);
-            log.info("Streaming {} models of type {} to {}",
-                    stream.path().getName(),
-                    stream.type().getSimpleName(),
-                    bean.getClass().getSimpleName());
+        Class<?> streamType = bean.getClass();
+        if (streamType.isAnnotationPresent(StreamComponent.class)) {
+            stream(streamType.getMethods()).forEach(method -> {
+                Stream stream = method.getDeclaredAnnotation(Stream.class);
+                if (stream != null) {
+                    Class<? extends Model> modelType = (Class<? extends Model>) method.getParameterTypes()[1];
+                    dispatcher.withStream(stream.path(), modelType, (headband, model) ->
+                            method.invoke(bean, headband, model));
+                    log.info("Streaming {} models of type {} to {}",
+                            stream.path().getName(),
+                            modelType.getSimpleName(),
+                            method.toGenericString());
+                }
+            });
         }
         return bean;
     }
