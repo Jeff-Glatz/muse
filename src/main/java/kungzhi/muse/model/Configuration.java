@@ -182,8 +182,7 @@ public class Configuration
     }
 
     public Configuration withEegChannelInLayout(Sensor sensor) {
-        this.eegChannelLayout.add(new EegChannel(this.eegChannelLayout.size(), sensor
-        ));
+        this.eegChannelLayout.add(new EegChannel(this.eegChannelLayout.size(), sensor));
         return this;
     }
 

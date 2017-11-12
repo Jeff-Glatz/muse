@@ -3,7 +3,6 @@ package kungzhi.muse.platform;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -85,7 +84,6 @@ public class HeadbandDiscoveryService
         return headband;
     }
 
-    @Scheduled(initialDelay = 1000, fixedRate = 30000)
     public void startInquiry()
             throws BluetoothStateException {
         log.info("Starting bluetooth device inquiry...");

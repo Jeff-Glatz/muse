@@ -46,7 +46,8 @@ import static java.util.concurrent.Executors.newFixedThreadPool;
         "kungzhi.muse.osc",
         "kungzhi.muse.platform",
         "kungzhi.muse.repository",
-        "kungzhi.muse.runtime"
+        "kungzhi.muse.runtime",
+        "kungzhi.muse.ui"
 })
 @EnableScheduling
 @EnableAutoConfiguration
@@ -86,7 +87,7 @@ public class MuseConfiguration {
     }
 
     @Bean
-    public MessageDispatcher messageDispatcher(Clock clock, MuseSession museSession, Bands bands) {
+    public MessageDispatcher messageDispatcher(Clock clock, MuseHeadband museSession, Bands bands) {
         return new MessageDispatcher(clock, museSession)
                 .streaming("/muse/config",
                         new ConfigurationTransformer(),
@@ -94,12 +95,27 @@ public class MuseConfiguration {
                 .streaming("/muse/version",
                         new VersionTransformer(),
                         museSession.versionStream())
-                .streaming("/muse/batt",
-                        new BatteryTransformer(),
-                        museSession.batteryStream())
                 .streaming("/muse/drlref",
                         new DrlReferenceTransformer(),
                         museSession.drlReferenceStream())
+                .streaming("/muse/batt",
+                        new BatteryTransformer(),
+                        new EmptyModelStream<>())
+                .streaming("/muse/elements/horseshoe",
+                        new HeadbandStatusTransformer(),
+                        new EmptyModelStream<>())
+                .streaming("/muse/elements/is_good",
+                        new HeadbandStatusStrictTransformer(),
+                        new EmptyModelStream<>())
+                .streaming("/muse/elements/touching_forehead",
+                        new SingleValueTransformer<>(Integer.class),
+                        new EmptyModelStream<>())
+                .streaming("/muse/elements/blink",
+                        new SingleValueTransformer<>(Integer.class),
+                        new EmptyModelStream<>())
+                .streaming("/muse/elements/jaw_clench",
+                        new SingleValueTransformer<>(Integer.class),
+                        new EmptyModelStream<>())
                 .streaming("/muse/acc",
                         new AccelerometerTransformer(),
                         new EmptyModelStream<>())
@@ -180,21 +196,6 @@ public class MuseConfiguration {
                         new EmptyModelStream<>())
                 .streaming("/muse/elements/raw_fft3",
                         new FftTransformer(3),
-                        new EmptyModelStream<>())
-                .streaming("/muse/elements/horseshoe",
-                        new HeadbandStatusTransformer(),
-                        new EmptyModelStream<>())
-                .streaming("/muse/elements/is_good",
-                        new HeadbandStatusStrictTransformer(),
-                        new EmptyModelStream<>())
-                .streaming("/muse/elements/touching_forehead",
-                        new SingleValueTransformer<>(Integer.class),
-                        new EmptyModelStream<>())
-                .streaming("/muse/elements/blink",
-                        new SingleValueTransformer<>(Integer.class),
-                        new EmptyModelStream<>())
-                .streaming("/muse/elements/jaw_clench",
-                        new SingleValueTransformer<>(Integer.class),
                         new EmptyModelStream<>())
                 // Error Handling
                 .handling(MissingTransformerException.class,

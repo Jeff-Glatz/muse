@@ -3,7 +3,7 @@ package kungzhi.muse.ui;
 import javafx.concurrent.Task;
 import kungzhi.muse.model.Model;
 import kungzhi.muse.model.ModelStream;
-import kungzhi.muse.model.Session;
+import kungzhi.muse.model.Headband;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,7 +21,7 @@ public class AsyncModelStream<M extends Model>
     }
 
     @Override
-    public void next(final Session session, final M model)
+    public void next(final Headband headband, final M model)
             throws Exception {
         executor.execute(new Task<M>() {
             @Override
@@ -33,7 +33,7 @@ public class AsyncModelStream<M extends Model>
             @Override
             protected void succeeded() {
                 try {
-                    delegate.next(session, model);
+                    delegate.next(headband, model);
                 } catch (Exception e) {
                     log.error("Failure streaming model", e);
                 }

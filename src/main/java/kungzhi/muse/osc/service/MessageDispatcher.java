@@ -4,7 +4,7 @@ import de.sciss.net.OSCListener;
 import de.sciss.net.OSCMessage;
 import kungzhi.muse.model.Model;
 import kungzhi.muse.model.ModelStream;
-import kungzhi.muse.model.Session;
+import kungzhi.muse.model.Headband;
 import kungzhi.muse.osc.transform.MessageTransformer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,11 +38,11 @@ public class MessageDispatcher
     private final Map<String, MessageTransformer<? extends Model>> transformers = new HashMap<>();
     private final Map<String, ModelStream<? extends Model>> streams = new HashMap<>();
     private final Clock clock;
-    private final Session session;
+    private final Headband headband;
 
-    public MessageDispatcher(Clock clock, Session session) {
+    public MessageDispatcher(Clock clock, Headband headband) {
         this.clock = clock;
-        this.session = session;
+        this.headband = headband;
     }
 
     public <M extends Model> MessageDispatcher withTransformer(
@@ -52,8 +52,8 @@ public class MessageDispatcher
     }
 
     public <M extends Model> MessageDispatcher withTransformer(
-            Path path, Class<M> type, MessageTransformer<M> transformer) {
-        return withTransformer(path.getPath(), type, transformer);
+            MessagePath path, Class<M> type, MessageTransformer<M> transformer) {
+        return withTransformer(path.getName(), type, transformer);
     }
 
     public <M extends Model> MessageDispatcher withStream(
@@ -63,8 +63,8 @@ public class MessageDispatcher
     }
 
     public <M extends Model> MessageDispatcher withStream(
-            Path path, Class<M> type, ModelStream<M> stream) {
-        return withStream(path.getPath(), type, stream);
+            MessagePath path, Class<M> type, ModelStream<M> stream) {
+        return withStream(path.getName(), type, stream);
     }
 
     public <M extends Model> MessageDispatcher streaming(
@@ -91,7 +91,7 @@ public class MessageDispatcher
             MessageTransformer transformer = transformer(path);
             ModelStream stream = stream(path);
             availablePaths.add(path);
-            stream.next(session, transformer.fromMessage(clock.millis(), message));
+            stream.next(headband, transformer.fromMessage(clock.millis(), message));
         } catch (MissingTransformerException e) {
             log.warn("No transformer configured for {}", path);
             this.<MissingTransformerException>handler(e).on(this, message, e);

@@ -7,15 +7,16 @@ import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.stage.Stage;
-import kungzhi.muse.runtime.MuseConfiguration;
 import kungzhi.muse.model.Band;
 import kungzhi.muse.model.BandPower;
 import kungzhi.muse.model.Configuration;
 import kungzhi.muse.model.EegChannel;
 import kungzhi.muse.model.Model;
+import kungzhi.muse.model.Headband;
 import kungzhi.muse.osc.service.MessageClient;
 import kungzhi.muse.osc.service.MessageDispatcher;
-import kungzhi.muse.osc.service.Path;
+import kungzhi.muse.osc.service.MessagePath;
+import kungzhi.muse.runtime.MuseConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -28,11 +29,11 @@ import java.util.SortedSet;
 import java.util.concurrent.ExecutorService;
 
 import static java.lang.System.currentTimeMillis;
-import static kungzhi.muse.osc.service.Path.ALPHA_ABSOLUTE;
-import static kungzhi.muse.osc.service.Path.BETA_ABSOLUTE;
-import static kungzhi.muse.osc.service.Path.DELTA_ABSOLUTE;
-import static kungzhi.muse.osc.service.Path.GAMMA_ABSOLUTE;
-import static kungzhi.muse.osc.service.Path.THETA_ABSOLUTE;
+import static kungzhi.muse.osc.service.MessagePath.ALPHA_ABSOLUTE;
+import static kungzhi.muse.osc.service.MessagePath.BETA_ABSOLUTE;
+import static kungzhi.muse.osc.service.MessagePath.DELTA_ABSOLUTE;
+import static kungzhi.muse.osc.service.MessagePath.GAMMA_ABSOLUTE;
+import static kungzhi.muse.osc.service.MessagePath.THETA_ABSOLUTE;
 import static kungzhi.muse.ui.AsyncModelStream.asynchronously;
 
 public class MuseApplication
@@ -56,7 +57,8 @@ public class MuseApplication
                 .registerShutdownHook(true)
                 .properties(new HashMap<>(getParameters().getNamed()))
                 .run(getParameters().getRaw().toArray(new String[0]));
-        configuration = context.getBean(Configuration.class);
+        Headband headband = context.getBean(Headband.class);
+        configuration = headband.getConfiguration();
         configuration.addActiveItemListener((current, previous) -> {
             if (previous.initial()) {
                 log.info("Configuration received, processing queued data...");
@@ -74,6 +76,7 @@ public class MuseApplication
             throws Exception {
         stage.setTitle("Muse EEG Feed");
         stage.setOnCloseRequest(event -> {
+            context.close();
         });
 
         //defining the axes
@@ -113,7 +116,7 @@ public class MuseApplication
         stage.show();
     }
 
-    private XYChart.Series<Number, Number> bandPowerSeries(Path path) {
+    private XYChart.Series<Number, Number> bandPowerSeries(MessagePath path) {
         XYChart.Series<Number, Number> series = new XYChart.Series<>();
         series.setName(path.name());
         dispatcher.withStream(path, BandPower.class,

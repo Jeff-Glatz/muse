@@ -1,12 +1,10 @@
 package kungzhi.muse.model;
 
-public interface Session {
+public interface Headband {
 
     Configuration getConfiguration();
 
     Version getVersion();
-
-    Battery getBattery();
 
     DrlReference getDrlReference();
 }

@@ -1,8 +1,5 @@
 package kungzhi.muse.model;
 
-import org.springframework.stereotype.Component;
-
-@Component
 public class Version
         extends ActiveModel<Version> {
     private String buildNumber;
