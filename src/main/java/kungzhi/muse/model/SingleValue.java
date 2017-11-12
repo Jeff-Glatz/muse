@@ -1,7 +1,8 @@
 package kungzhi.muse.model;
 
 public class SingleValue<V>
-        extends AbstractModel {
+        extends AbstractModel
+        implements Equivalence<SingleValue<V>> {
     private final V value;
 
     public SingleValue(long time, V value) {
@@ -14,14 +15,17 @@ public class SingleValue<V>
     }
 
     @Override
+    public boolean sameAs(SingleValue<V> that) {
+        return value != null ? value.equals(that.value) : that.value == null;
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
 
-        SingleValue<?> that = (SingleValue<?>) o;
-
-        return value != null ? value.equals(that.value) : that.value == null;
+        return sameAs((SingleValue) o);
     }
 
     @Override

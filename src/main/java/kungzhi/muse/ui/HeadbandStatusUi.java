@@ -15,20 +15,29 @@ import static kungzhi.muse.osc.service.MessagePath.HEADBAND_STATUS;
 @StreamComponent
 public class HeadbandStatusUi {
     private final Logger log = LoggerFactory.getLogger(getClass());
+    private HeadbandStatus headbandStatus = new HeadbandStatus(0, null);
+    private SingleValue<Integer> headbandTouching = new SingleValue<>(0, null);
 
     @Stream(path = HEADBAND_STATUS)
-    public void on(Headband headband, HeadbandStatus status)
+    public void on(Headband headband, HeadbandStatus headbandStatus)
             throws Exception {
-        Configuration configuration = headband.getConfiguration();
-        configuration.getEegChannelLayout()
-                .forEach(channel -> {
-                    log.info("{}: {}", channel.getSensor(), status.forChannel(channel));
-                });
+        log.info(headbandStatus.toString());
+        if (!this.headbandStatus.sameAs(headbandStatus)) {
+            this.headbandStatus = headbandStatus;
+            Configuration configuration = headband.getConfiguration();
+            configuration.getEegChannelLayout().stream()
+                    .forEachOrdered(channel -> {
+                        log.info("{}: {}", channel.getSensor(), headbandStatus.forChannel(channel));
+                    });
+        }
     }
 
     @Stream(path = HEADBAND_ON)
-    public void on(Headband headband, SingleValue<Integer> value)
+    public void on(Headband headband, SingleValue<Integer> headbandTouching)
             throws Exception {
-        log.info("Touching: {}", value.get());
+        if (!this.headbandTouching.sameAs(headbandTouching)) {
+            this.headbandTouching = headbandTouching;
+            log.info("Touching: {}", headbandTouching.get());
+        }
     }
 }

@@ -2,15 +2,14 @@ package kungzhi.muse.ui;
 
 import javafx.application.Application;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.scene.Scene;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.stage.Stage;
-import kungzhi.muse.model.Band;
 import kungzhi.muse.model.BandPower;
 import kungzhi.muse.model.Configuration;
-import kungzhi.muse.model.EegChannel;
 import kungzhi.muse.model.Headband;
 import kungzhi.muse.model.Model;
 import kungzhi.muse.osc.service.MessageClient;
@@ -25,7 +24,6 @@ import org.springframework.context.ConfigurableApplicationContext;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Queue;
-import java.util.SortedSet;
 import java.util.concurrent.ExecutorService;
 
 import static java.lang.System.currentTimeMillis;
@@ -34,7 +32,6 @@ import static kungzhi.muse.osc.service.MessagePath.BETA_ABSOLUTE;
 import static kungzhi.muse.osc.service.MessagePath.DELTA_ABSOLUTE;
 import static kungzhi.muse.osc.service.MessagePath.GAMMA_ABSOLUTE;
 import static kungzhi.muse.osc.service.MessagePath.THETA_ABSOLUTE;
-import static kungzhi.muse.ui.AsyncModelStream.asynchronously;
 
 public class MuseApplication
         extends Application {
@@ -85,13 +82,13 @@ public class MuseApplication
         final NumberAxis xAxis = new NumberAxis();
         xAxis.setLabel("Timestamp");
         xAxis.setAutoRanging(true);
-        xAxis.setAnimated(true);
+        xAxis.setAnimated(false);
         xAxis.setForceZeroInRange(false);
 
         final NumberAxis yAxis = new NumberAxis();
         yAxis.setLabel("Absolute Power");
         yAxis.setAutoRanging(false);
-        yAxis.setAnimated(true);
+        yAxis.setAnimated(false);
         yAxis.setLowerBound(-1);
         yAxis.setUpperBound(2);
 
@@ -122,7 +119,7 @@ public class MuseApplication
         XYChart.Series<Number, Number> series = new XYChart.Series<>();
         series.setName(path.name());
         dispatcher.withStream(path, BandPower.class,
-                asynchronously(executor, (session, power) -> {
+                (session, power) -> {
                     Configuration configuration = headband.getConfiguration();
                     if (configuration.initial()) {
                         log.warn("Configuration not yet received, queueing data");
@@ -130,21 +127,33 @@ public class MuseApplication
                         return;
                     }
                     addTo(series, power);
-                }));
+
+                });
         return series;
     }
 
     private void addTo(XYChart.Series<Number, Number> series, BandPower power) {
-        double seconds = (currentTimeMillis() - start) / 1000D;
-        Configuration configuration = headband.getConfiguration();
-        SortedSet<EegChannel> channels = configuration.getEegChannelLayout();
-        Band band = power.getBand();
-        double average = power.average();
-        ObservableList<XYChart.Data<Number, Number>> data = series.getData();
-        data.add(new XYChart.Data<>(seconds, average));
-        while (data.size() > 100) {
-            data.remove(0);
-        }
+        executor.submit(new Task<Double>() {
+            @Override
+            protected Double call()
+                    throws Exception {
+                return power.average();
+            }
+
+            @Override
+            protected void succeeded() {
+                try {
+                    double seconds = (currentTimeMillis() - start) / 1000D;
+                    ObservableList<XYChart.Data<Number, Number>> data = series.getData();
+                    data.add(new XYChart.Data<>(seconds, get()));
+                    while (data.size() > 100) {
+                        data.remove(0);
+                    }
+                } catch (Exception e) {
+                    log.error("Failure getting computed value", e);
+                }
+            }
+        });
     }
 
     public static void main(String[] args) {

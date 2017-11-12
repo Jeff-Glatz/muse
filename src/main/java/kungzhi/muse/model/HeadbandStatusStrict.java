@@ -1,6 +1,7 @@
 package kungzhi.muse.model;
 
 import static kungzhi.muse.model.HeadbandStatusStrict.Status.fromValue;
+import static kungzhi.muse.runtime.ProblemLog.problem;
 
 public class HeadbandStatusStrict
         extends AbstractModel {
@@ -61,6 +62,7 @@ public class HeadbandStatusStrict
                 case 1:
                     return BAD;
                 default:
+                    problem(HeadbandStatusStrict.class, "missing enum item for value: %s", value);
                     return null;
             }
         }

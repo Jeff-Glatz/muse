@@ -12,10 +12,13 @@ import static kungzhi.muse.osc.service.MessagePath.BATTERY;
 @StreamComponent
 public class BatteryUi {
     private final Logger log = LoggerFactory.getLogger(getClass());
+    private final Battery battery = new Battery();
 
     @Stream(path = BATTERY)
     public void on(Headband headband, Battery battery)
             throws Exception {
-        log.info("Battery: {}%", battery.getPercentRemaining());
+        if (this.battery.updateFrom(battery)) {
+            log.info("Battery: {}%", battery.getPercentRemaining());
+        }
     }
 }

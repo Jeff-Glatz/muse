@@ -1,9 +1,11 @@
 package kungzhi.muse.model;
 
 import static kungzhi.muse.model.HeadbandStatus.Status.fromValue;
+import static kungzhi.muse.runtime.ProblemLog.problem;
 
 public class HeadbandStatus
-        extends AbstractModel {
+        extends AbstractModel
+        implements Equivalence<HeadbandStatus> {
     private final Values<Float> values;
 
     public HeadbandStatus(long time, Values<Float> values) {
@@ -16,14 +18,17 @@ public class HeadbandStatus
     }
 
     @Override
+    public boolean sameAs(HeadbandStatus that) {
+        return values != null ? values.equals(that.values) : that.values == null;
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
 
-        HeadbandStatus eeg = (HeadbandStatus) o;
-
-        return values != null ? values.equals(eeg.values) : eeg.values == null;
+        return sameAs((HeadbandStatus) o);
     }
 
     @Override
@@ -63,6 +68,7 @@ public class HeadbandStatus
                 case 3:
                     return BAD;
                 default:
+                    problem(HeadbandStatus.class, "missing enum item for value: %s", value);
                     return null;
             }
         }

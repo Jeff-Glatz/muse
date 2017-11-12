@@ -13,9 +13,12 @@ public class MessageHelper {
     }
 
     public static <T> Values<T> extractArguments(OSCMessage message, Class<T> type) {
+        return new Values<>(type, args(message));
+    }
+
+    public static Object[] args(OSCMessage message) {
         try {
-            Object[] args = (Object[]) MessageHelper.args.get(message);
-            return new Values<T>(type, args);
+            return (Object[]) MessageHelper.args.get(message);
         } catch (IllegalAccessException e) {
             throw new RuntimeException(e);
         }
