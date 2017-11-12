@@ -26,7 +26,10 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.core.convert.support.DefaultConversionService;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
+import javax.bluetooth.BluetoothStateException;
+import javax.bluetooth.LocalDevice;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.time.Clock;
@@ -41,9 +44,11 @@ import static java.util.concurrent.Executors.newFixedThreadPool;
 @ComponentScan({
         "kungzhi.muse.model",
         "kungzhi.muse.osc",
+        "kungzhi.muse.platform",
         "kungzhi.muse.repository",
         "kungzhi.muse.runtime"
 })
+@EnableScheduling
 @EnableAutoConfiguration
 public class MuseConfiguration {
     private final Logger log = LoggerFactory.getLogger(MuseConfiguration.class);
@@ -57,6 +62,14 @@ public class MuseConfiguration {
     public ExecutorService executorService() {
         return newFixedThreadPool(getRuntime()
                 .availableProcessors());
+    }
+
+    @Bean
+    LocalDevice localDevice()
+            throws BluetoothStateException {
+        LocalDevice device = LocalDevice.getLocalDevice();
+        log.info("Retrieved local bluetooth device named {}", device.getFriendlyName());
+        return device;
     }
 
     @Bean

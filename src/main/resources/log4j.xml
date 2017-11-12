@@ -10,6 +10,9 @@
     <category name="com.intel.bluetooth">
         <priority value="info"/>
     </category>
+    <category name="org.springframework">
+        <priority value="info"/>
+    </category>
     <root>
         <priority value="debug"/>
         <appender-ref ref="console"/>
