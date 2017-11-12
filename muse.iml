@@ -44,7 +44,6 @@
     <orderEntry type="library" name="Maven: de.sciss:netutil:1.0.1" level="project" />
     <orderEntry type="library" name="Maven: com.google.protobuf:protobuf-java:3.4.0" level="project" />
     <orderEntry type="library" name="Maven: com.jsoniter:jsoniter:0.9.17" level="project" />
-    <orderEntry type="library" name="Maven: net.sf.bluecove:bluecove:2.1.1-SNAPSHOT" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.junit.jupiter:junit-jupiter-api:5.0.1" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.opentest4j:opentest4j:1.0.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.junit.platform:junit-platform-commons:1.0.1" level="project" />

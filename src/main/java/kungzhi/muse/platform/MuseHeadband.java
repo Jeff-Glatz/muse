@@ -12,6 +12,8 @@ import com.choosemuse.libmuse.MuseVersion;
 import com.choosemuse.libmuse.NotchFrequency;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.DirectFieldAccessor;
+import org.springframework.util.StreamUtils;
 
 import javax.bluetooth.RemoteDevice;
 import javax.microedition.io.StreamConnection;
@@ -24,10 +26,18 @@ public class MuseHeadband
         extends Muse {
     private final Logger log = LoggerFactory.getLogger(getClass());
     private final RemoteDevice device;
+    private final DirectFieldAccessor deviceAccessor;
+    private ConnectionState connectionState = ConnectionState.UNKNOWN;
     private StreamConnection connection;
 
     public MuseHeadband(RemoteDevice device) {
         this.device = device;
+        this.deviceAccessor = new DirectFieldAccessor(device);
+    }
+
+    @Override
+    public ConnectionState getConnectionState() {
+        return connectionState;
     }
 
     @Override
@@ -37,26 +47,41 @@ public class MuseHeadband
 
     @Override
     public String getName() {
-        return invoke(() -> device.getFriendlyName(false), "Failure getting name from remote device");
+        return apply(() -> device.getFriendlyName(false), "Failure getting name from remote device");
     }
 
     @Override
     public boolean isPaired() {
-        return connection != null;
+        return (boolean) deviceAccessor.getPropertyValue("paired");
     }
 
     @Override
-    public void connect() {
-        connection = invoke(() -> (StreamConnection) open(format("btspp://%s:1", device.getBluetoothAddress())),
-                "Failure opening connection to remote device");
-    }
-
-    @Override
-    public void disconnect() {
+    public final void connect() {
+        connectionState = ConnectionState.CONNECTING;
         try {
-            send(() -> connection.close(), "Failure closing connection");
+            connection = apply(() -> (StreamConnection) open(format("btspp://%s:1", device.getBluetoothAddress())),
+                    "Failure opening connection to remote device");
+            connectionState = ConnectionState.CONNECTED;
+        } catch (RuntimeException e) {
+            connectionState = ConnectionState.DISCONNECTED;
+            throw e;
+        }
+    }
+
+    public void readFromInputStream() {
+        attempt(() -> {
+            log.info("Attempting to read from stream");
+            StreamUtils.copy(connection.openDataInputStream(), System.out);
+        }, "Failure reading from input stream");
+    }
+
+    @Override
+    public final void disconnect() {
+        try {
+            attempt(() -> connection.close(), "Failure closing connection");
         } finally {
             connection = null;
+            connectionState = ConnectionState.DISCONNECTED;
         }
     }
 
@@ -71,13 +96,8 @@ public class MuseHeadband
     }
 
     @Override
-    public ConnectionState getConnectionState() {
-        return null;
-    }
-
-    @Override
     public double getRssi() {
-        return invoke(() -> (double) readRSSI(device), "Failure reading RSSI");
+        return apply(() -> (double) readRSSI(device), "Failure reading RSSI");
     }
 
     @Override
@@ -87,7 +107,6 @@ public class MuseHeadband
 
     @Override
     public void setNumConnectTries(int i) {
-
     }
 
     @Override
@@ -157,10 +176,9 @@ public class MuseHeadband
 
     @Override
     public void enableException(boolean b) {
-
     }
 
-    private <R> R invoke(RemoteFunction<R> function, String failureStatement) {
+    private <R> R apply(ExceptionalFunction<R> function, String failureStatement) {
         try {
             return function.apply();
         } catch (Exception e) {
@@ -169,9 +187,9 @@ public class MuseHeadband
         }
     }
 
-    private void send(RemoteMessage message, String failureStatement) {
+    private void attempt(ExceptionalAction action, String failureStatement) {
         try {
-            message.send();
+            action.attempt();
         } catch (Exception e) {
             log.error(failureStatement, e);
             throw new MuseHeadbandException(this, e);
@@ -179,12 +197,12 @@ public class MuseHeadband
     }
 
     @FunctionalInterface
-    interface RemoteFunction<R> {
+    interface ExceptionalFunction<R> {
         R apply() throws Exception;
     }
 
     @FunctionalInterface
-    interface RemoteMessage {
-        void send() throws Exception;
+    interface ExceptionalAction {
+        void attempt() throws Exception;
     }
 }
