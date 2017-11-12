@@ -59,7 +59,7 @@ public class MuseHeadband
     public final void connect() {
         connectionState = ConnectionState.CONNECTING;
         try {
-            connection = apply(() -> (StreamConnection) open(format("btspp://%s:1", device.getBluetoothAddress())),
+            connection = apply(() -> (StreamConnection) open(format("btspp://%s:2", device.getBluetoothAddress())),
                     "Failure opening connection to remote device");
             connectionState = ConnectionState.CONNECTED;
         } catch (RuntimeException e) {
