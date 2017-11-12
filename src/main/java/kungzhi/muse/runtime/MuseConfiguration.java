@@ -87,17 +87,17 @@ public class MuseConfiguration {
     }
 
     @Bean
-    public MessageDispatcher messageDispatcher(Clock clock, MuseHeadband museSession, Bands bands) {
-        return new MessageDispatcher(clock, museSession)
+    public MessageDispatcher messageDispatcher(Clock clock, MuseHeadband headband, Bands bands) {
+        return new MessageDispatcher(clock, headband)
                 .streaming("/muse/config",
                         new ConfigurationTransformer(),
-                        museSession.configurationStream())
+                        headband.configurationStream())
                 .streaming("/muse/version",
                         new VersionTransformer(),
-                        museSession.versionStream())
+                        headband.versionStream())
                 .streaming("/muse/drlref",
                         new DrlReferenceTransformer(),
-                        museSession.drlReferenceStream())
+                        headband.drlReferenceStream())
                 .streaming("/muse/batt",
                         new BatteryTransformer(),
                         new EmptyModelStream<>())
