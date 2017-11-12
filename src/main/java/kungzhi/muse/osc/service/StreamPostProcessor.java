@@ -39,9 +39,9 @@ public class StreamPostProcessor
                     Class<? extends Model> modelType = (Class<? extends Model>) method.getParameterTypes()[1];
                     dispatcher.withStream(stream.path(), modelType, (headband, model) ->
                             method.invoke(bean, headband, model));
-                    log.info("Streaming {} models of type {} to {}",
-                            stream.path().getName(),
+                    log.info("Streaming {} models on {} to {}",
                             modelType.getSimpleName(),
+                            stream.path().getName(),
                             method.toGenericString());
                 }
             });
