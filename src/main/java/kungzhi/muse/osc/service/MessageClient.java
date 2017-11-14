@@ -1,7 +1,8 @@
 package kungzhi.muse.osc.service;
 
-import de.sciss.net.OSCClient;
 import de.sciss.net.OSCPacket;
+import de.sciss.net.OSCServer;
+import de.sciss.net.OSCTransmitter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,8 +13,6 @@ import javax.annotation.PreDestroy;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
-
-import static de.sciss.net.OSCClient.newUsing;
 
 /**
  * OSC messages will be emitted over OSC to paths:
@@ -74,8 +73,9 @@ public class MessageClient {
 
     private String protocol;
     private InetSocketAddress receiverAddress;
+    private OSCServer receiver;
     private InetSocketAddress transmitterAddress;
-    private OSCClient client;
+    private OSCTransmitter transmitter;
 
     @Autowired
     public MessageClient(MessageDispatcher dispatcher) {
@@ -92,7 +92,7 @@ public class MessageClient {
 
     @Autowired
     public MessageClient withProtocol(
-            @Value("${muse.osc.protocol:udp}") String protocol) {
+            @Value("${muse.osc.protocol:tcp}") String protocol) {
         this.protocol = protocol;
         return this;
     }
@@ -114,14 +114,14 @@ public class MessageClient {
         return receivingOn(new InetSocketAddress(port));
     }
 
-    public MessageClient receivingOn(String hostname, int port) {
+    @Autowired
+    public MessageClient receivingOn(
+            @Value("${muse.osc.receiver.host:0.0.0.0}") String hostname,
+            @Value("${muse.osc.receiver.port:5000}") int port) {
         return receivingOn(new InetSocketAddress(hostname, port));
     }
 
-    @Autowired
-    public MessageClient receivingOn(
-            @Value("${muse.osc.receiver.host:0.0.0.0}") InetAddress address,
-            @Value("${muse.osc.receiver.port:5000}") int port) {
+    public MessageClient receivingOn(InetAddress address, int port) {
         return receivingOn(new InetSocketAddress(address, port));
     }
 
@@ -142,41 +142,69 @@ public class MessageClient {
         return transmittingOn(new InetSocketAddress(port));
     }
 
-    public MessageClient transmittingOn(String hostname, int port) {
+    @Autowired
+    public MessageClient transmittingOn(
+            @Value("${muse.osc.receiver.host:localhost}") String hostname,
+            @Value("${muse.osc.receiver.port:5000}") int port) {
         return transmittingOn(new InetSocketAddress(hostname, port));
     }
 
-    @Autowired
-    public MessageClient transmittingOn(
-            @Value("${muse.osc.receiver.host:localhost}") InetAddress address,
-            @Value("${muse.osc.receiver.port:5000}") int port) {
+    public MessageClient transmittingOn(InetAddress address, int port) {
         return transmittingOn(new InetSocketAddress(address, port));
     }
 
     public void on()
             throws IOException {
-        log.info("starting {} client receiving on: {} and transmitting on: {}...",
-                protocol, receiverAddress, transmitterAddress);
-        client = newUsing(protocol, receiverAddress);
-        client.setTarget(transmitterAddress);
-        client.addOSCListener(dispatcher);
-        client.start();
-        log.info("client started.");
+        turnOnReceiver();
+        turnOnTransmitter();
     }
 
     public void send(OSCPacket packet)
             throws IOException {
-        client.send(packet);
+        transmitter.send(packet);
     }
 
     @PreDestroy
     public void off()
             throws IOException {
-        if (client != null) {
-            log.info("stopping {} client receiving on: {} and transmitting on: {}...",
-                    protocol, receiverAddress, transmitterAddress);
-            client.stop();
-            log.info("client stopped.");
+        turnOffReceiver();
+        turnOffTransmitter();
+    }
+
+    protected void turnOnTransmitter()
+            throws IOException {
+        log.info("connecting transmitter to: {}://{}...",
+                protocol, transmitterAddress);
+        transmitter = OSCTransmitter.newUsing(protocol);
+        transmitter.setTarget(transmitterAddress);
+        transmitter.connect();
+        log.info("transmitter started.");
+    }
+
+    private void turnOffTransmitter() {
+        if (transmitter != null) {
+            log.info("stopping {} transmitter on: {}...", protocol, transmitterAddress);
+            transmitter.dispose();
+            log.info("transmitter stopped.");
+        }
+    }
+
+    private void turnOnReceiver()
+            throws IOException {
+        log.info("starting receiver on: {}://{}...",
+                protocol, receiverAddress);
+        receiver = OSCServer.newUsing(protocol, receiverAddress);
+        receiver.addOSCListener(dispatcher);
+        receiver.start();
+        log.info("receiver started.");
+    }
+
+    private void turnOffReceiver() {
+        if (receiver != null) {
+            log.info("stopping {} receiver on: {}...", protocol, receiverAddress);
+            receiver.dispose();
+            receiver = null;
+            log.info("receiver stopped.");
         }
     }
 }
