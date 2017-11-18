@@ -32,6 +32,7 @@ import static kungzhi.muse.osc.service.MessagePath.BETA_ABSOLUTE;
 import static kungzhi.muse.osc.service.MessagePath.DELTA_ABSOLUTE;
 import static kungzhi.muse.osc.service.MessagePath.GAMMA_ABSOLUTE;
 import static kungzhi.muse.osc.service.MessagePath.THETA_ABSOLUTE;
+import static org.springframework.boot.Banner.Mode.CONSOLE;
 
 public class MuseApplication
         extends Application {
@@ -50,8 +51,10 @@ public class MuseApplication
         super.init();
         start = currentTimeMillis();
         context = new SpringApplicationBuilder(MuseConfiguration.class)
+                .web(false)
                 .headless(false)
                 .registerShutdownHook(true)
+                .bannerMode(CONSOLE)
                 .initializers(context -> context.getBeanFactory()
                         .registerSingleton("application", MuseApplication.this))
                 .properties(new HashMap<>(getParameters().getNamed()))

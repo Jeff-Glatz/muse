@@ -10,6 +10,6 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target(METHOD)
 @Retention(RUNTIME)
 @Documented
-public @interface Stream {
-    MessagePath path();
+public @interface StreamHandler {
+    MessagePath value();
 }

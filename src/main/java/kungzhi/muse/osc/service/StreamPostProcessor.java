@@ -34,14 +34,14 @@ public class StreamPostProcessor
         Class<?> streamType = bean.getClass();
         if (streamType.isAnnotationPresent(StreamComponent.class)) {
             stream(streamType.getMethods()).forEach(method -> {
-                Stream stream = method.getDeclaredAnnotation(Stream.class);
-                if (stream != null) {
+                StreamHandler handler = method.getDeclaredAnnotation(StreamHandler.class);
+                if (handler != null) {
                     Class<? extends Model> modelType = (Class<? extends Model>) method.getParameterTypes()[1];
-                    dispatcher.withStream(stream.path(), modelType, (headband, model) ->
+                    dispatcher.withStream(handler.value(), modelType, (headband, model) ->
                             method.invoke(bean, headband, model));
                     log.info("Streaming {} models on {} to {}",
                             modelType.getSimpleName(),
-                            stream.path().getName(),
+                            handler.value().getName(),
                             method.toGenericString());
                 }
             });

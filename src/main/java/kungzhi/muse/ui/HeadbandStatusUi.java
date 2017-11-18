@@ -4,7 +4,7 @@ import kungzhi.muse.model.Configuration;
 import kungzhi.muse.model.Headband;
 import kungzhi.muse.model.HeadbandStatus;
 import kungzhi.muse.model.SingleValue;
-import kungzhi.muse.osc.service.Stream;
+import kungzhi.muse.osc.service.StreamHandler;
 import kungzhi.muse.osc.service.StreamComponent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,7 +18,7 @@ public class HeadbandStatusUi {
     private HeadbandStatus headbandStatus = new HeadbandStatus(0, null);
     private SingleValue<Integer> headbandTouching = new SingleValue<>(0, null);
 
-    @Stream(path = HEADBAND_STATUS)
+    @StreamHandler(HEADBAND_STATUS)
     public void on(Headband headband, HeadbandStatus headbandStatus)
             throws Exception {
         log.info(headbandStatus.toString());
@@ -32,7 +32,7 @@ public class HeadbandStatusUi {
         }
     }
 
-    @Stream(path = HEADBAND_ON)
+    @StreamHandler(value = HEADBAND_ON)
     public void on(Headband headband, SingleValue<Integer> headbandTouching)
             throws Exception {
         if (!this.headbandTouching.sameAs(headbandTouching)) {

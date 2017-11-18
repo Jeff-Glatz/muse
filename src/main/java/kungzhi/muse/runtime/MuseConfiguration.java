@@ -22,9 +22,9 @@ import kungzhi.muse.repository.Bands;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.core.convert.support.DefaultConversionService;
@@ -40,7 +40,6 @@ import static java.lang.Runtime.getRuntime;
 import static java.net.InetAddress.getByName;
 import static java.util.concurrent.Executors.newFixedThreadPool;
 
-@Configuration
 @ComponentScan({
         "kungzhi.muse.model",
         "kungzhi.muse.osc",
@@ -51,6 +50,7 @@ import static java.util.concurrent.Executors.newFixedThreadPool;
 @Import({BluetoothConfiguration.class})
 @EnableScheduling
 @EnableAutoConfiguration
+@SpringBootApplication
 public class MuseConfiguration {
     private final Logger log = LoggerFactory.getLogger(MuseConfiguration.class);
 
