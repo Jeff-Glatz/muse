@@ -2,7 +2,11 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/muse.iml" filepath="$PROJECT_DIR$/muse.iml" />
+      <module fileurl="file://$PROJECT_DIR$/model/muse-model.iml" filepath="$PROJECT_DIR$/model/muse-model.iml" />
+      <module fileurl="file://$PROJECT_DIR$/osc/muse-osc.iml" filepath="$PROJECT_DIR$/osc/muse-osc.iml" />
+      <module fileurl="file://$PROJECT_DIR$/platform/muse-platform.iml" filepath="$PROJECT_DIR$/platform/muse-platform.iml" />
+      <module fileurl="file://$PROJECT_DIR$/muse-project.iml" filepath="$PROJECT_DIR$/muse-project.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ui/muse-ui.iml" filepath="$PROJECT_DIR$/ui/muse-ui.iml" />
     </modules>
   </component>
 </project>

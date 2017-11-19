@@ -6,11 +6,18 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="muse" />
+        <module name="muse-model" />
+        <module name="muse-osc" />
+        <module name="muse-platform" />
+        <module name="muse-ui" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="muse" target="1.9" />
+      <module name="muse-model" target="1.9" />
+      <module name="muse-osc" target="1.9" />
+      <module name="muse-platform" target="1.9" />
+      <module name="muse-project" target="1.9" />
+      <module name="muse-ui" target="1.9" />
     </bytecodeTargetLevel>
   </component>
 </project>

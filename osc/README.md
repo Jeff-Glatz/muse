@@ -1,0 +1,1 @@
+This module contains a framework for consuming data streams emitted by MuseIO over OSC.

@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="Muse SDK">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/lib/libmuse_android.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>
