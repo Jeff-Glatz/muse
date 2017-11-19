@@ -17,6 +17,17 @@ import static java.lang.String.format;
 import static java.lang.reflect.Array.newInstance;
 import static java.util.Arrays.stream;
 
+/**
+ * The {@link MuseSimulator} is a JMX managed singleton that can be used to transmit
+ * simulated messages from the Muse headband to the {@link MessageDispatcher}.
+ * <p>
+ * When running locally, simply use the JDK provided {@code jconsole} to connect to
+ * the running Java process. From there any invoked MBean operations will result in
+ * OSC messages being delivered to the running application.
+ *
+ * @see MessageDispatcher
+ * @see MessageClient
+ */
 @Component
 @ManagedResource
 public class MuseSimulator {

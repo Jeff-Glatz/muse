@@ -65,6 +65,40 @@ import java.net.InetSocketAddress;
  * <p>
  * to OSC URL:
  * osc.tcp://127.0.0.1:5000
+ * <p>
+ * The default configuration of this {@link MessageClient} is setup to
+ * receive OSC messages from MuseIO using it's default settings.
+ *
+ * The client can be altered programmatically by setting the
+ * transmitting and receiving addresses or by specifying the following
+ * system properties:
+ *
+ * <table>
+ *     <th>
+ *         <td>System Property</td>
+ *         <td>Default Value</td>
+ *     </th>
+ *     <tr>
+ *         <td>muse.osc.protocol</td>
+ *         <td>tcp</td>
+ *     </tr>
+ *     <tr>
+ *         <td>muse.osc.receiver.host</td>
+ *         <td>0.0.0.0</td>
+ *     </tr>
+ *     <tr>
+ *         <td>muse.osc.receiver.port</td>
+ *         <td>5000</td>
+ *     </tr>
+ *     <tr>
+ *         <td>muse.osc.transmitter.host</td>
+ *         <td>localhost</td>
+ *     </tr>
+ *     <tr>
+ *         <td>muse.osc.transmitter.port</td>
+ *         <td>5000</td>
+ *     </tr>
+ * </table>
  */
 @Component
 public class MessageClient {
@@ -144,8 +178,8 @@ public class MessageClient {
 
     @Autowired
     public MessageClient transmittingOn(
-            @Value("${muse.osc.receiver.host:localhost}") String hostname,
-            @Value("${muse.osc.receiver.port:5000}") int port) {
+            @Value("${muse.osc.transmitter.host:localhost}") String hostname,
+            @Value("${muse.osc.transmitter.port:5000}") int port) {
         return transmittingOn(new InetSocketAddress(hostname, port));
     }
 
@@ -153,6 +187,14 @@ public class MessageClient {
         return transmittingOn(new InetSocketAddress(address, port));
     }
 
+    /**
+     * This method is intentionally not annotated with @PostConstruct to
+     * allow the application to determine when it is ready to start streaming
+     * data from the Muse headband.
+     *
+     * @throws IOException If an error occurs while turning on the receiving and
+     *                     transmitting components
+     */
     public void on()
             throws IOException {
         turnOnReceiver();
@@ -167,11 +209,11 @@ public class MessageClient {
     @PreDestroy
     public void off()
             throws IOException {
-        turnOffReceiver();
         turnOffTransmitter();
+        turnOffReceiver();
     }
 
-    protected void turnOnTransmitter()
+    private void turnOnTransmitter()
             throws IOException {
         log.info("connecting transmitter to: {}://{}...",
                 protocol, transmitterAddress);

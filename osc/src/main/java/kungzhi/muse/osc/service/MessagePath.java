@@ -20,6 +20,10 @@ import static java.util.Arrays.stream;
 import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.toMap;
 
+/**
+ * Enumerates the available message paths and the expected domain/model
+ * objects contained in the message stream.
+ */
 public enum MessagePath {
     EEG("/muse/eeg", Eeg.class, false),
     EEG_DROPPED_SAMPLES("/muse/eeg/dropped_samples", SingleValue.class, false),
