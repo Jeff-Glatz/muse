@@ -4,19 +4,11 @@ import kungzhi.muse.model.EmptyModelStream;
 import kungzhi.muse.model.Fft;
 import kungzhi.muse.osc.service.MessageDispatcher;
 import kungzhi.muse.osc.service.MissingTransformerException;
-import kungzhi.muse.osc.transform.AccelerometerTransformer;
 import kungzhi.muse.osc.transform.BandPowerTransformer;
-import kungzhi.muse.osc.transform.BatteryTransformer;
-import kungzhi.muse.osc.transform.ConfigurationTransformer;
-import kungzhi.muse.osc.transform.DrlReferenceTransformer;
-import kungzhi.muse.osc.transform.EegTransformer;
 import kungzhi.muse.osc.transform.EmptyMessageTransformer;
 import kungzhi.muse.osc.transform.FftTransformer;
-import kungzhi.muse.osc.transform.HeadbandStatusStrictTransformer;
-import kungzhi.muse.osc.transform.HeadbandStatusTransformer;
 import kungzhi.muse.osc.transform.SessionScoreTransformer;
 import kungzhi.muse.osc.transform.SingleValueTransformer;
-import kungzhi.muse.osc.transform.VersionTransformer;
 import kungzhi.muse.platform.BluetoothConfiguration;
 import kungzhi.muse.repository.Bands;
 import org.slf4j.Logger;
@@ -81,24 +73,6 @@ public class MuseConfiguration {
     @Bean
     public MessageDispatcher messageDispatcher(Clock clock, MuseHeadband headband, Bands bands) {
         return new MessageDispatcher(clock, headband)
-                .streaming("/muse/config",
-                        new ConfigurationTransformer(),
-                        headband.configurationStream())
-                .streaming("/muse/version",
-                        new VersionTransformer(),
-                        headband.versionStream())
-                .streaming("/muse/drlref",
-                        new DrlReferenceTransformer(),
-                        headband.drlReferenceStream())
-                .streaming("/muse/batt",
-                        new BatteryTransformer(),
-                        new EmptyModelStream<>())
-                .streaming("/muse/elements/horseshoe",
-                        new HeadbandStatusTransformer(),
-                        new EmptyModelStream<>())
-                .streaming("/muse/elements/is_good",
-                        new HeadbandStatusStrictTransformer(),
-                        new EmptyModelStream<>())
                 .streaming("/muse/elements/touching_forehead",
                         new SingleValueTransformer<>(Integer.class),
                         new EmptyModelStream<>())
@@ -108,14 +82,8 @@ public class MuseConfiguration {
                 .streaming("/muse/elements/jaw_clench",
                         new SingleValueTransformer<>(Integer.class),
                         new EmptyModelStream<>())
-                .streaming("/muse/acc",
-                        new AccelerometerTransformer(),
-                        new EmptyModelStream<>())
                 .streaming("/muse/acc/dropped_samples",
                         new SingleValueTransformer<>(Integer.class),
-                        new EmptyModelStream<>())
-                .streaming("/muse/eeg",
-                        new EegTransformer(),
                         new EmptyModelStream<>())
                 .streaming("/muse/eeg/dropped_samples",
                         new SingleValueTransformer<>(Integer.class),

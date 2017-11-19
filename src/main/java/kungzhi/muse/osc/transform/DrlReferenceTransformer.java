@@ -2,9 +2,12 @@ package kungzhi.muse.osc.transform;
 
 import de.sciss.net.OSCMessage;
 import kungzhi.muse.model.DrlReference;
+import kungzhi.muse.osc.service.Transformer;
 
+import static kungzhi.muse.osc.service.MessagePath.DRL_REFERENCE;
 import static kungzhi.muse.osc.transform.MessageHelper.argumentAt;
 
+@Transformer(DRL_REFERENCE)
 public class DrlReferenceTransformer
         implements MessageTransformer<DrlReference> {
 

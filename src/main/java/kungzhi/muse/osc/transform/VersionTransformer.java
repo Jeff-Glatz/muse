@@ -3,12 +3,13 @@ package kungzhi.muse.osc.transform;
 import com.jsoniter.any.Any;
 import de.sciss.net.OSCMessage;
 import kungzhi.muse.model.Version;
-import org.springframework.stereotype.Component;
+import kungzhi.muse.osc.service.Transformer;
 
 import static com.jsoniter.JsonIterator.deserialize;
+import static kungzhi.muse.osc.service.MessagePath.VERSION;
 import static kungzhi.muse.osc.transform.MessageHelper.argumentAt;
 
-@Component
+@Transformer(VERSION)
 public class VersionTransformer
         implements MessageTransformer<Version> {
 

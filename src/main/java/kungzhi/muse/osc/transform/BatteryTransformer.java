@@ -2,9 +2,12 @@ package kungzhi.muse.osc.transform;
 
 import de.sciss.net.OSCMessage;
 import kungzhi.muse.model.Battery;
+import kungzhi.muse.osc.service.Transformer;
 
+import static kungzhi.muse.osc.service.MessagePath.BATTERY;
 import static kungzhi.muse.osc.transform.MessageHelper.argumentAt;
 
+@Transformer(BATTERY)
 public class BatteryTransformer
         implements MessageTransformer<Battery> {
 

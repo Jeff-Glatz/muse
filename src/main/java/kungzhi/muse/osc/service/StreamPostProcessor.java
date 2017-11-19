@@ -32,7 +32,7 @@ public class StreamPostProcessor
     public Object postProcessAfterInitialization(Object bean, String beanName)
             throws BeansException {
         Class<?> streamType = bean.getClass();
-        if (streamType.isAnnotationPresent(StreamComponent.class)) {
+        if (streamType.isAnnotationPresent(Stream.class)) {
             stream(streamType.getMethods()).forEach(method -> {
                 StreamHandler handler = method.getDeclaredAnnotation(StreamHandler.class);
                 if (handler != null) {

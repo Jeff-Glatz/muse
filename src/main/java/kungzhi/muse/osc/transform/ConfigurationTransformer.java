@@ -5,12 +5,14 @@ import de.sciss.net.OSCMessage;
 import kungzhi.muse.model.Configuration;
 import kungzhi.muse.model.Preset;
 import kungzhi.muse.model.Sensor;
-
-import java.util.stream.Stream;
+import kungzhi.muse.osc.service.Transformer;
 
 import static com.jsoniter.JsonIterator.deserialize;
+import static java.util.Arrays.stream;
+import static kungzhi.muse.osc.service.MessagePath.CONFIGURATION;
 import static kungzhi.muse.osc.transform.MessageHelper.argumentAt;
 
+@Transformer(CONFIGURATION)
 public class ConfigurationTransformer
         implements MessageTransformer<Configuration> {
 
@@ -31,7 +33,7 @@ public class ConfigurationTransformer
                 .withEegSampleFrequencyInHz(json.toInt("eeg_sample_frequency_hz"))
                 .withEegOutputFrequencyInHz(json.toInt("eeg_output_frequency_hz"))
                 .withEegChannelCount(json.toInt("eeg_channel_count"));
-        Stream.of(json.toString("eeg_channel_layout").trim().split(" "))
+        stream(json.toString("eeg_channel_layout").trim().split(" "))
                 .map(Sensor::valueOf)
                 .forEach(configuration::withEegChannelInLayout);
         return configuration
