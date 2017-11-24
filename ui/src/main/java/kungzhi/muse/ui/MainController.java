@@ -1,14 +1,14 @@
 package kungzhi.muse.ui;
 
-import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
-import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.control.ToggleButton;
+import javafx.scene.control.Tooltip;
 import kungzhi.muse.model.BandPower;
 import kungzhi.muse.model.Battery;
 import kungzhi.muse.model.Configuration;
@@ -38,6 +38,12 @@ import static kungzhi.muse.osc.service.MessagePath.THETA_ABSOLUTE;
 @Controller
 public class MainController
         extends AbstractController {
+    private static final String BATTERY_RED = "battery-red";
+    private static final String BATTERY_YELLOW = "battery-yellow";
+    private static final String BATTERY_ORANGE = "battery-orange";
+    private static final String BATTERY_GREEN = "battery-green";
+    private static final String[] barColorStyleClasses = {BATTERY_RED, BATTERY_YELLOW, BATTERY_ORANGE, BATTERY_GREEN};
+
     private final Queue<QueuedData<BandPower>> powers = new LinkedList<>();
     private final ExecutorService executor;
     private final Headband headband;
@@ -47,13 +53,10 @@ public class MainController
     private long start;
 
     @FXML
-    private Label batteryLabel;
+    private ProgressBar batteryProgressBar;
 
     @FXML
     private LineChart<Number, Number> bandPowerLineChart;
-
-    @FXML
-    private LineChart<Number, Number> calmLineChart;
 
     @FXML
     private ToggleButton clientToggleButton;
@@ -71,15 +74,32 @@ public class MainController
     public void monitorBattery() {
         Battery battery = headband.getBattery();
         battery.addActiveItemListener((current, previous) -> {
-            Platform.runLater(() ->
-                    batteryLabel.setText(format("Battery: %s%%", current.getPercentRemaining())));
+            Float remaining = current.getPercentRemaining();
+            batteryProgressBar.setProgress(remaining / 100f);
+            batteryProgressBar.getTooltip()
+                    .setText(format("Battery: %.2f%%", remaining));
         });
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         log.info("Initializing controller from {}", location);
-        batteryLabel.setText("Battery: unknown");
+        batteryProgressBar.setTooltip(new Tooltip("Battery"));
+        batteryProgressBar.progressProperty()
+                .addListener((observable, oldValue, newValue) -> {
+                    double progress = newValue == null ? 0 : newValue.doubleValue();
+                    ObservableList<String> styleClass = batteryProgressBar.getStyleClass();
+                    styleClass.removeAll(barColorStyleClasses);
+                    if (progress < 0.2) {
+                        styleClass.add(BATTERY_RED);
+                    } else if (progress < 0.4) {
+                        styleClass.add(BATTERY_ORANGE);
+                    } else if (progress < 0.6) {
+                        styleClass.add(BATTERY_YELLOW);
+                    } else {
+                        styleClass.add(BATTERY_GREEN);
+                    }
+                });
 
         bandPowerLineChart.setTitle("Brainwave Monitoring");
         bandPowerLineChart.setAnimated(true);
@@ -96,7 +116,7 @@ public class MainController
         yAxis.setLabel("Absolute Power");
         yAxis.setAutoRanging(false);
         yAxis.setAnimated(false);
-        yAxis.setLowerBound(-1);
+        yAxis.setLowerBound(0);
         yAxis.setUpperBound(2);
 
         ObservableList<XYChart.Series<Number, Number>> seriesData = bandPowerLineChart.getData();

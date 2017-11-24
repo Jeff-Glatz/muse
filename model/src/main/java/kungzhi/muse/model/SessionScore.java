@@ -1,6 +1,5 @@
 package kungzhi.muse.model;
 
-import java.util.Objects;
 import java.util.stream.Stream;
 
 public class SessionScore
@@ -28,8 +27,7 @@ public class SessionScore
 
     public Double average() {
         return values()
-                .filter(Objects::nonNull)
-                .mapToDouble(value -> value)
+                .mapToDouble(value -> (value == null) ? 0 : value)
                 .average()
                 .getAsDouble();
     }

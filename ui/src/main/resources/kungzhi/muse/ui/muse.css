@@ -16,3 +16,8 @@
     -fx-background-insets: 0, 0;
     -fx-padding: 0;
 }
+
+.battery-green  { -fx-accent: green;  }
+.battery-yellow { -fx-accent: yellow; }
+.battery-orange { -fx-accent: orange; }
+.battery-red    { -fx-accent: red;    }

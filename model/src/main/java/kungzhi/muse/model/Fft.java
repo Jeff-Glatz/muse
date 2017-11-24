@@ -1,6 +1,5 @@
 package kungzhi.muse.model;
 
-import java.util.Objects;
 import java.util.stream.Stream;
 
 public class Fft
@@ -24,8 +23,7 @@ public class Fft
 
     public Double average() {
         return values()
-                .filter(Objects::nonNull)
-                .mapToDouble(value -> value)
+                .mapToDouble(value -> (value == null) ? 0 : value)
                 .average()
                 .getAsDouble();
     }
