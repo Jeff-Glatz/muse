@@ -2,35 +2,38 @@ package kungzhi.muse.ui;
 
 import kungzhi.muse.model.Battery;
 import kungzhi.muse.model.Headband;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 
 import javax.annotation.PostConstruct;
+import java.net.URL;
+import java.util.ResourceBundle;
 
-@Component
-public class BatteryUi {
-    private final Logger log = LoggerFactory.getLogger(getClass());
+@Controller
+public class BatteryController
+        extends AbstractController {
     private final Headband headband;
 
     @Autowired
-    public BatteryUi(Headband headband) {
+    public BatteryController(Headband headband) {
         this.headband = headband;
     }
 
     @PostConstruct
-    public void initialize()
-            throws Exception {
+    public void addBatteryListener() {
         Battery battery = headband.getBattery();
         battery.addActiveItemListener((current, previous) -> {
-            updateUi();
+            updateView();
         });
     }
 
-    private void updateUi() {
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        log.info("Initializing controller from {}", location);
+    }
+
+    private void updateView() {
         Battery battery = headband.getBattery();
         log.info("Battery: {}%", battery.getPercentRemaining());
-
     }
 }

@@ -48,9 +48,9 @@ public class MuseApplication
     @Autowired
     private MessageClient client;
     @Autowired
-    private BatteryUi batteryUi;
+    private BatteryController batteryController;
     @Autowired
-    private HeadbandStatusUi headbandStatusUi;
+    private HeadbandController headbandController;
 
     private long start;
 
