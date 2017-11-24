@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.Scope;
 
 @ComponentScan({"kungzhi.muse.ui"})
 @Import(OscWiring.class)
@@ -15,6 +16,7 @@ import org.springframework.context.annotation.Import;
 public class UiWiring {
 
     @Bean
+    @Scope("prototype")
     public FXMLLoader fxmlLoader(ApplicationContext context) {
         FXMLLoader loader = new FXMLLoader();
         loader.setControllerFactory(context::getBean);

@@ -3,6 +3,7 @@ package kungzhi.muse.ui;
 import kungzhi.muse.model.Configuration;
 import kungzhi.muse.model.Headband;
 import kungzhi.muse.model.HeadbandStatus;
+import kungzhi.muse.model.HeadbandStatusStrict;
 import kungzhi.muse.model.SingleValue;
 import kungzhi.muse.osc.service.Stream;
 import kungzhi.muse.osc.service.StreamHandler;
@@ -14,6 +15,7 @@ import java.util.ResourceBundle;
 
 import static kungzhi.muse.osc.service.MessagePath.HEADBAND_ON;
 import static kungzhi.muse.osc.service.MessagePath.HEADBAND_STATUS;
+import static kungzhi.muse.osc.service.MessagePath.HEADBAND_STATUS_STRICT;
 
 @Stream
 @Controller
@@ -21,8 +23,8 @@ public class HeadbandController
         extends AbstractController {
     private final Headband headband;
 
-    private HeadbandStatus headbandStatus = new HeadbandStatus(0, null);
-    private SingleValue<Integer> headbandTouching = new SingleValue<>(0, null);
+    private HeadbandStatus status = new HeadbandStatus(0, null);
+    private SingleValue<Integer> touching = new SingleValue<>(0, null);
 
     @Autowired
     public HeadbandController(Headband headband) {
@@ -38,8 +40,8 @@ public class HeadbandController
     public void on(Headband headband, HeadbandStatus headbandStatus)
             throws Exception {
         log.info(headbandStatus.toString());
-        if (!this.headbandStatus.sameAs(headbandStatus)) {
-            this.headbandStatus = headbandStatus;
+        if (!this.status.sameAs(headbandStatus)) {
+            this.status = headbandStatus;
             Configuration configuration = headband.getConfiguration();
             configuration.getEegChannelLayout().stream()
                     .forEachOrdered(channel -> {
@@ -48,11 +50,16 @@ public class HeadbandController
         }
     }
 
+    @StreamHandler(HEADBAND_STATUS_STRICT)
+    public void on(Headband headband, HeadbandStatusStrict headbandStatus)
+            throws Exception {
+    }
+
     @StreamHandler(HEADBAND_ON)
     public void on(Headband headband, SingleValue<Integer> headbandTouching)
             throws Exception {
-        if (!this.headbandTouching.sameAs(headbandTouching)) {
-            this.headbandTouching = headbandTouching;
+        if (!this.touching.sameAs(headbandTouching)) {
+            this.touching = headbandTouching;
             log.info("Touching: {}", headbandTouching.get());
         }
     }
