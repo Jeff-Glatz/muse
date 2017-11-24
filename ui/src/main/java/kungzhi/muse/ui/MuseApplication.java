@@ -3,6 +3,7 @@ package kungzhi.muse.ui;
 import javafx.application.Application;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
@@ -15,72 +16,56 @@ import kungzhi.muse.model.Model;
 import kungzhi.muse.osc.service.MessageClient;
 import kungzhi.muse.osc.service.MessageDispatcher;
 import kungzhi.muse.osc.service.MessagePath;
-import kungzhi.muse.runtime.UiWiring;
+import kungzhi.muse.runtime.SpringContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.builder.SpringApplicationBuilder;
-import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.concurrent.ExecutorService;
 
 import static java.lang.System.currentTimeMillis;
+import static java.util.ResourceBundle.getBundle;
 import static kungzhi.muse.osc.service.MessagePath.ALPHA_ABSOLUTE;
 import static kungzhi.muse.osc.service.MessagePath.BETA_ABSOLUTE;
 import static kungzhi.muse.osc.service.MessagePath.DELTA_ABSOLUTE;
 import static kungzhi.muse.osc.service.MessagePath.GAMMA_ABSOLUTE;
 import static kungzhi.muse.osc.service.MessagePath.THETA_ABSOLUTE;
-import static org.springframework.boot.Banner.Mode.CONSOLE;
 
 public class MuseApplication
         extends Application {
     private final Logger log = LoggerFactory.getLogger(getClass());
     private final Queue<QueuedData<BandPower>> powers = new LinkedList<>();
-    private long start;
-    private ConfigurableApplicationContext context;
+    private final SpringContext context = new SpringContext(this);
 
+    @Autowired
+    private FXMLLoader loader;
+    @Autowired
     private ExecutorService executor;
+    @Autowired
     private MessageDispatcher dispatcher;
+    @Autowired
     private MessageClient client;
-
+    @Autowired
     private BatteryUi batteryUi;
+    @Autowired
     private HeadbandStatusUi headbandStatusUi;
+
+    private long start;
 
     @Override
     public void init()
             throws Exception {
         super.init();
-        start = currentTimeMillis();
-
-        // Launch SpringBoot
-        context = new SpringApplicationBuilder(UiWiring.class)
-                .web(false)
-                .headless(false)
-                .registerShutdownHook(true)
-                .bannerMode(CONSOLE)
-                .initializers(context -> context.getBeanFactory()
-                        .registerSingleton("application", MuseApplication.this))
-                .properties(new HashMap<>(getParameters().getNamed()))
-                .run(getParameters().getRaw().toArray(new String[0]));
-
-        // Grab the objects we need to collaborate with
-        executor = context.getBean(ExecutorService.class);
-        dispatcher = context.getBean(MessageDispatcher.class);
-        client = context.getBean(MessageClient.class);
-
-        // Grab the UI elements to display
-        batteryUi = context.getBean(BatteryUi.class);
-        headbandStatusUi = context.getBean(HeadbandStatusUi.class);
-
+        context.init();
         // Attach a listener to the configuration of the headband so that
         // we will be notified when it has been received. Data cannot be
         // analyzed until the configuration has been received because
         // it contains channel information and preset details needed to
         // interpret that data. All data received will be queued until the
         // configuration arrives, at which point the data will then be processed
-        Headband headband = context.getBean(Headband.class);
+        Headband headband = context.lookup(Headband.class);
         Configuration configuration = headband.getConfiguration();
         configuration.addActiveItemListener((current, previous) -> {
             if (previous.initial()) {
@@ -94,11 +79,6 @@ public class MuseApplication
     @Override
     public void start(Stage stage)
             throws Exception {
-        stage.setTitle("Muse EEG Feed");
-        stage.setOnCloseRequest(event -> {
-            context.close();
-        });
-
         //defining the axes
         final NumberAxis xAxis = new NumberAxis();
         xAxis.setLabel("Timestamp");
@@ -121,7 +101,6 @@ public class MuseApplication
         lineChart.setVerticalGridLinesVisible(false);
         lineChart.setCreateSymbols(false);
 
-        Scene scene = new Scene(lineChart, 800, 600);
         ObservableList<XYChart.Series<Number, Number>> data = lineChart.getData();
         data.add(bandPowerSeries(GAMMA_ABSOLUTE));
         data.add(bandPowerSeries(BETA_ABSOLUTE));
@@ -130,9 +109,17 @@ public class MuseApplication
         data.add(bandPowerSeries(DELTA_ABSOLUTE));
 
         // Start streaming messages
+        start = currentTimeMillis();
         client.on();
 
-        stage.setScene(scene);
+        stage.setTitle("Muse EEG Feed");
+        stage.setOnCloseRequest(event -> {
+            context.close();
+        });
+        loader.setResources(getBundle("kungzhi.muse.ui.muse"));
+        loader.setLocation(getClass().getResource("main.fxml"));
+        stage.setScene(new Scene(loader.load()));
+        stage.setScene(new Scene(lineChart, 800, 600));
         stage.show();
     }
 
