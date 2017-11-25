@@ -107,8 +107,7 @@ public class MainController
         HeadbandStatus status = headband.getStatus();
         status.addActiveItemListener((current, previous) -> {
             sensors.forEach((channel, checkBox) -> {
-                HeadbandStatus.State state = current.forChannel(channel);
-                switch (state) {
+                switch (current.forChannel(channel)) {
                     case GOOD:
                         checkBox.setSelected(true);
                         break;
@@ -146,43 +145,19 @@ public class MainController
                         styleClass.add(BATTERY_GREEN);
                     }
                 });
-
-        bandPowerLineChart.setTitle("Brainwave Monitoring");
-        bandPowerLineChart.setAnimated(true);
-        bandPowerLineChart.setVerticalGridLinesVisible(false);
-        bandPowerLineChart.setCreateSymbols(false);
-
-        final NumberAxis xAxis = (NumberAxis) bandPowerLineChart.getXAxis();
-        xAxis.setLabel("Timestamp");
-        xAxis.setAutoRanging(true);
-        xAxis.setAnimated(false);
-        xAxis.setForceZeroInRange(false);
-
-        final NumberAxis yAxis = (NumberAxis) bandPowerLineChart.getYAxis();
-        yAxis.setLabel("Absolute Power");
-        yAxis.setAutoRanging(false);
-        yAxis.setAnimated(false);
-        yAxis.setLowerBound(0);
-        yAxis.setUpperBound(2);
-
-        ObservableList<XYChart.Series<Number, Number>> seriesData = bandPowerLineChart.getData();
-        seriesData.add(bandPowerSeries(GAMMA_ABSOLUTE));
-        seriesData.add(bandPowerSeries(BETA_ABSOLUTE));
-        seriesData.add(bandPowerSeries(ALPHA_ABSOLUTE));
-        seriesData.add(bandPowerSeries(THETA_ABSOLUTE));
-        seriesData.add(bandPowerSeries(DELTA_ABSOLUTE));
-
+        buildAbsoluteBandPowerChart();
         start = currentTimeMillis();
     }
 
+    @FXML
     public void toggleClient()
             throws IOException {
         if (clientToggleButton.isSelected()) {
             client.on();
-            clientToggleButton.setText("Client On");
+            clientToggleButton.setText("On");
         } else {
             client.off();
-            clientToggleButton.setText("Client Off");
+            clientToggleButton.setText("Off");
         }
     }
 
@@ -252,5 +227,32 @@ public class MainController
                     addTo(series, power);
                 });
         return series;
+    }
+
+    private void buildAbsoluteBandPowerChart() {
+        bandPowerLineChart.setTitle("Absolute Band Power");
+        bandPowerLineChart.setAnimated(true);
+        bandPowerLineChart.setVerticalGridLinesVisible(false);
+        bandPowerLineChart.setCreateSymbols(false);
+
+        NumberAxis xAxis = (NumberAxis) bandPowerLineChart.getXAxis();
+        xAxis.setLabel("Timestamp");
+        xAxis.setAutoRanging(true);
+        xAxis.setAnimated(false);
+        xAxis.setForceZeroInRange(false);
+
+        NumberAxis yAxis = (NumberAxis) bandPowerLineChart.getYAxis();
+        yAxis.setLabel("Absolute Power");
+        yAxis.setAutoRanging(false);
+        yAxis.setAnimated(false);
+        yAxis.setLowerBound(0);
+        yAxis.setUpperBound(2);
+
+        ObservableList<XYChart.Series<Number, Number>> seriesData = bandPowerLineChart.getData();
+        seriesData.add(bandPowerSeries(GAMMA_ABSOLUTE));
+        seriesData.add(bandPowerSeries(BETA_ABSOLUTE));
+        seriesData.add(bandPowerSeries(ALPHA_ABSOLUTE));
+        seriesData.add(bandPowerSeries(THETA_ABSOLUTE));
+        seriesData.add(bandPowerSeries(DELTA_ABSOLUTE));
     }
 }

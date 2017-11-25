@@ -76,8 +76,6 @@
                                 <Color blue="0.624" green="0.624" red="0.624" fx:id="x2"/>
                             </textFill>
                         </Label>
-                        <ToggleButton fx:id="clientToggleButton" layoutX="35.0" layoutY="201.0" mnemonicParsing="false"
-                                      onAction="#toggleClient" text="Client Off"/>
                     </children>
                 </AnchorPane>
                 <ScrollPane prefHeight="-1.0" prefWidth="-1.0">
@@ -114,15 +112,12 @@
         </SplitPane>
         <HBox id="HBox" alignment="CENTER_LEFT" spacing="5.0" VBox.vgrow="NEVER">
             <children>
-                <Label maxHeight="1.7976931348623157E308" maxWidth="-1.0" text="%label.text.left.status"
-                       HBox.hgrow="ALWAYS">
+                <Label maxHeight="1.7976931348623157E308" maxWidth="-1.0" text="OSC Client" HBox.hgrow="ALWAYS">
                     <font>
                         <Font size="11.0" fx:id="x3"/>
                     </font>
-                    <textFill>
-                        <Color blue="0.625" green="0.625" red="0.625" fx:id="x4"/>
-                    </textFill>
                 </Label>
+                <ToggleButton fx:id="clientToggleButton" mnemonicParsing="false" onAction="#toggleClient" text="off"/>
                 <HBox fx:id="headbandStatusBox" alignment="CENTER" prefHeight="-1.0" prefWidth="-1.0" HBox.hgrow="ALWAYS"/>
                 <ProgressBar fx:id="batteryProgressBar" progress="0.0" styleClass="battery-indicator"/>
             </children>
