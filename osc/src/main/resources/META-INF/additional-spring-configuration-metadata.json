@@ -1,0 +1,29 @@
+{
+  "hints": [
+    {
+      "name": "muse.osc.protocol",
+      "values": [
+        {
+          "value": "tcp"
+        },
+        {
+          "value": "udp"
+        }
+      ]
+    }
+  ],
+  "properties": [
+    {
+      "sourceType": "kungzhi.muse.runtime.OscProperties$Service",
+      "name": "muse.osc.receiver.host",
+      "type": "java.net.InetAddress",
+      "defaulValue": "java.net.InetAddress.getLocalHost()"
+    },
+    {
+      "sourceType": "kungzhi.muse.runtime.OscProperties$Service",
+      "name": "muse.osc.transmitter.host",
+      "type": "java.net.InetAddress",
+      "defaulValue": "java.net.InetAddress.getLocalHost()"
+    }
+  ]
+}

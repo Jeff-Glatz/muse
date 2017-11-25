@@ -1,9 +1,12 @@
-package kungzhi.muse.osc.service;
+package kungzhi.muse.osc.simulation;
 
 import de.sciss.net.OSCMessage;
+import kungzhi.muse.osc.service.MessageClient;
+import kungzhi.muse.osc.service.MessageDispatcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.jmx.export.annotation.ManagedOperation;
 import org.springframework.jmx.export.annotation.ManagedResource;
@@ -29,6 +32,7 @@ import static java.util.Arrays.stream;
  * @see MessageClient
  */
 @Component
+@Profile("simulation")
 @ManagedResource
 public class MuseSimulator {
     private final Logger log = LoggerFactory.getLogger(getClass());
