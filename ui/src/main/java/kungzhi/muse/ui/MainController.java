@@ -4,6 +4,7 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
@@ -42,11 +43,11 @@ import static java.lang.System.currentTimeMillis;
 import static javafx.animation.Animation.INDEFINITE;
 import static javafx.application.Platform.runLater;
 import static javafx.util.Duration.millis;
-import static kungzhi.muse.osc.service.MessagePath.ALPHA_ABSOLUTE;
-import static kungzhi.muse.osc.service.MessagePath.BETA_ABSOLUTE;
-import static kungzhi.muse.osc.service.MessagePath.DELTA_ABSOLUTE;
-import static kungzhi.muse.osc.service.MessagePath.GAMMA_ABSOLUTE;
-import static kungzhi.muse.osc.service.MessagePath.THETA_ABSOLUTE;
+import static kungzhi.muse.osc.service.MessagePath.ALPHA_RELATIVE;
+import static kungzhi.muse.osc.service.MessagePath.BETA_RELATIVE;
+import static kungzhi.muse.osc.service.MessagePath.DELTA_RELATIVE;
+import static kungzhi.muse.osc.service.MessagePath.GAMMA_RELATIVE;
+import static kungzhi.muse.osc.service.MessagePath.THETA_RELATIVE;
 
 @Controller
 public class MainController
@@ -167,7 +168,7 @@ public class MainController
                         styles.add(BATTERY_GREEN);
                     }
                 });
-        buildAbsoluteBandPowerChart();
+        buildBandPowerChart();
         start = currentTimeMillis();
     }
 
@@ -191,9 +192,10 @@ public class MainController
         SortedSet<EegChannel> channels = configuration.getEegChannelLayout();
         channels.forEach(channel -> {
             RadioButton indicator = new RadioButton(channel.getName());
+            indicator.setTooltip(new Tooltip(format("Sensor %s status", channel.getName())));
+            indicator.setPadding(new Insets(0, 5, 0, 5));
             ObservableList<String> styles = indicator.getStyleClass();
             styles.add("sensor-indicator");
-            indicator.setTooltip(new Tooltip(format("Sensor %s status", channel.getName())));
             sensorIndicatorMap.put(channel, indicator);
             headbandStatusBox.getChildren().add(indicator);
         });
@@ -234,8 +236,8 @@ public class MainController
         return series;
     }
 
-    private void buildAbsoluteBandPowerChart() {
-        bandPowerLineChart.setTitle("Absolute Band Power");
+    private void buildBandPowerChart() {
+        bandPowerLineChart.setTitle("Relative Band Power");
         bandPowerLineChart.setAnimated(true);
         bandPowerLineChart.setVerticalGridLinesVisible(false);
         bandPowerLineChart.setCreateSymbols(false);
@@ -253,15 +255,15 @@ public class MainController
         yAxis.setLabel("Power");
         yAxis.setAutoRanging(false);
         yAxis.setAnimated(false);
-        yAxis.setLowerBound(-0.5);
-        yAxis.setUpperBound(2);
-        yAxis.setTickUnit(0.5);
+        yAxis.setLowerBound(0);
+        yAxis.setUpperBound(1);
+        yAxis.setTickUnit(0.2);
 
         ObservableList<Series<Number, Number>> seriesData = bandPowerLineChart.getData();
-        seriesData.add(bandPowerSeries(GAMMA_ABSOLUTE, "band.gamma.name"));
-        seriesData.add(bandPowerSeries(BETA_ABSOLUTE, "band.beta.name"));
-        seriesData.add(bandPowerSeries(ALPHA_ABSOLUTE, "band.alpha.name"));
-        seriesData.add(bandPowerSeries(THETA_ABSOLUTE, "band.theta.name"));
-        seriesData.add(bandPowerSeries(DELTA_ABSOLUTE, "band.delta.name"));
+        seriesData.add(bandPowerSeries(GAMMA_RELATIVE, "band.gamma.name"));
+        seriesData.add(bandPowerSeries(BETA_RELATIVE, "band.beta.name"));
+        seriesData.add(bandPowerSeries(ALPHA_RELATIVE, "band.alpha.name"));
+        seriesData.add(bandPowerSeries(THETA_RELATIVE, "band.theta.name"));
+        seriesData.add(bandPowerSeries(DELTA_RELATIVE, "band.delta.name"));
     }
 }
