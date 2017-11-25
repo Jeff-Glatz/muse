@@ -90,20 +90,22 @@ public class Headband
 
         Headband headband = (Headband) o;
 
-        if (battery != null ? !battery.equals(headband.battery) : headband.battery != null) return false;
-        if (configuration != null ? !configuration.equals(headband.configuration) : headband.configuration != null)
-            return false;
-        if (drlReference != null ? !drlReference.equals(headband.drlReference) : headband.drlReference != null)
-            return false;
-        return version != null ? version.equals(headband.version) : headband.version == null;
+        if (!battery.equals(headband.battery)) return false;
+        if (!configuration.equals(headband.configuration)) return false;
+        if (!status.equals(headband.status)) return false;
+        if (!touching.equals(headband.touching)) return false;
+        if (!version.equals(headband.version)) return false;
+        return drlReference.equals(headband.drlReference);
     }
 
     @Override
     public int hashCode() {
-        int result = battery != null ? battery.hashCode() : 0;
-        result = 31 * result + (configuration != null ? configuration.hashCode() : 0);
-        result = 31 * result + (drlReference != null ? drlReference.hashCode() : 0);
-        result = 31 * result + (version != null ? version.hashCode() : 0);
+        int result = battery.hashCode();
+        result = 31 * result + configuration.hashCode();
+        result = 31 * result + status.hashCode();
+        result = 31 * result + touching.hashCode();
+        result = 31 * result + version.hashCode();
+        result = 31 * result + drlReference.hashCode();
         return result;
     }
 }

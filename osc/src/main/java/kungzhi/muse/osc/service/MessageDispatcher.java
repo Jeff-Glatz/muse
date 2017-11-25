@@ -6,6 +6,8 @@ import kungzhi.muse.model.Headband;
 import kungzhi.muse.model.Model;
 import kungzhi.muse.model.ModelStream;
 import kungzhi.muse.osc.transform.MessageTransformer;
+import kungzhi.muse.runtime.StreamPostProcessor;
+import kungzhi.muse.runtime.TransformerPostProcessor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -36,10 +38,10 @@ public class MessageDispatcher
         implements OSCListener {
 
     private final Logger log = LoggerFactory.getLogger(getClass());
-    private final ErrorHandler<Throwable> defaultErrorHandler = (dispatcher, message, error) -> {
+    private final MessageDispatcherErrorHandler<Throwable> defaultErrorHandler = (dispatcher, message, error) -> {
     };
     private final Set<String> availablePaths = new HashSet<>();
-    private final Map<Class<? extends Throwable>, ErrorHandler<? extends Throwable>> handlers = new HashMap<>();
+    private final Map<Class<? extends Throwable>, MessageDispatcherErrorHandler<? extends Throwable>> handlers = new HashMap<>();
     private final Map<String, MessageTransformer<? extends Model>> transformers = new HashMap<>();
     private final Map<String, ModelStream<? extends Model>> streams = new HashMap<>();
     private final Clock clock;
@@ -89,7 +91,7 @@ public class MessageDispatcher
         return streaming(path.getName(), transformer, stream);
     }
 
-    public <E extends Exception> MessageDispatcher handling(Class<E> type, ErrorHandler<E> errorHandler) {
+    public <E extends Exception> MessageDispatcher handling(Class<E> type, MessageDispatcherErrorHandler<E> errorHandler) {
         this.handlers.put(type, errorHandler);
         return this;
     }
@@ -134,8 +136,8 @@ public class MessageDispatcher
     }
 
     @SuppressWarnings("unchecked")
-    private <E extends Throwable> ErrorHandler<E> handler(Throwable throwable) {
-        return (ErrorHandler<E>) handlers.getOrDefault(throwable.getClass(),
+    private <E extends Throwable> MessageDispatcherErrorHandler<E> handler(Throwable throwable) {
+        return (MessageDispatcherErrorHandler<E>) handlers.getOrDefault(throwable.getClass(),
                 defaultErrorHandler);
     }
 
