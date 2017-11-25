@@ -19,7 +19,38 @@
 
 .battery-indicator {
 }
-.battery-green  { -fx-accent: limegreen;  }
-.battery-yellow { -fx-accent: yellow; }
-.battery-orange { -fx-accent: orange; }
-.battery-red    { -fx-accent: red;    }
+
+.battery-green {
+    -fx-accent: limegreen;
+}
+
+.battery-yellow {
+    -fx-accent: yellow;
+}
+
+.battery-orange {
+    -fx-accent: orange;
+}
+
+.battery-red {
+    -fx-accent: red;
+}
+
+.sensor-indicator {
+}
+
+.sensor-good .dot {
+    -fx-mark-color: limegreen;
+}
+
+.sensor-ok .dot {
+    -fx-mark-color: orange;
+}
+
+.sensor-bad .dot {
+    -fx-mark-color: red;
+}
+
+/*.radio-button .dot {*/
+    /*-fx-mark-color: red;*/
+/*}*/

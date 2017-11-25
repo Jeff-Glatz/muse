@@ -3,13 +3,11 @@ package kungzhi.muse.ui;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.HBox;
@@ -54,15 +52,21 @@ public class MainController
     private static final String BATTERY_YELLOW = "battery-yellow";
     private static final String BATTERY_ORANGE = "battery-orange";
     private static final String BATTERY_GREEN = "battery-green";
-    private static final String[] barColorStyleClasses = {BATTERY_RED, BATTERY_YELLOW, BATTERY_ORANGE, BATTERY_GREEN};
+    private static final String[] BATTERY_CLASSES = {BATTERY_RED, BATTERY_YELLOW, BATTERY_ORANGE, BATTERY_GREEN};
 
-    private final Map<EegChannel, CheckBox> sensors = new HashMap<>();
+    private static final String SENSOR_GOOD = "sensor-good";
+    private static final String SENSOR_OK = "sensor-ok";
+    private static final String SENSOR_BAD = "sensor-bad";
+    private static final String[] SENSOR_CLASSES = {SENSOR_GOOD, SENSOR_OK, SENSOR_BAD};
+
+    private final Map<EegChannel, RadioButton> sensorIndicatorMap = new HashMap<>();
     private final Queue<XYChartData<Number, Number, BandPower>> powers = new LinkedList<>();
     private final ExecutorService executor;
     private final Headband headband;
     private final MessageClient client;
     private final MessageDispatcher dispatcher;
 
+    private ResourceBundle resources;
     private long start;
 
     @FXML
@@ -91,37 +95,42 @@ public class MainController
         Configuration configuration = headband.getConfiguration();
         configuration.addActiveItemListener((current, previous) -> {
             if (previous.initial()) {
-                log.info("Muse configuration received.");
-                buildHeadbandStatusDisplay(current);
+                runLater(() -> {
+                    log.info("Muse configuration received.");
+                    buildSensorStatusDisplay(current);
+                });
                 powers.forEach(data -> addTo(data.series, data.model));
             }
         });
 
         Battery battery = headband.getBattery();
-        battery.addActiveItemListener((current, previous) -> {
+        battery.addActiveItemListener((current, previous) -> runLater(() -> {
             Float remaining = current.getPercentRemaining();
             batteryProgressBar.setProgress(remaining / 100f);
             batteryProgressBar.getTooltip()
                     .setText(format("Battery: %.2f%%", remaining));
-        });
+        }));
 
         HeadbandStatus status = headband.getStatus();
-        status.addActiveItemListener((current, previous) -> {
-            sensors.forEach((channel, checkBox) -> {
-                HeadbandStatus.State state = current.forChannel(channel);
-                switch (state) {
-                    case GOOD:
-                        checkBox.setSelected(true);
-                        break;
-                    case OK:
-                        checkBox.setSelected(false);
-                        break;
-                    case BAD:
-                        checkBox.setIndeterminate(true);
-                        break;
-                }
-            });
-        });
+        status.addActiveItemListener((current, previous) -> runLater(() ->
+                sensorIndicatorMap.forEach((channel, indicator) -> {
+                    ObservableList<String> styles = indicator.getStyleClass();
+                    styles.removeAll(SENSOR_CLASSES);
+                    switch (current.forChannel(channel)) {
+                        case GOOD:
+                            indicator.setSelected(true);
+                            styles.add(SENSOR_GOOD);
+                            break;
+                        case OK:
+                            indicator.setSelected(true);
+                            styles.add(SENSOR_OK);
+                            break;
+                        case BAD:
+                            indicator.setSelected(true);
+                            styles.add(SENSOR_BAD);
+                            break;
+                    }
+                })));
 
         HeadbandTouching touching = headband.getTouching();
         touching.addActiveItemListener(((current, previous) -> {
@@ -131,20 +140,21 @@ public class MainController
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         log.info("Initializing controller from {}", location);
+        this.resources = resources;
         batteryProgressBar.setTooltip(new Tooltip("Battery"));
         batteryProgressBar.progressProperty()
                 .addListener((observable, oldValue, newValue) -> {
                     double progress = newValue == null ? 0 : newValue.doubleValue();
-                    ObservableList<String> styleClass = batteryProgressBar.getStyleClass();
-                    styleClass.removeAll(barColorStyleClasses);
+                    ObservableList<String> styles = batteryProgressBar.getStyleClass();
+                    styles.removeAll(BATTERY_CLASSES);
                     if (progress < 0.2) {
-                        styleClass.add(BATTERY_RED);
+                        styles.add(BATTERY_RED);
                     } else if (progress < 0.4) {
-                        styleClass.add(BATTERY_ORANGE);
+                        styles.add(BATTERY_ORANGE);
                     } else if (progress < 0.6) {
-                        styleClass.add(BATTERY_YELLOW);
+                        styles.add(BATTERY_YELLOW);
                     } else {
-                        styleClass.add(BATTERY_GREEN);
+                        styles.add(BATTERY_GREEN);
                     }
                 });
         buildAbsoluteBandPowerChart();
@@ -163,18 +173,15 @@ public class MainController
         }
     }
 
-    private void buildHeadbandStatusDisplay(Configuration configuration) {
+    private void buildSensorStatusDisplay(Configuration configuration) {
         SortedSet<EegChannel> channels = configuration.getEegChannelLayout();
         channels.forEach(channel -> {
-            Label label = new Label(channel.getName());
-            CheckBox checkBox = new CheckBox();
-            checkBox.setTooltip(new Tooltip(channel.getName()));
-            sensors.put(channel, checkBox);
-            runLater(() -> {
-                ObservableList<Node> children = headbandStatusBox.getChildren();
-                children.add(label);
-                children.add(checkBox);
-            });
+            RadioButton indicator = new RadioButton(channel.getName());
+            ObservableList<String> styles = indicator.getStyleClass();
+            styles.add("sensor-indicator");
+            indicator.setTooltip(new Tooltip(format("Sensor %s status", channel.getName())));
+            sensorIndicatorMap.put(channel, indicator);
+            headbandStatusBox.getChildren().add(indicator);
         });
     }
 
@@ -216,9 +223,9 @@ public class MainController
      * @param path The path containg the band power data to be plotted
      * @return A new series for the specified band
      */
-    private XYChart.Series<Number, Number> bandPowerSeries(MessagePath path) {
+    private XYChart.Series<Number, Number> bandPowerSeries(MessagePath path, String labelKey) {
         XYChart.Series<Number, Number> series = new XYChart.Series<>();
-        series.setName(path.name());
+        series.setName(resources.getString(labelKey));
         dispatcher.withStream(path, BandPower.class,
                 (headband, power) -> {
                     if (!headband.ready()) {
@@ -251,10 +258,10 @@ public class MainController
         yAxis.setUpperBound(2);
 
         ObservableList<XYChart.Series<Number, Number>> seriesData = bandPowerLineChart.getData();
-        seriesData.add(bandPowerSeries(GAMMA_ABSOLUTE));
-        seriesData.add(bandPowerSeries(BETA_ABSOLUTE));
-        seriesData.add(bandPowerSeries(ALPHA_ABSOLUTE));
-        seriesData.add(bandPowerSeries(THETA_ABSOLUTE));
-        seriesData.add(bandPowerSeries(DELTA_ABSOLUTE));
+        seriesData.add(bandPowerSeries(GAMMA_ABSOLUTE, "band.gamma.name"));
+        seriesData.add(bandPowerSeries(BETA_ABSOLUTE, "band.beta.name"));
+        seriesData.add(bandPowerSeries(ALPHA_ABSOLUTE, "band.alpha.name"));
+        seriesData.add(bandPowerSeries(THETA_ABSOLUTE, "band.theta.name"));
+        seriesData.add(bandPowerSeries(DELTA_ABSOLUTE, "band.delta.name"));
     }
 }
