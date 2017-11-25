@@ -22,6 +22,7 @@ import kungzhi.muse.model.EegChannel;
 import kungzhi.muse.model.Headband;
 import kungzhi.muse.model.HeadbandStatus;
 import kungzhi.muse.model.HeadbandTouching;
+import kungzhi.muse.model.SingleValue;
 import kungzhi.muse.osc.service.MessageClient;
 import kungzhi.muse.osc.service.MessageDispatcher;
 import kungzhi.muse.osc.service.MessagePath;
@@ -220,19 +221,24 @@ public class MainController
                 new XYChart.Data<>(secondsSinceStart(), power.average())));
     }
 
-    /**
-     * Attaches a stream to the message dispatcher for consuming band power
-     * data. Any data received on the specified message path will be queued
-     * until the headband's configuration arrives.
-     *
-     * @param path The path containg the band power data to be plotted
-     * @return A new series for the specified band
-     */
     private Series<Number, Number> bandPowerSeries(MessagePath path, String labelKey) {
         Series<Number, Number> series = new Series<>();
         series.setName(resources.getString(labelKey));
         dispatcher.withStream(path, BandPower.class,
                 (headband, power) -> addToQueue(series, power));
+        return series;
+    }
+
+    private void addToQueue(Series<Number, Number> series, SingleValue<Float> value) {
+        powers.offer(new XYChartData<>(series,
+                new XYChart.Data<>(secondsSinceStart(), value.get())));
+    }
+
+    private Series<Number, Number> singleValueSeries(MessagePath path, String labelKey) {
+        Series<Number, Number> series = new Series<>();
+        series.setName(resources.getString(labelKey));
+        dispatcher.withStream(path, SingleValue.class,
+                (headband, value) -> addToQueue(series, value));
         return series;
     }
 
@@ -265,5 +271,7 @@ public class MainController
         seriesData.add(bandPowerSeries(ALPHA_RELATIVE, "band.alpha.name"));
         seriesData.add(bandPowerSeries(THETA_RELATIVE, "band.theta.name"));
         seriesData.add(bandPowerSeries(DELTA_RELATIVE, "band.delta.name"));
+//        seriesData.add(singleValueSeries(MELLOW, "algorithm.mellow"));
+//        seriesData.add(singleValueSeries(CONCENTRATION, "algorithm.concentration"));
     }
 }
