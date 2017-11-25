@@ -16,6 +16,10 @@ public class EegChannel
         return index;
     }
 
+    public String getName() {
+        return sensor.name();
+    }
+
     public Sensor getSensor() {
         return sensor;
     }

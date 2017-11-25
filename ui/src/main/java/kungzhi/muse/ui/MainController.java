@@ -3,16 +3,24 @@ package kungzhi.muse.ui;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.Tooltip;
+import javafx.scene.layout.HBox;
 import kungzhi.muse.model.BandPower;
 import kungzhi.muse.model.Battery;
 import kungzhi.muse.model.Configuration;
+import kungzhi.muse.model.EegChannel;
 import kungzhi.muse.model.Headband;
+import kungzhi.muse.model.HeadbandStatus;
+import kungzhi.muse.model.HeadbandTouching;
+import kungzhi.muse.model.XYChartData;
 import kungzhi.muse.osc.service.MessageClient;
 import kungzhi.muse.osc.service.MessageDispatcher;
 import kungzhi.muse.osc.service.MessagePath;
@@ -22,13 +30,17 @@ import org.springframework.stereotype.Controller;
 import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
 import java.util.Queue;
 import java.util.ResourceBundle;
+import java.util.SortedSet;
 import java.util.concurrent.ExecutorService;
 
 import static java.lang.String.format;
 import static java.lang.System.currentTimeMillis;
+import static javafx.application.Platform.runLater;
 import static kungzhi.muse.osc.service.MessagePath.ALPHA_ABSOLUTE;
 import static kungzhi.muse.osc.service.MessagePath.BETA_ABSOLUTE;
 import static kungzhi.muse.osc.service.MessagePath.DELTA_ABSOLUTE;
@@ -44,13 +56,17 @@ public class MainController
     private static final String BATTERY_GREEN = "battery-green";
     private static final String[] barColorStyleClasses = {BATTERY_RED, BATTERY_YELLOW, BATTERY_ORANGE, BATTERY_GREEN};
 
-    private final Queue<QueuedData<BandPower>> powers = new LinkedList<>();
+    private final Map<EegChannel, CheckBox> sensors = new HashMap<>();
+    private final Queue<XYChartData<Number, Number, BandPower>> powers = new LinkedList<>();
     private final ExecutorService executor;
     private final Headband headband;
     private final MessageClient client;
     private final MessageDispatcher dispatcher;
 
     private long start;
+
+    @FXML
+    private HBox headbandStatusBox;
 
     @FXML
     private ProgressBar batteryProgressBar;
@@ -71,7 +87,15 @@ public class MainController
     }
 
     @PostConstruct
-    public void monitorBattery() {
+    public void registerHeadbandListeners() {
+        Configuration configuration = headband.getConfiguration();
+        configuration.addActiveItemListener((current, previous) -> {
+            if (previous.initial()) {
+                buildHeadbandStatusDisplay(current);
+                powers.forEach(data -> addTo(data.series, data.model));
+            }
+        });
+
         Battery battery = headband.getBattery();
         battery.addActiveItemListener((current, previous) -> {
             Float remaining = current.getPercentRemaining();
@@ -79,6 +103,28 @@ public class MainController
             batteryProgressBar.getTooltip()
                     .setText(format("Battery: %.2f%%", remaining));
         });
+
+        HeadbandStatus status = headband.getStatus();
+        status.addActiveItemListener((current, previous) -> {
+            sensors.forEach((channel, checkBox) -> {
+                HeadbandStatus.State state = current.forChannel(channel);
+                switch (state) {
+                    case GOOD:
+                        checkBox.setSelected(true);
+                        break;
+                    case OK:
+                        checkBox.setIndeterminate(true);
+                        break;
+                    case BAD:
+                        checkBox.setSelected(false);
+                        break;
+                }
+            });
+        });
+
+        HeadbandTouching touching = headband.getTouching();
+        touching.addActiveItemListener(((current, previous) -> {
+        }));
     }
 
     @Override
@@ -127,14 +173,6 @@ public class MainController
         seriesData.add(bandPowerSeries(DELTA_ABSOLUTE));
 
         start = currentTimeMillis();
-        Configuration configuration = headband.getConfiguration();
-        configuration.addActiveItemListener((current, previous) -> {
-            if (previous.initial()) {
-                log.info("Configuration received, processing queued data...");
-                powers.stream().forEachOrdered(data -> addTo(data.series, data.model));
-                log.info("Queued data processed.");
-            }
-        });
     }
 
     public void toggleClient()
@@ -146,6 +184,21 @@ public class MainController
             client.off();
             clientToggleButton.setText("Client Off");
         }
+    }
+
+    private void buildHeadbandStatusDisplay(Configuration configuration) {
+        SortedSet<EegChannel> channels = configuration.getEegChannelLayout();
+        channels.forEach(channel -> {
+            Label label = new Label(channel.getName());
+            CheckBox checkBox = new CheckBox();
+            checkBox.setTooltip(new Tooltip(channel.getName()));
+            sensors.put(channel, checkBox);
+            runLater(() -> {
+                ObservableList<Node> children = headbandStatusBox.getChildren();
+                children.add(label);
+                children.add(checkBox);
+            });
+        });
     }
 
     /**
@@ -193,7 +246,7 @@ public class MainController
                 (headband, power) -> {
                     if (!headband.ready()) {
                         log.warn("Configuration not yet received, queueing data");
-                        powers.offer(new QueuedData<>(series, power));
+                        powers.offer(new XYChartData<>(series, power));
                         return;
                     }
                     addTo(series, power);

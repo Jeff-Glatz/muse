@@ -40,8 +40,10 @@ public class DrlReference
     }
 
     @Override
-    public boolean differsFrom(DrlReference that) {
-        return !this.sameAs(that);
+    public boolean sameAs(DrlReference drlReference) {
+        if (drivenRightLegVoltage != null ? !drivenRightLegVoltage.equals(drlReference.drivenRightLegVoltage) : drlReference.drivenRightLegVoltage != null)
+            return false;
+        return referenceVoltage != null ? referenceVoltage.equals(drlReference.referenceVoltage) : drlReference.referenceVoltage == null;
     }
 
     @Override
@@ -81,11 +83,5 @@ public class DrlReference
         this.drivenRightLegVoltage = that.drivenRightLegVoltage;
         this.referenceVoltage = that.referenceVoltage;
         return this;
-    }
-
-    private boolean sameAs(DrlReference drlReference) {
-        if (drivenRightLegVoltage != null ? !drivenRightLegVoltage.equals(drlReference.drivenRightLegVoltage) : drlReference.drivenRightLegVoltage != null)
-            return false;
-        return referenceVoltage != null ? referenceVoltage.equals(drlReference.referenceVoltage) : drlReference.referenceVoltage == null;
     }
 }

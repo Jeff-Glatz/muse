@@ -96,8 +96,17 @@ public class Version
     }
 
     @Override
-    public boolean differsFrom(Version that) {
-        return !this.sameAs(that);
+    public boolean sameAs(Version version) {
+        if (buildNumber != null ? !buildNumber.equals(version.buildNumber) : version.buildNumber != null) return false;
+        if (firmwareType != null ? !firmwareType.equals(version.firmwareType) : version.firmwareType != null)
+            return false;
+        if (hardwareVersion != null ? !hardwareVersion.equals(version.hardwareVersion) : version.hardwareVersion != null)
+            return false;
+        if (firmwareHeadsetVersion != null ? !firmwareHeadsetVersion.equals(version.firmwareHeadsetVersion) : version.firmwareHeadsetVersion != null)
+            return false;
+        if (protocolVersion != null ? !protocolVersion.equals(version.protocolVersion) : version.protocolVersion != null)
+            return false;
+        return firmwareBootloaderVersion != null ? firmwareBootloaderVersion.equals(version.firmwareBootloaderVersion) : version.firmwareBootloaderVersion == null;
     }
 
     @Override
@@ -149,18 +158,5 @@ public class Version
         this.hardwareVersion = that.hardwareVersion;
         this.protocolVersion = that.protocolVersion;
         return this;
-    }
-
-    private boolean sameAs(Version version) {
-        if (buildNumber != null ? !buildNumber.equals(version.buildNumber) : version.buildNumber != null) return false;
-        if (firmwareType != null ? !firmwareType.equals(version.firmwareType) : version.firmwareType != null)
-            return false;
-        if (hardwareVersion != null ? !hardwareVersion.equals(version.hardwareVersion) : version.hardwareVersion != null)
-            return false;
-        if (firmwareHeadsetVersion != null ? !firmwareHeadsetVersion.equals(version.firmwareHeadsetVersion) : version.firmwareHeadsetVersion != null)
-            return false;
-        if (protocolVersion != null ? !protocolVersion.equals(version.protocolVersion) : version.protocolVersion != null)
-            return false;
-        return firmwareBootloaderVersion != null ? firmwareBootloaderVersion.equals(version.firmwareBootloaderVersion) : version.firmwareBootloaderVersion == null;
     }
 }

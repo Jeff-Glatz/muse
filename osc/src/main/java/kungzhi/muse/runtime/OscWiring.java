@@ -41,7 +41,8 @@ import static kungzhi.muse.osc.service.MessagePath.EEG_QUANTIZATION;
 import static kungzhi.muse.osc.service.MessagePath.GAMMA_ABSOLUTE;
 import static kungzhi.muse.osc.service.MessagePath.GAMMA_RELATIVE;
 import static kungzhi.muse.osc.service.MessagePath.GAMMA_SESSION_SCORE;
-import static kungzhi.muse.osc.service.MessagePath.HEADBAND_ON;
+import static kungzhi.muse.osc.service.MessagePath.HEADBAND_STATUS;
+import static kungzhi.muse.osc.service.MessagePath.HEADBAND_TOUCHING;
 import static kungzhi.muse.osc.service.MessagePath.JAW_CLENCH;
 import static kungzhi.muse.osc.service.MessagePath.LOW_FREQUENCY_ABSOLUTE;
 import static kungzhi.muse.osc.service.MessagePath.MELLOW;
@@ -67,9 +68,8 @@ public class OscWiring {
                 .withStream(CONFIGURATION, headband.configurationStream())
                 .withStream(DRL_REFERENCE, headband.drlReferenceStream())
                 .withStream(VERSION, headband.versionStream())
-                .streaming(HEADBAND_ON,
-                        new SingleValueTransformer<>(Integer.class),
-                        new EmptyModelStream<>())
+                .withStream(HEADBAND_STATUS, headband.statusStream())
+                .withStream(HEADBAND_TOUCHING, headband.touchingStream())
                 .streaming(BLINK,
                         new SingleValueTransformer<>(Integer.class),
                         new EmptyModelStream<>())

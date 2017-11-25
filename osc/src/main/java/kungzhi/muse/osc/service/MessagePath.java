@@ -7,6 +7,9 @@ import kungzhi.muse.model.Configuration;
 import kungzhi.muse.model.DrlReference;
 import kungzhi.muse.model.Eeg;
 import kungzhi.muse.model.Fft;
+import kungzhi.muse.model.HeadbandTouching;
+import kungzhi.muse.model.HeadbandStatus;
+import kungzhi.muse.model.HeadbandStatusStrict;
 import kungzhi.muse.model.Model;
 import kungzhi.muse.model.SessionScore;
 import kungzhi.muse.model.SingleValue;
@@ -56,9 +59,9 @@ public enum MessagePath {
     BETA_SESSION_SCORE("/muse/elements/beta_session_score", SessionScore.class, false),
     GAMMA_SESSION_SCORE("/muse/elements/gamma_session_score", SessionScore.class, false),
 
-    HEADBAND_ON("/muse/elements/touching_forehead", SingleValue.class, false),
-    HEADBAND_STATUS("/muse/elements/horseshoe", SingleValue.class, false),
-    HEADBAND_STATUS_STRICT("/muse/elements/is_good", SingleValue.class, false),
+    HEADBAND_STATUS("/muse/elements/horseshoe", HeadbandStatus.class, false),
+    HEADBAND_STATUS_STRICT("/muse/elements/is_good", HeadbandStatusStrict.class, false),
+    HEADBAND_TOUCHING("/muse/elements/touching_forehead", HeadbandTouching.class, false),
 
     BLINK("/muse/elements/blink", SingleValue.class, false),
     JAW_CLENCH("/muse/elements/jaw_clench", SingleValue.class, false),

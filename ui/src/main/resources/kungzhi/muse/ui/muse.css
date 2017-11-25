@@ -17,6 +17,8 @@
     -fx-padding: 0;
 }
 
+.battery-indicator {
+}
 .battery-green  { -fx-accent: green;  }
 .battery-yellow { -fx-accent: yellow; }
 .battery-orange { -fx-accent: orange; }

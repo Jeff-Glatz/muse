@@ -2,25 +2,35 @@ package kungzhi.muse.model;
 
 import kungzhi.muse.runtime.ProblemLog;
 
-import static kungzhi.muse.model.HeadbandStatus.Status.fromValue;
+import static kungzhi.muse.model.HeadbandStatus.State.fromValue;
 
 public class HeadbandStatus
-        extends AbstractModel
-        implements Equivalence<HeadbandStatus> {
-    private final Values<Float> values;
+        extends ActiveModel<HeadbandStatus> {
+    private Values<Float> values;
+
+    public HeadbandStatus() {
+        this(0, null);
+    }
 
     public HeadbandStatus(long time, Values<Float> values) {
         super(time);
         this.values = values;
     }
 
-    public Status forChannel(EegChannel channel) {
+    public State forChannel(EegChannel channel) {
         return fromValue(values.at(channel.getIndex()).intValue());
     }
 
     @Override
     public boolean sameAs(HeadbandStatus that) {
         return values != null ? values.equals(that.values) : that.values == null;
+    }
+
+    @Override
+    protected HeadbandStatus update(HeadbandStatus item) {
+        this.time = item.time;
+        this.values = item.values;
+        return this;
     }
 
     @Override
@@ -47,12 +57,17 @@ public class HeadbandStatus
                 '}';
     }
 
-    public enum Status {
+    @Override
+    protected HeadbandStatus newInstance() {
+        return new HeadbandStatus();
+    }
+
+    public enum State {
         GOOD(1), OK(2), BAD(3);
 
         private final int value;
 
-        Status(int value) {
+        State(int value) {
             this.value = value;
         }
 
@@ -60,7 +75,7 @@ public class HeadbandStatus
             return value;
         }
 
-        public static Status fromValue(int value) {
+        public static State fromValue(int value) {
             switch (value) {
                 case 1:
                     return GOOD;

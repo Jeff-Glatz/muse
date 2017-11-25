@@ -1,24 +1,32 @@
 package kungzhi.muse.model;
 
-import kungzhi.muse.lang.Equivalence;
+public class HeadbandTouching
+        extends ActiveModel<HeadbandTouching> {
+    private Integer value;
 
-public class SingleValue<V>
-        extends AbstractModel
-        implements Equivalence<SingleValue<V>> {
-    private final V value;
+    public HeadbandTouching() {
+        this(0, null);
+    }
 
-    public SingleValue(long time, V value) {
+    public HeadbandTouching(long time, Integer value) {
         super(time);
         this.value = value;
     }
 
-    public V get() {
+    public Integer get() {
         return value;
     }
 
     @Override
-    public boolean sameAs(SingleValue<V> that) {
+    public boolean sameAs(HeadbandTouching that) {
         return value != null ? value.equals(that.value) : that.value == null;
+    }
+
+    @Override
+    protected HeadbandTouching update(HeadbandTouching item) {
+        this.time = item.time;
+        this.value = item.value;
+        return null;
     }
 
     @Override
@@ -27,7 +35,7 @@ public class SingleValue<V>
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
 
-        return sameAs((SingleValue) o);
+        return sameAs((HeadbandTouching) o);
     }
 
     @Override
@@ -39,9 +47,14 @@ public class SingleValue<V>
 
     @Override
     public String toString() {
-        return "SingleValue{" +
+        return "HeadbandTouching{" +
                 "time=" + time +
                 ", value=" + value +
                 '}';
+    }
+
+    @Override
+    protected HeadbandTouching newInstance() {
+        return new HeadbandTouching();
     }
 }

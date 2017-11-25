@@ -35,7 +35,7 @@ public abstract class ActiveModel<M extends ActiveItem<M> & Model>
 
     @Override
     public final boolean updateFrom(M model) {
-        if (differsFrom(model)) {
+        if (!sameAs(model)) {
             M previous = copy();
             M current = update(model);
             log.debug("{} has been modified: {}", getClass().getSimpleName(), current);

@@ -123,7 +123,7 @@
                         <Color blue="0.625" green="0.625" red="0.625" fx:id="x4"/>
                     </textFill>
                 </Label>
-                <Pane prefHeight="-1.0" prefWidth="-1.0" HBox.hgrow="ALWAYS"/>
+                <HBox fx:id="headbandStatusBox" alignment="CENTER" prefHeight="-1.0" prefWidth="-1.0" HBox.hgrow="ALWAYS"/>
                 <ProgressBar fx:id="batteryProgressBar" progress="0.0" styleClass="battery-indicator"/>
             </children>
             <padding>

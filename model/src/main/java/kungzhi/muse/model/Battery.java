@@ -72,8 +72,13 @@ public class Battery
     }
 
     @Override
-    public boolean differsFrom(Battery that) {
-        return !this.sameAs(that);
+    public boolean sameAs(Battery battery) {
+        if (stateOfCharge != null ? !stateOfCharge.equals(battery.stateOfCharge) : battery.stateOfCharge != null)
+            return false;
+        if (fuelGaugeVoltage != null ? !fuelGaugeVoltage.equals(battery.fuelGaugeVoltage) : battery.fuelGaugeVoltage != null)
+            return false;
+        if (adcVoltage != null ? !adcVoltage.equals(battery.adcVoltage) : battery.adcVoltage != null) return false;
+        return temperature != null ? temperature.equals(battery.temperature) : battery.temperature == null;
     }
 
     @Override
@@ -119,14 +124,5 @@ public class Battery
         this.stateOfCharge = that.stateOfCharge;
         this.temperature = that.temperature;
         return this;
-    }
-
-    private boolean sameAs(Battery battery) {
-        if (stateOfCharge != null ? !stateOfCharge.equals(battery.stateOfCharge) : battery.stateOfCharge != null)
-            return false;
-        if (fuelGaugeVoltage != null ? !fuelGaugeVoltage.equals(battery.fuelGaugeVoltage) : battery.fuelGaugeVoltage != null)
-            return false;
-        if (adcVoltage != null ? !adcVoltage.equals(battery.adcVoltage) : battery.adcVoltage != null) return false;
-        return temperature != null ? temperature.equals(battery.temperature) : battery.temperature == null;
     }
 }

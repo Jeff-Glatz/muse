@@ -366,8 +366,48 @@ public class Configuration
                 .orElseThrow(IllegalArgumentException::new);
     }
 
-    public boolean differsFrom(Configuration that) {
-        return !this.sameAs(that);
+    @Override
+    public boolean sameAs(Configuration that) {
+        if (!eegChannelLayout.equals(that.eegChannelLayout))
+            return false;
+        if (macAddress != null ? !macAddress.equals(that.macAddress) : that.macAddress != null) return false;
+        if (serialNumber != null ? !serialNumber.equals(that.serialNumber) : that.serialNumber != null) return false;
+        if (preset != that.preset) return false;
+        if (compressionEnabled != null ? !compressionEnabled.equals(that.compressionEnabled) : that.compressionEnabled != null)
+            return false;
+        if (filtersEnabled != null ? !filtersEnabled.equals(that.filtersEnabled) : that.filtersEnabled != null)
+            return false;
+        if (notchFrequencyInHz != null ? !notchFrequencyInHz.equals(that.notchFrequencyInHz) : that.notchFrequencyInHz != null)
+            return false;
+        if (eegSampleFrequencyInHz != null ? !eegSampleFrequencyInHz.equals(that.eegSampleFrequencyInHz) : that.eegSampleFrequencyInHz != null)
+            return false;
+        if (eegOutputFrequencyInHz != null ? !eegOutputFrequencyInHz.equals(that.eegOutputFrequencyInHz) : that.eegOutputFrequencyInHz != null)
+            return false;
+        if (eegChannelCount != null ? !eegChannelCount.equals(that.eegChannelCount) : that.eegChannelCount != null)
+            return false;
+        if (eegSamplesBitWidth != null ? !eegSamplesBitWidth.equals(that.eegSamplesBitWidth) : that.eegSamplesBitWidth != null)
+            return false;
+        if (eegDownSample != null ? !eegDownSample.equals(that.eegDownSample) : that.eegDownSample != null)
+            return false;
+        if (afeGain != null ? !afeGain.equals(that.afeGain) : that.afeGain != null) return false;
+        if (drlRefDataEnabled != null ? !drlRefDataEnabled.equals(that.drlRefDataEnabled) : that.drlRefDataEnabled != null)
+            return false;
+        if (drlRefConversionFactor != null ? !drlRefConversionFactor.equals(that.drlRefConversionFactor) : that.drlRefConversionFactor != null)
+            return false;
+        if (drlRefSampleFrequencyInHz != null ? !drlRefSampleFrequencyInHz.equals(that.drlRefSampleFrequencyInHz) : that.drlRefSampleFrequencyInHz != null)
+            return false;
+        if (accDataEnabled != null ? !accDataEnabled.equals(that.accDataEnabled) : that.accDataEnabled != null)
+            return false;
+        if (accUnits != null ? !accUnits.equals(that.accUnits) : that.accUnits != null) return false;
+        if (accSampleFrequencyInHz != null ? !accSampleFrequencyInHz.equals(that.accSampleFrequencyInHz) : that.accSampleFrequencyInHz != null)
+            return false;
+        if (batteryDataEnabled != null ? !batteryDataEnabled.equals(that.batteryDataEnabled) : that.batteryDataEnabled != null)
+            return false;
+        if (batteryPercentRemaining != null ? !batteryPercentRemaining.equals(that.batteryPercentRemaining) : that.batteryPercentRemaining != null)
+            return false;
+        if (batteryMilliVolts != null ? !batteryMilliVolts.equals(that.batteryMilliVolts) : that.batteryMilliVolts != null)
+            return false;
+        return errorDataEnabled != null ? errorDataEnabled.equals(that.errorDataEnabled) : that.errorDataEnabled == null;
     }
 
     @Override
@@ -470,48 +510,5 @@ public class Configuration
         this.batteryMilliVolts = that.batteryMilliVolts;
         this.errorDataEnabled = that.errorDataEnabled;
         return this;
-    }
-
-    private boolean sameAs(Configuration that) {
-        if (!eegChannelLayout.equals(that.eegChannelLayout))
-            return false;
-        if (macAddress != null ? !macAddress.equals(that.macAddress) : that.macAddress != null) return false;
-        if (serialNumber != null ? !serialNumber.equals(that.serialNumber) : that.serialNumber != null) return false;
-        if (preset != that.preset) return false;
-        if (compressionEnabled != null ? !compressionEnabled.equals(that.compressionEnabled) : that.compressionEnabled != null)
-            return false;
-        if (filtersEnabled != null ? !filtersEnabled.equals(that.filtersEnabled) : that.filtersEnabled != null)
-            return false;
-        if (notchFrequencyInHz != null ? !notchFrequencyInHz.equals(that.notchFrequencyInHz) : that.notchFrequencyInHz != null)
-            return false;
-        if (eegSampleFrequencyInHz != null ? !eegSampleFrequencyInHz.equals(that.eegSampleFrequencyInHz) : that.eegSampleFrequencyInHz != null)
-            return false;
-        if (eegOutputFrequencyInHz != null ? !eegOutputFrequencyInHz.equals(that.eegOutputFrequencyInHz) : that.eegOutputFrequencyInHz != null)
-            return false;
-        if (eegChannelCount != null ? !eegChannelCount.equals(that.eegChannelCount) : that.eegChannelCount != null)
-            return false;
-        if (eegSamplesBitWidth != null ? !eegSamplesBitWidth.equals(that.eegSamplesBitWidth) : that.eegSamplesBitWidth != null)
-            return false;
-        if (eegDownSample != null ? !eegDownSample.equals(that.eegDownSample) : that.eegDownSample != null)
-            return false;
-        if (afeGain != null ? !afeGain.equals(that.afeGain) : that.afeGain != null) return false;
-        if (drlRefDataEnabled != null ? !drlRefDataEnabled.equals(that.drlRefDataEnabled) : that.drlRefDataEnabled != null)
-            return false;
-        if (drlRefConversionFactor != null ? !drlRefConversionFactor.equals(that.drlRefConversionFactor) : that.drlRefConversionFactor != null)
-            return false;
-        if (drlRefSampleFrequencyInHz != null ? !drlRefSampleFrequencyInHz.equals(that.drlRefSampleFrequencyInHz) : that.drlRefSampleFrequencyInHz != null)
-            return false;
-        if (accDataEnabled != null ? !accDataEnabled.equals(that.accDataEnabled) : that.accDataEnabled != null)
-            return false;
-        if (accUnits != null ? !accUnits.equals(that.accUnits) : that.accUnits != null) return false;
-        if (accSampleFrequencyInHz != null ? !accSampleFrequencyInHz.equals(that.accSampleFrequencyInHz) : that.accSampleFrequencyInHz != null)
-            return false;
-        if (batteryDataEnabled != null ? !batteryDataEnabled.equals(that.batteryDataEnabled) : that.batteryDataEnabled != null)
-            return false;
-        if (batteryPercentRemaining != null ? !batteryPercentRemaining.equals(that.batteryPercentRemaining) : that.batteryPercentRemaining != null)
-            return false;
-        if (batteryMilliVolts != null ? !batteryMilliVolts.equals(that.batteryMilliVolts) : that.batteryMilliVolts != null)
-            return false;
-        return errorDataEnabled != null ? errorDataEnabled.equals(that.errorDataEnabled) : that.errorDataEnabled == null;
     }
 }

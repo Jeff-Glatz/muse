@@ -2,19 +2,35 @@ package kungzhi.muse.model;
 
 import kungzhi.muse.runtime.ProblemLog;
 
-import static kungzhi.muse.model.HeadbandStatusStrict.Status.fromValue;
+import static kungzhi.muse.model.HeadbandStatusStrict.State.fromValue;
 
 public class HeadbandStatusStrict
-        extends AbstractModel {
-    private final Values<Float> values;
+        extends ActiveModel<HeadbandStatusStrict> {
+    private Values<Float> values;
+
+    public HeadbandStatusStrict() {
+        this(0, null);
+    }
 
     public HeadbandStatusStrict(long time, Values<Float> values) {
         super(time);
         this.values = values;
     }
 
-    public Status forChannel(EegChannel channel) {
+    public State forChannel(EegChannel channel) {
         return fromValue(values.at(channel.getIndex()).intValue());
+    }
+
+    @Override
+    public boolean sameAs(HeadbandStatusStrict that) {
+        return values != null ? values.equals(that.values) : that.values == null;
+    }
+
+    @Override
+    protected HeadbandStatusStrict update(HeadbandStatusStrict item) {
+        this.time = item.time;
+        this.values = item.values;
+        return this;
     }
 
     @Override
@@ -23,9 +39,7 @@ public class HeadbandStatusStrict
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
 
-        HeadbandStatusStrict eeg = (HeadbandStatusStrict) o;
-
-        return values != null ? values.equals(eeg.values) : eeg.values == null;
+        return sameAs((HeadbandStatusStrict) o);
     }
 
     @Override
@@ -43,12 +57,17 @@ public class HeadbandStatusStrict
                 '}';
     }
 
-    public enum Status {
+    @Override
+    protected HeadbandStatusStrict newInstance() {
+        return new HeadbandStatusStrict();
+    }
+
+    public enum State {
         GOOD(0), BAD(1);
 
         private final int value;
 
-        Status(int value) {
+        State(int value) {
             this.value = value;
         }
 
@@ -56,7 +75,7 @@ public class HeadbandStatusStrict
             return value;
         }
 
-        public static Status fromValue(int value) {
+        public static State fromValue(int value) {
             switch (value) {
                 case 0:
                     return GOOD;

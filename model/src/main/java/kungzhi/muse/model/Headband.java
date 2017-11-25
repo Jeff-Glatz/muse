@@ -12,8 +12,10 @@ public class Headband
     private final Logger log = LoggerFactory.getLogger(getClass());
     private final Battery battery = new Battery();
     private final Configuration configuration = new Configuration();
-    private final DrlReference drlReference = new DrlReference();
+    private final HeadbandStatus status = new HeadbandStatus();
+    private final HeadbandTouching touching = new HeadbandTouching();
     private final Version version = new Version();
+    private final DrlReference drlReference = new DrlReference();
 
     public Battery getBattery() {
         return battery;
@@ -21,6 +23,14 @@ public class Headband
 
     public Configuration getConfiguration() {
         return configuration;
+    }
+
+    public HeadbandStatus getStatus() {
+        return status;
+    }
+
+    public HeadbandTouching getTouching() {
+        return touching;
     }
 
     public Version getVersion() {
@@ -61,6 +71,16 @@ public class Headband
     public ModelStream<Battery> batteryStream() {
         return (headband, battery) ->
                 this.battery.updateFrom(battery);
+    }
+
+    public ModelStream<HeadbandStatus> statusStream() {
+        return ((headband, status) ->
+                this.status.updateFrom(status));
+    }
+
+    public ModelStream<HeadbandTouching> touchingStream() {
+        return ((headband, touching) ->
+                this.touching.updateFrom(touching));
     }
 
     @Override

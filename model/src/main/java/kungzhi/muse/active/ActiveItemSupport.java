@@ -34,15 +34,14 @@ public class ActiveItemSupport<Item extends ActiveItem<Item> & Serializable>
     }
 
     public void modified(final Item current, final Item previous) {
-        listeners.stream()
-                .forEachOrdered(listener -> {
-                    try {
-                        listener.modified(current, previous);
-                    } catch (Exception ex) {
-                        log.error(format("Failure notifying listener: %s",
-                                listener.getClass().getSimpleName()), ex);
-                        errorHandler.error(listener, ex);
-                    }
-                });
+        listeners.forEach(listener -> {
+            try {
+                listener.modified(current, previous);
+            } catch (Exception ex) {
+                log.error(format("Failure notifying listener: %s",
+                        listener.getClass().getSimpleName()), ex);
+                errorHandler.error(listener, ex);
+            }
+        });
     }
 }
