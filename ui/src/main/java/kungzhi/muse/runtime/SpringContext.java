@@ -3,6 +3,7 @@ package kungzhi.muse.runtime;
 import javafx.application.Application;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.core.env.StandardEnvironment;
 
 import java.util.HashMap;
 
@@ -19,10 +20,11 @@ public class SpringContext {
     public void init()
             throws Exception {
         context = new SpringApplicationBuilder(UiWiring.class)
-                .web(false)
-                .headless(false)
+                .environment(new StandardEnvironment())
                 .registerShutdownHook(true)
                 .bannerMode(CONSOLE)
+                .headless(false)
+                .web(false)
                 .properties(new HashMap<>(application.getParameters().getNamed()))
                 .initializers(context -> context.getBeanFactory()
                         .registerSingleton("application", application))

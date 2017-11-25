@@ -16,4 +16,27 @@
             <artifactId>muse-osc</artifactId>
         </dependency>
     </dependencies>
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
+                    <configuration>
+                        <useTestClasspath>true</useTestClasspath>
+                        <mainClass>kungzhi.muse.ui.MuseDesktop</mainClass>
+                        <profiles>
+                            <profile>mock-data-generation</profile>
+                        </profiles>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
 </project>

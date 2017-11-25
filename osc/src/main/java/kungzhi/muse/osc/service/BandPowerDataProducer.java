@@ -1,16 +1,19 @@
-package kungzhi.muse.runtime;
+package kungzhi.muse.osc.service;
 
 import de.sciss.net.OSCMessage;
 import kungzhi.muse.model.Configuration;
 import kungzhi.muse.model.EegChannel;
 import kungzhi.muse.model.Headband;
-import kungzhi.muse.osc.service.MessageClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Profile;
-import org.springframework.stereotype.Service;
+import org.springframework.jmx.export.annotation.ManagedAttribute;
+import org.springframework.jmx.export.annotation.ManagedOperation;
+import org.springframework.jmx.export.annotation.ManagedResource;
+import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import java.io.IOException;
 import java.util.Random;
 import java.util.SortedSet;
@@ -18,8 +21,9 @@ import java.util.concurrent.ExecutorService;
 
 import static java.lang.String.format;
 
-@Service
-@Profile("band-power-data")
+@Component
+@Profile("mock-data-generation")
+@ManagedResource
 public class BandPowerDataProducer {
     private final Logger log = LoggerFactory.getLogger(getClass());
     private final Random random = new Random();
@@ -28,6 +32,7 @@ public class BandPowerDataProducer {
     private final Headband headband;
 
     private boolean producing;
+    private long latency = 100;
 
     public BandPowerDataProducer(ExecutorService executor, MessageClient client, Headband headband) {
         this.executor = executor;
@@ -48,20 +53,30 @@ public class BandPowerDataProducer {
         });
     }
 
-    private void startProducingData(Configuration configuration)
-            throws Exception {
-        SortedSet<EegChannel> channels = configuration.getEegChannelLayout();
-        int arguments = channels.size();
-        executor.submit(() -> {
-            while (producing) {
-                sendBandPower("gamma", false, arguments);
-                sendBandPower("beta", false, arguments);
-                sendBandPower("alpha", false, arguments);
-                sendBandPower("theta", false, arguments);
-                sendBandPower("delta", false, arguments);
-            }
-        });
+    @ManagedAttribute
+    public boolean isProducing() {
+        return producing;
+    }
 
+    @ManagedAttribute
+    public long getLatency() {
+        return latency;
+    }
+
+    @ManagedAttribute
+    public void setLatency(long latency) {
+        this.latency = latency;
+    }
+
+    @ManagedOperation
+    public void start() {
+        startProducingData(headband.getConfiguration());
+    }
+
+    @ManagedOperation
+    @PreDestroy
+    public void stop() {
+        producing = false;
     }
 
     private void send(String path, Float[] args)
@@ -80,5 +95,29 @@ public class BandPowerDataProducer {
         } catch (Exception e) {
             log.error("Failure sending message", e);
         }
+    }
+
+    private void addLatency() {
+        try {
+            Thread.sleep(latency);
+        } catch (InterruptedException e) {
+            log.error("Thread was interrupted", e);
+        }
+    }
+
+    private void startProducingData(Configuration configuration) {
+        SortedSet<EegChannel> channels = configuration.getEegChannelLayout();
+        int arguments = channels.size();
+        producing = true;
+        executor.submit(() -> {
+            while (producing) {
+                sendBandPower("gamma", false, arguments);
+                sendBandPower("beta", false, arguments);
+                sendBandPower("alpha", false, arguments);
+                sendBandPower("theta", false, arguments);
+                sendBandPower("delta", false, arguments);
+                addLatency();
+            }
+        });
     }
 }
