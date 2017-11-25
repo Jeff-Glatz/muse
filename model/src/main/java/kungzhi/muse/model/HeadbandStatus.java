@@ -18,7 +18,8 @@ public class HeadbandStatus
     }
 
     public State forChannel(EegChannel channel) {
-        return fromValue(values.at(channel.getIndex()).intValue());
+        Float channelValue = values.at(channel.getIndex());
+        return fromValue(channelValue.intValue());
     }
 
     @Override
@@ -85,7 +86,7 @@ public class HeadbandStatus
                     return BAD;
                 default:
                     ProblemLog.problem(HeadbandStatus.class, "missing enum item for value: %s", value);
-                    return null;
+                    return BAD;
             }
         }
     }

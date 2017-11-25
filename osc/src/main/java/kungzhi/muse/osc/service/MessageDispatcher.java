@@ -108,10 +108,10 @@ public class MessageDispatcher
             availablePaths.add(path);
             stream.next(headband, transformer.fromMessage(clock.millis(), message));
         } catch (MissingTransformerException e) {
-            log.warn("No transformer configured for {}", path);
+            log.debug("No transformer configured for {}", path);
             this.<MissingTransformerException>handler(e).on(this, message, e);
         } catch (MissingStreamException e) {
-            log.warn("No stream configured for {}", path);
+            log.debug("No stream configured for {}", path);
             this.<MissingStreamException>handler(e).on(this, message, e);
         } catch (Throwable e) {
             log.error(format("Failure dispatching message: %s", toString(message)), e);

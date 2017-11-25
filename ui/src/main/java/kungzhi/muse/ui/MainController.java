@@ -91,6 +91,7 @@ public class MainController
         Configuration configuration = headband.getConfiguration();
         configuration.addActiveItemListener((current, previous) -> {
             if (previous.initial()) {
+                log.info("Muse configuration received.");
                 buildHeadbandStatusDisplay(current);
                 powers.forEach(data -> addTo(data.series, data.model));
             }
@@ -107,15 +108,16 @@ public class MainController
         HeadbandStatus status = headband.getStatus();
         status.addActiveItemListener((current, previous) -> {
             sensors.forEach((channel, checkBox) -> {
-                switch (current.forChannel(channel)) {
+                HeadbandStatus.State state = current.forChannel(channel);
+                switch (state) {
                     case GOOD:
                         checkBox.setSelected(true);
                         break;
                     case OK:
-                        checkBox.setIndeterminate(true);
+                        checkBox.setSelected(false);
                         break;
                     case BAD:
-                        checkBox.setSelected(false);
+                        checkBox.setIndeterminate(true);
                         break;
                 }
             });
@@ -220,7 +222,7 @@ public class MainController
         dispatcher.withStream(path, BandPower.class,
                 (headband, power) -> {
                     if (!headband.ready()) {
-                        log.warn("Configuration not yet received, queueing data");
+                        log.debug("Configuration not yet received, queueing data");
                         powers.offer(new XYChartData<>(series, power));
                         return;
                     }

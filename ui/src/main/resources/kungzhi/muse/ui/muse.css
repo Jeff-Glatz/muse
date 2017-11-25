@@ -19,7 +19,7 @@
 
 .battery-indicator {
 }
-.battery-green  { -fx-accent: green;  }
+.battery-green  { -fx-accent: limegreen;  }
 .battery-yellow { -fx-accent: yellow; }
 .battery-orange { -fx-accent: orange; }
 .battery-red    { -fx-accent: red;    }

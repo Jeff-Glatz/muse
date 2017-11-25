@@ -13,6 +13,9 @@
     <category name="org.springframework">
         <priority value="info"/>
     </category>
+    <category name="kungzhi.muse.model">
+        <priority value="info"/>
+    </category>
     <root>
         <priority value="info"/>
         <appender-ref ref="console"/>
