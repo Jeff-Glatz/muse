@@ -11,6 +11,7 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.chart.XYChart.Series;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.HBox;
@@ -23,6 +24,7 @@ import kungzhi.muse.model.Headband;
 import kungzhi.muse.model.HeadbandStatus;
 import kungzhi.muse.model.HeadbandTouching;
 import kungzhi.muse.model.SingleValue;
+import kungzhi.muse.model.Version;
 import kungzhi.muse.osc.service.MessageClient;
 import kungzhi.muse.osc.service.MessageDispatcher;
 import kungzhi.muse.osc.service.MessagePath;
@@ -87,6 +89,24 @@ public class MainController
     @FXML
     private ToggleButton clientToggleButton;
 
+    @FXML
+    private TextField macAddress;
+
+    @FXML
+    private TextField serialNumber;
+
+    @FXML
+    private TextField preset;
+
+    @FXML
+    private TextField channelCount;
+
+    @FXML
+    private TextField hardwareVersion;
+
+    @FXML
+    private TextField firmwareHeadsetVersion;
+
     @Autowired
     public MainController(Headband headband, MessageClient client, MessageDispatcher dispatcher) {
         this.headband = headband;
@@ -108,11 +128,10 @@ public class MainController
         configuration.addActiveItemListener((current, previous) -> {
             if (previous.initial()) {
                 log.info("Muse configuration received: {}", current);
-                runLater(() -> {
-                    buildSensorStatusDisplay(current);
-                });
+                runLater(() -> buildSensorStatusDisplay(current));
                 timeline.play();
             }
+            runLater(this::updateDetailsView);
         });
 
         Battery battery = headband.getBattery();
@@ -200,6 +219,18 @@ public class MainController
             sensorIndicatorMap.put(channel, indicator);
             headbandStatusBox.getChildren().add(indicator);
         });
+    }
+
+    private void updateDetailsView() {
+        Configuration configuration = headband.getConfiguration();
+        macAddress.setText(configuration.getMacAddress());
+        serialNumber.setText(configuration.getSerialNumber());
+        preset.setText(configuration.getPreset().getId());
+        channelCount.setText(format("%d", configuration.getEegChannelCount()));
+
+        Version version = headband.getVersion();
+        hardwareVersion.setText(version.getHardwareVersion());
+        firmwareHeadsetVersion.setText(version.getFirmwareHeadsetVersion());
     }
 
     private void addToSeries() {
