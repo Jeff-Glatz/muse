@@ -14,7 +14,6 @@
 <?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
@@ -80,15 +79,15 @@
                 </AnchorPane>
                 <ScrollPane prefHeight="-1.0" prefWidth="-1.0">
                     <content>
-                        <AnchorPane id="Content" minHeight="-1.0" minWidth="-1.0" prefHeight="545.0" prefWidth="430.0">
+                        <AnchorPane id="Content" minHeight="-1.0" minWidth="-1.0" prefHeight="415.0" prefWidth="456.0">
                             <children>
                                 <Label alignment="CENTER" font="$x1" layoutX="14.0" layoutY="14.0" style="&#10;"
                                        text="%label.text.view" textAlignment="CENTER" textFill="$x2" wrapText="false"/>
-                                <VBox layoutX="165.0" layoutY="173.0" AnchorPane.bottomAnchor="0.0"
-                                      AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
-                                      AnchorPane.topAnchor="50.0">
+                                <VBox layoutX="165.0" layoutY="173.0" prefHeight="273.0" prefWidth="456.0"
+                                      AnchorPane.bottomAnchor="92.0" AnchorPane.leftAnchor="0.0"
+                                      AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0">
                                     <children>
-                                        <LineChart fx:id="bandPowerLineChart">
+                                        <LineChart fx:id="bandPowerLineChart" prefHeight="281.0" prefWidth="456.0">
                                             <xAxis>
                                                 <NumberAxis side="BOTTOM"/>
                                             </xAxis>
@@ -118,7 +117,8 @@
                     </font>
                 </Label>
                 <ToggleButton fx:id="clientToggleButton" mnemonicParsing="false" onAction="#toggleClient" text="off"/>
-                <HBox fx:id="headbandStatusBox" alignment="CENTER" prefHeight="-1.0" prefWidth="-1.0" HBox.hgrow="ALWAYS"/>
+                <HBox fx:id="headbandStatusBox" alignment="CENTER" prefHeight="-1.0" prefWidth="-1.0"
+                      HBox.hgrow="ALWAYS"/>
                 <ProgressBar fx:id="batteryProgressBar" progress="0.0" styleClass="battery-indicator"/>
             </children>
             <padding>
