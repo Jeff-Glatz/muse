@@ -95,8 +95,8 @@ public class MainController
         Configuration configuration = headband.getConfiguration();
         configuration.addActiveItemListener((current, previous) -> {
             if (previous.initial()) {
+                log.info("Muse configuration received: {}", current);
                 runLater(() -> {
-                    log.info("Muse configuration received.");
                     buildSensorStatusDisplay(current);
                 });
                 powers.forEach(data -> addTo(data.series, data.model));
