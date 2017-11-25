@@ -241,21 +241,21 @@ public class MainController
         bandPowerLineChart.setCreateSymbols(false);
 
         NumberAxis xAxis = (NumberAxis) bandPowerLineChart.getXAxis();
-        xAxis.setLabel("seconds");
         xAxis.setAutoRanging(false);
-        xAxis.setAnimated(false);
+        xAxis.setAnimated(true);
+        xAxis.setTickLabelsVisible(false);
         xAxis.setForceZeroInRange(false);
         xAxis.setLowerBound(0);
         xAxis.setUpperBound(30);
         xAxis.setTickUnit(5);
 
         NumberAxis yAxis = (NumberAxis) bandPowerLineChart.getYAxis();
-        yAxis.setLabel("power");
+        yAxis.setLabel("Power");
         yAxis.setAutoRanging(false);
         yAxis.setAnimated(false);
-        yAxis.setLowerBound(0);
-        yAxis.setUpperBound(1.5);
-        yAxis.setTickUnit(0.15);
+        yAxis.setLowerBound(-0.5);
+        yAxis.setUpperBound(2);
+        yAxis.setTickUnit(0.5);
 
         ObservableList<Series<Number, Number>> seriesData = bandPowerLineChart.getData();
         seriesData.add(bandPowerSeries(GAMMA_ABSOLUTE, "band.gamma.name"));
