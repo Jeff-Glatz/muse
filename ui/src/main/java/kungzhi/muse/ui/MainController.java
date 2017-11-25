@@ -1,16 +1,19 @@
 package kungzhi.muse.ui;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.collections.ObservableList;
-import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
+import javafx.scene.chart.XYChart.Series;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.HBox;
+import kungzhi.muse.chart.XYChartData;
 import kungzhi.muse.model.BandPower;
 import kungzhi.muse.model.Battery;
 import kungzhi.muse.model.Configuration;
@@ -18,7 +21,6 @@ import kungzhi.muse.model.EegChannel;
 import kungzhi.muse.model.Headband;
 import kungzhi.muse.model.HeadbandStatus;
 import kungzhi.muse.model.HeadbandTouching;
-import kungzhi.muse.model.XYChartData;
 import kungzhi.muse.osc.service.MessageClient;
 import kungzhi.muse.osc.service.MessageDispatcher;
 import kungzhi.muse.osc.service.MessagePath;
@@ -34,11 +36,12 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.ResourceBundle;
 import java.util.SortedSet;
-import java.util.concurrent.ExecutorService;
 
 import static java.lang.String.format;
 import static java.lang.System.currentTimeMillis;
+import static javafx.animation.Animation.INDEFINITE;
 import static javafx.application.Platform.runLater;
+import static javafx.util.Duration.millis;
 import static kungzhi.muse.osc.service.MessagePath.ALPHA_ABSOLUTE;
 import static kungzhi.muse.osc.service.MessagePath.BETA_ABSOLUTE;
 import static kungzhi.muse.osc.service.MessagePath.DELTA_ABSOLUTE;
@@ -60,11 +63,12 @@ public class MainController
     private static final String[] SENSOR_CLASSES = {SENSOR_GOOD, SENSOR_OK, SENSOR_BAD};
 
     private final Map<EegChannel, RadioButton> sensorIndicatorMap = new HashMap<>();
-    private final Queue<XYChartData<Number, Number, BandPower>> powers = new LinkedList<>();
-    private final ExecutorService executor;
+    private final Queue<XYChartData<Number, Number>> powers = new LinkedList<>();
+    private final int secondsOfHistory = 30;
     private final Headband headband;
     private final MessageClient client;
     private final MessageDispatcher dispatcher;
+    private final Timeline timeline;
 
     private ResourceBundle resources;
     private long start;
@@ -82,12 +86,18 @@ public class MainController
     private ToggleButton clientToggleButton;
 
     @Autowired
-    public MainController(ExecutorService executor, Headband headband,
-                          MessageClient client, MessageDispatcher dispatcher) {
-        this.executor = executor;
+    public MainController(Headband headband, MessageClient client, MessageDispatcher dispatcher) {
         this.headband = headband;
         this.client = client;
         this.dispatcher = dispatcher;
+        this.timeline = new Timeline();
+        this.timeline.getKeyFrames()
+                .add(new KeyFrame(millis(1000 / 60), (event) -> {
+                    for (int count = 0; count < 6; count++) {
+                        addToSeries();
+                    }
+                }));
+        this.timeline.setCycleCount(INDEFINITE);
     }
 
     @PostConstruct
@@ -99,7 +109,7 @@ public class MainController
                 runLater(() -> {
                     buildSensorStatusDisplay(current);
                 });
-                powers.forEach(data -> addTo(data.series, data.model));
+                timeline.play();
             }
         });
 
@@ -173,6 +183,10 @@ public class MainController
         }
     }
 
+    private double secondsSinceStart() {
+        return (currentTimeMillis() - start) / 1000D;
+    }
+
     private void buildSensorStatusDisplay(Configuration configuration) {
         SortedSet<EegChannel> channels = configuration.getEegChannelLayout();
         channels.forEach(channel -> {
@@ -185,34 +199,23 @@ public class MainController
         });
     }
 
-    /**
-     * Submits a task to asynchronously add the data to the specified series
-     *
-     * @param series The series to which the incoming data will be added
-     * @param power  The BandPower to add
-     */
-    private void addTo(XYChart.Series<Number, Number> series, BandPower power) {
-        executor.submit(new Task<Double>() {
-            @Override
-            protected Double call()
-                    throws Exception {
-                return power.average();
-            }
+    private void addToSeries() {
+        for (XYChartData<Number, Number> data = powers.poll();
+             data != null;
+             data = powers.poll()) {
+            data.addToSeries(1000);
+        }
+        double elapsed = secondsSinceStart();
+        if (elapsed > secondsOfHistory) {
+            NumberAxis xAxis = (NumberAxis) bandPowerLineChart.getXAxis();
+            xAxis.setUpperBound(elapsed);
+            xAxis.setLowerBound(elapsed - secondsOfHistory);
+        }
+    }
 
-            @Override
-            protected void succeeded() {
-                try {
-                    double seconds = (currentTimeMillis() - start) / 1000D;
-                    ObservableList<XYChart.Data<Number, Number>> data = series.getData();
-                    data.add(new XYChart.Data<>(seconds, get()));
-                    while (data.size() > 100) {
-                        data.remove(0);
-                    }
-                } catch (Exception e) {
-                    log.error("Failure getting computed value", e);
-                }
-            }
-        });
+    private void addToQueue(Series<Number, Number> series, BandPower power) {
+        powers.offer(new XYChartData<>(series,
+                new XYChart.Data<>(secondsSinceStart(), power.average())));
     }
 
     /**
@@ -223,18 +226,11 @@ public class MainController
      * @param path The path containg the band power data to be plotted
      * @return A new series for the specified band
      */
-    private XYChart.Series<Number, Number> bandPowerSeries(MessagePath path, String labelKey) {
-        XYChart.Series<Number, Number> series = new XYChart.Series<>();
+    private Series<Number, Number> bandPowerSeries(MessagePath path, String labelKey) {
+        Series<Number, Number> series = new Series<>();
         series.setName(resources.getString(labelKey));
         dispatcher.withStream(path, BandPower.class,
-                (headband, power) -> {
-                    if (!headband.ready()) {
-                        log.debug("Configuration not yet received, queueing data");
-                        powers.offer(new XYChartData<>(series, power));
-                        return;
-                    }
-                    addTo(series, power);
-                });
+                (headband, power) -> addToQueue(series, power));
         return series;
     }
 
@@ -245,19 +241,23 @@ public class MainController
         bandPowerLineChart.setCreateSymbols(false);
 
         NumberAxis xAxis = (NumberAxis) bandPowerLineChart.getXAxis();
-        xAxis.setLabel("Timestamp");
-        xAxis.setAutoRanging(true);
+        xAxis.setLabel("seconds");
+        xAxis.setAutoRanging(false);
         xAxis.setAnimated(false);
         xAxis.setForceZeroInRange(false);
+        xAxis.setLowerBound(0);
+        xAxis.setUpperBound(30);
+        xAxis.setTickUnit(5);
 
         NumberAxis yAxis = (NumberAxis) bandPowerLineChart.getYAxis();
-        yAxis.setLabel("Absolute Power");
+        yAxis.setLabel("power");
         yAxis.setAutoRanging(false);
         yAxis.setAnimated(false);
         yAxis.setLowerBound(0);
-        yAxis.setUpperBound(2);
+        yAxis.setUpperBound(1.5);
+        yAxis.setTickUnit(0.15);
 
-        ObservableList<XYChart.Series<Number, Number>> seriesData = bandPowerLineChart.getData();
+        ObservableList<Series<Number, Number>> seriesData = bandPowerLineChart.getData();
         seriesData.add(bandPowerSeries(GAMMA_ABSOLUTE, "band.gamma.name"));
         seriesData.add(bandPowerSeries(BETA_ABSOLUTE, "band.beta.name"));
         seriesData.add(bandPowerSeries(ALPHA_ABSOLUTE, "band.alpha.name"));

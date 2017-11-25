@@ -9,11 +9,11 @@ import org.springframework.core.convert.support.DefaultConversionService;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.time.Clock;
-import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ScheduledExecutorService;
 
 import static java.lang.Runtime.getRuntime;
 import static java.net.InetAddress.getByName;
-import static java.util.concurrent.Executors.newFixedThreadPool;
+import static java.util.concurrent.Executors.newScheduledThreadPool;
 
 @ComponentScan({
         "kungzhi.muse.model",
@@ -29,8 +29,8 @@ public class ModelWiring {
     }
 
     @Bean(destroyMethod = "shutdown")
-    public ExecutorService executorService() {
-        return newFixedThreadPool(getRuntime()
+    public ScheduledExecutorService executorService() {
+        return newScheduledThreadPool(getRuntime()
                 .availableProcessors());
     }
 

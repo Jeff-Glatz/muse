@@ -68,11 +68,11 @@ import java.net.InetSocketAddress;
  * <p>
  * The default configuration of this {@link MessageClient} is setup to
  * receive OSC messages from MuseIO using it's default settings.
- *
+ * <p>
  * The client can be altered programmatically by setting the
  * transmitting and receiving addresses or by specifying the following
  * system properties:
- *
+ * <p>
  * <table>
  *     <th>
  *         <td>System Property</td>
@@ -203,6 +203,9 @@ public class MessageClient {
 
     public void send(OSCPacket packet)
             throws IOException {
+        if (transmitter == null) {
+            log.warn("cannot send packet, client is off");
+        }
         transmitter.send(packet);
     }
 
@@ -227,6 +230,7 @@ public class MessageClient {
         if (transmitter != null) {
             log.info("stopping {} transmitter on: {}...", protocol, transmitterAddress);
             transmitter.dispose();
+            transmitter = null;
             log.info("transmitter stopped.");
         }
     }
