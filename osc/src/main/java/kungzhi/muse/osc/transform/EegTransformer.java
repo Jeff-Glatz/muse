@@ -2,7 +2,7 @@ package kungzhi.muse.osc.transform;
 
 import de.sciss.net.OSCMessage;
 import kungzhi.muse.model.Eeg;
-import kungzhi.muse.osc.service.Transformer;
+import kungzhi.muse.runtime.Transformer;
 
 import static kungzhi.muse.osc.service.MessagePath.EEG;
 import static kungzhi.muse.osc.transform.MessageHelper.extractArguments;

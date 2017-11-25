@@ -5,7 +5,7 @@ import de.sciss.net.OSCMessage;
 import kungzhi.muse.model.Configuration;
 import kungzhi.muse.model.Preset;
 import kungzhi.muse.model.Sensor;
-import kungzhi.muse.osc.service.Transformer;
+import kungzhi.muse.runtime.Transformer;
 
 import static com.jsoniter.JsonIterator.deserialize;
 import static java.util.Arrays.stream;

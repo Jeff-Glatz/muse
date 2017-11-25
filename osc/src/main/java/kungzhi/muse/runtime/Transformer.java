@@ -1,5 +1,6 @@
-package kungzhi.muse.osc.service;
+package kungzhi.muse.runtime;
 
+import kungzhi.muse.osc.service.MessagePath;
 import org.springframework.stereotype.Component;
 
 import java.lang.annotation.Documented;
@@ -13,5 +14,6 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Retention(RUNTIME)
 @Documented
 @Component
-public @interface Stream {
+public @interface Transformer {
+    MessagePath[] value();
 }

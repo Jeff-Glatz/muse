@@ -3,7 +3,7 @@ package kungzhi.muse.osc.transform;
 import com.jsoniter.any.Any;
 import de.sciss.net.OSCMessage;
 import kungzhi.muse.model.Version;
-import kungzhi.muse.osc.service.Transformer;
+import kungzhi.muse.runtime.Transformer;
 
 import static com.jsoniter.JsonIterator.deserialize;
 import static kungzhi.muse.osc.service.MessagePath.VERSION;
