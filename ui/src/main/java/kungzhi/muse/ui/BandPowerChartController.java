@@ -55,7 +55,7 @@ public abstract class BandPowerChartController
     }
 
     @Override
-    protected void initialize() {
+    protected void onInitialize() {
         animator.setChart(bandPowerChart);
 
         ObservableList<Series<Number, Number>> seriesData = bandPowerChart.getData();
@@ -79,7 +79,7 @@ public abstract class BandPowerChartController
                 band.getIdentifier().toUpperCase(),
                 relative ? "RELATIVE" : "ABSOLUTE"));
         Series<Number, Number> series = new Series<>();
-        series.setName(resources.getString(band.resourceKey()));
+        series.setName(localize(band.resourceKey()));
         dispatcher.withStream(path, BandPower.class,
                 (headband, power) -> animator.offer(series, power.average()));
         return series;

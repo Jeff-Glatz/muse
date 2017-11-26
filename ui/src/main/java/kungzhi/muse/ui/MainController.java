@@ -148,7 +148,7 @@ public class MainController
     }
 
     @Override
-    protected void initialize() {
+    protected void onInitialize() {
         animator.setChart(bandPowerLineChart);
         buildBandPowerChart();
         buildBatteryProgressBar();
@@ -180,7 +180,7 @@ public class MainController
     }
 
     private void buildBandPowerChart() {
-        bandPowerLineChart.setTitle("Relative Band Power");
+        bandPowerLineChart.setTitle(localize("chart.bandPower.relative"));
         bandPowerLineChart.setAnimated(true);
         bandPowerLineChart.setVerticalGridLinesVisible(false);
         bandPowerLineChart.setCreateSymbols(false);
@@ -195,7 +195,7 @@ public class MainController
         xAxis.setTickUnit(5);
 
         NumberAxis yAxis = (NumberAxis) bandPowerLineChart.getYAxis();
-        yAxis.setLabel("Power");
+        yAxis.setLabel(localize("chart.bandPower.axis.power"));
         yAxis.setAutoRanging(false);
         yAxis.setAnimated(false);
         yAxis.setLowerBound(0);
@@ -243,7 +243,7 @@ public class MainController
 
     private Series<Number, Number> bandPowerSeries(MessagePath path, String labelKey) {
         Series<Number, Number> series = new Series<>();
-        series.setName(resources.getString(labelKey));
+        series.setName(localize(labelKey));
         dispatcher.withStream(path, BandPower.class,
                 (headband, power) -> animator.offer(series, power.average()));
         return series;

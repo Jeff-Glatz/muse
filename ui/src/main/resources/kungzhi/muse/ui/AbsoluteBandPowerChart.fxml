@@ -17,7 +17,7 @@
                     upperBound="30"
                     forceZeroInRange="false"
                     tickUnit="5"
-                    label="%chart.axis.elapsed"
+                    label="%chart.bandPower.axis.elapsed"
                     tickLabelsVisible="false"/>
     </xAxis>
     <yAxis>
@@ -27,6 +27,6 @@
                     lowerBound="-0.5"
                     upperBound="+1.5"
                     tickUnit="0.2"
-                    label="%chart.axis.power"/>
+                    label="%chart.bandPower.axis.power"/>
     </yAxis>
 </LineChart>

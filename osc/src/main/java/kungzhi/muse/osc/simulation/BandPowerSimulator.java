@@ -72,17 +72,24 @@ public class BandPowerSimulator {
         int argCount = configuration.getEegChannelCount();
         log.info("Producing random {} band power data for {} channels",
                 relative ? "relative" : "absolute", argCount);
-        producing = true;
-        while (producing) {
-            executor.submit(() -> {
-                sendBandPower("gamma", argCount);
-                sendBandPower("beta", argCount);
-                sendBandPower("alpha", argCount);
-                sendBandPower("theta", argCount);
-                sendBandPower("delta", argCount);
-            });
-            sleep(computeRandomLatency());
-        }
+        executor.submit(() -> {
+            producing = true;
+            try {
+                while (producing) {
+                    executor.execute(() -> {
+                        sendBandPower("gamma", argCount);
+                        sendBandPower("beta", argCount);
+                        sendBandPower("alpha", argCount);
+                        sendBandPower("theta", argCount);
+                        sendBandPower("delta", argCount);
+                    });
+                    sleep(computeRandomLatency());
+                }
+            } finally {
+                producing = false;
+            }
+            return null;
+        });
     }
 
     @ManagedOperation
