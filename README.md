@@ -68,6 +68,14 @@ that simulates the presence of a Muse headset:
 * `kungzhi.muse.osc.simulation.MuseSimulator`
 * `kungzhi.muse.osc.simulation.BandPowerSimulator`
 
+#### Accessing the simulator objects
+To connect to the local JVM's MBean server, launch `jconsole` and attach to the process that
+looks something like: 
+```
+org.codehaus.plexus.classworlds.launcher.Launcher spring-boot:run
+```
+
+#### Things to keep in mind
 Muse Workbench is event driven and centered around the primary `kungzhi.muse.model.Configuration`
 object. Because headsets can have different sensor layouts, Muse Workbench waits until a 
 configuration message arrives over OSC before activating certain UI features. 
@@ -75,3 +83,6 @@ configuration message arrives over OSC before activating certain UI features.
 Because of this, the first thing to do when running the simulator is to use the 
 `kungzhi.muse.osc.simulation.MuseSimulator` MBean to send a configuration message. After that, the
 `kungzhi.muse.osc.simulation.BandPowerSimulator` MBean can be used to send random band power data.
+
+Don't forget to turn on the OSC client in Muse Workbench in order to start receiving the stream of 
+OSC muse messages.
