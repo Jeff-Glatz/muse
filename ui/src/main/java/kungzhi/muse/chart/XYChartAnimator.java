@@ -28,11 +28,8 @@ public class XYChartAnimator<Y> {
         this.clock = clock;
         this.timeline = new Timeline();
         this.timeline.getKeyFrames()
-                .add(new KeyFrame(millis(1000 / 60), (event) -> {
-                    for (int count = 0; count < 6; count++) {
-                        addToSeries();
-                    }
-                }));
+                .add(new KeyFrame(millis(1000 / 60), (event) ->
+                        addQueuedDataToChart()));
         this.timeline.setCycleCount(INDEFINITE);
     }
 
@@ -81,7 +78,7 @@ public class XYChartAnimator<Y> {
         }
     }
 
-    private void addToSeries() {
+    private void addQueuedDataToChart() {
         for (XYChartData<Number, Y> data = queue.poll();
              data != null;
              data = queue.poll()) {
