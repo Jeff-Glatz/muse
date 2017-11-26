@@ -61,6 +61,9 @@ public class XYChartAnimator<Y> {
     }
 
     public void start() {
+        if (chart == null) {
+            throw new IllegalStateException("Missing chart to animate");
+        }
         startedAt = clock.millis();
         timeline.play();
     }

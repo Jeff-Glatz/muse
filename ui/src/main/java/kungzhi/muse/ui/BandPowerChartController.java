@@ -56,6 +56,8 @@ public abstract class BandPowerChartController
 
     @Override
     protected void initialize() {
+        animator.setChart(bandPowerChart);
+
         ObservableList<Series<Number, Number>> seriesData = bandPowerChart.getData();
         seriesData.add(bandPowerSeries(bands.load("gamma")));
         seriesData.add(bandPowerSeries(bands.load("beta")));

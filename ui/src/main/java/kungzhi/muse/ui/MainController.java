@@ -1,13 +1,10 @@
 package kungzhi.muse.ui;
 
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
-import javafx.scene.chart.XYChart;
 import javafx.scene.chart.XYChart.Series;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.RadioButton;
@@ -15,7 +12,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.HBox;
-import kungzhi.muse.chart.XYChartData;
+import kungzhi.muse.chart.XYChartAnimator;
 import kungzhi.muse.model.BandPower;
 import kungzhi.muse.model.Battery;
 import kungzhi.muse.model.Configuration;
@@ -23,7 +20,6 @@ import kungzhi.muse.model.EegChannel;
 import kungzhi.muse.model.Headband;
 import kungzhi.muse.model.HeadbandStatus;
 import kungzhi.muse.model.HeadbandTouching;
-import kungzhi.muse.model.SingleValue;
 import kungzhi.muse.model.Version;
 import kungzhi.muse.osc.service.MessageClient;
 import kungzhi.muse.osc.service.MessageDispatcher;
@@ -33,17 +29,13 @@ import org.springframework.stereotype.Controller;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
+import java.time.Clock;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.Map;
-import java.util.Queue;
 import java.util.SortedSet;
 
 import static java.lang.String.format;
-import static java.lang.System.currentTimeMillis;
-import static javafx.animation.Animation.INDEFINITE;
 import static javafx.application.Platform.runLater;
-import static javafx.util.Duration.millis;
 import static kungzhi.muse.osc.service.MessagePath.ALPHA_RELATIVE;
 import static kungzhi.muse.osc.service.MessagePath.BETA_RELATIVE;
 import static kungzhi.muse.osc.service.MessagePath.DELTA_RELATIVE;
@@ -65,14 +57,10 @@ public class MainController
     private static final String[] SENSOR_CLASSES = {SENSOR_GOOD, SENSOR_OK, SENSOR_BAD};
 
     private final Map<EegChannel, RadioButton> sensorIndicatorMap = new HashMap<>();
-    private final Queue<XYChartData<Number, Number>> powers = new LinkedList<>();
-    private final int secondsOfHistory = 30;
     private final Headband headband;
     private final MessageClient client;
     private final MessageDispatcher dispatcher;
-    private final Timeline timeline;
-
-    private long start;
+    private final XYChartAnimator<Number> animator;
 
     @FXML
     private HBox headbandStatusBox;
@@ -105,18 +93,12 @@ public class MainController
     private TextField firmwareHeadsetVersion;
 
     @Autowired
-    public MainController(Headband headband, MessageClient client, MessageDispatcher dispatcher) {
+    public MainController(Clock clock, Headband headband,
+                          MessageClient client, MessageDispatcher dispatcher) {
         this.headband = headband;
         this.client = client;
         this.dispatcher = dispatcher;
-        this.timeline = new Timeline();
-        this.timeline.getKeyFrames()
-                .add(new KeyFrame(millis(1000 / 60), (event) -> {
-                    for (int count = 0; count < 6; count++) {
-                        addToSeries();
-                    }
-                }));
-        this.timeline.setCycleCount(INDEFINITE);
+        this.animator = new XYChartAnimator<>(clock);
     }
 
     @PostConstruct
@@ -126,7 +108,7 @@ public class MainController
             if (previous.initial()) {
                 log.info("Muse configuration received: {}", current);
                 runLater(() -> buildSensorStatusDisplay(current));
-                timeline.play();
+                animator.start();
             }
             runLater(this::updateDetailsView);
         });
@@ -167,24 +149,9 @@ public class MainController
 
     @Override
     protected void initialize() {
-        batteryProgressBar.setTooltip(new Tooltip("Battery"));
-        batteryProgressBar.progressProperty()
-                .addListener((observable, oldValue, newValue) -> {
-                    double progress = newValue == null ? 0 : newValue.doubleValue();
-                    ObservableList<String> styles = batteryProgressBar.getStyleClass();
-                    styles.removeAll(BATTERY_CLASSES);
-                    if (progress < 0.2) {
-                        styles.add(BATTERY_RED);
-                    } else if (progress < 0.4) {
-                        styles.add(BATTERY_ORANGE);
-                    } else if (progress < 0.6) {
-                        styles.add(BATTERY_YELLOW);
-                    } else {
-                        styles.add(BATTERY_GREEN);
-                    }
-                });
+        animator.setChart(bandPowerLineChart);
         buildBandPowerChart();
-        start = currentTimeMillis();
+        buildBatteryProgressBar();
     }
 
     @FXML
@@ -199,10 +166,6 @@ public class MainController
         }
     }
 
-    private double secondsSinceStart() {
-        return (currentTimeMillis() - start) / 1000D;
-    }
-
     private void buildSensorStatusDisplay(Configuration configuration) {
         SortedSet<EegChannel> channels = configuration.getEegChannelLayout();
         channels.forEach(channel -> {
@@ -214,58 +177,6 @@ public class MainController
             sensorIndicatorMap.put(channel, indicator);
             headbandStatusBox.getChildren().add(indicator);
         });
-    }
-
-    private void updateDetailsView() {
-        Configuration configuration = headband.getConfiguration();
-        macAddress.setText(configuration.getMacAddress());
-        serialNumber.setText(configuration.getSerialNumber());
-        preset.setText(configuration.getPreset().getId());
-        channelCount.setText(format("%d", configuration.getEegChannelCount()));
-
-        Version version = headband.getVersion();
-        hardwareVersion.setText(version.getHardwareVersion());
-        firmwareHeadsetVersion.setText(version.getFirmwareHeadsetVersion());
-    }
-
-    private void addToSeries() {
-        for (XYChartData<Number, Number> data = powers.poll();
-             data != null;
-             data = powers.poll()) {
-            data.addToSeries(1000);
-        }
-        double elapsed = secondsSinceStart();
-        if (elapsed > secondsOfHistory) {
-            NumberAxis xAxis = (NumberAxis) bandPowerLineChart.getXAxis();
-            xAxis.setUpperBound(elapsed);
-            xAxis.setLowerBound(elapsed - secondsOfHistory);
-        }
-    }
-
-    private void addToQueue(Series<Number, Number> series, BandPower power) {
-        powers.offer(new XYChartData<>(series,
-                new XYChart.Data<>(secondsSinceStart(), power.average())));
-    }
-
-    private Series<Number, Number> bandPowerSeries(MessagePath path, String labelKey) {
-        Series<Number, Number> series = new Series<>();
-        series.setName(resources.getString(labelKey));
-        dispatcher.withStream(path, BandPower.class,
-                (headband, power) -> addToQueue(series, power));
-        return series;
-    }
-
-    private void addToQueue(Series<Number, Number> series, SingleValue<Float> value) {
-        powers.offer(new XYChartData<>(series,
-                new XYChart.Data<>(secondsSinceStart(), value.get())));
-    }
-
-    private Series<Number, Number> singleValueSeries(MessagePath path, String labelKey) {
-        Series<Number, Number> series = new Series<>();
-        series.setName(resources.getString(labelKey));
-        dispatcher.withStream(path, SingleValue.class,
-                (headband, value) -> addToQueue(series, value));
-        return series;
     }
 
     private void buildBandPowerChart() {
@@ -297,7 +208,44 @@ public class MainController
         seriesData.add(bandPowerSeries(ALPHA_RELATIVE, "band.alpha.name"));
         seriesData.add(bandPowerSeries(THETA_RELATIVE, "band.theta.name"));
         seriesData.add(bandPowerSeries(DELTA_RELATIVE, "band.delta.name"));
-//        seriesData.add(singleValueSeries(MELLOW, "algorithm.mellow"));
-//        seriesData.add(singleValueSeries(CONCENTRATION, "algorithm.concentration"));
+    }
+
+    private void buildBatteryProgressBar() {
+        batteryProgressBar.setTooltip(new Tooltip("Battery"));
+        batteryProgressBar.progressProperty()
+                .addListener((observable, oldValue, newValue) -> {
+                    double progress = newValue == null ? 0 : newValue.doubleValue();
+                    ObservableList<String> styles = batteryProgressBar.getStyleClass();
+                    styles.removeAll(BATTERY_CLASSES);
+                    if (progress < 0.2) {
+                        styles.add(BATTERY_RED);
+                    } else if (progress < 0.4) {
+                        styles.add(BATTERY_ORANGE);
+                    } else if (progress < 0.6) {
+                        styles.add(BATTERY_YELLOW);
+                    } else {
+                        styles.add(BATTERY_GREEN);
+                    }
+                });
+    }
+
+    private void updateDetailsView() {
+        Configuration configuration = headband.getConfiguration();
+        macAddress.setText(configuration.getMacAddress());
+        serialNumber.setText(configuration.getSerialNumber());
+        preset.setText(configuration.getPreset().getId());
+        channelCount.setText(format("%d", configuration.getEegChannelCount()));
+
+        Version version = headband.getVersion();
+        hardwareVersion.setText(version.getHardwareVersion());
+        firmwareHeadsetVersion.setText(version.getFirmwareHeadsetVersion());
+    }
+
+    private Series<Number, Number> bandPowerSeries(MessagePath path, String labelKey) {
+        Series<Number, Number> series = new Series<>();
+        series.setName(resources.getString(labelKey));
+        dispatcher.withStream(path, BandPower.class,
+                (headband, power) -> animator.offer(series, power.average()));
+        return series;
     }
 }
