@@ -1,18 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.chart.LineChart?>
-<?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.SeparatorMenuItem?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -22,192 +18,159 @@
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 <?import java.net.URL?>
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="480.0"
-      prefWidth="929.0" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="kungzhi.muse.ui.MainController">
-    <children>
-        <MenuBar VBox.vgrow="NEVER">
-            <menus>
-                <Menu mnemonicParsing="false" text="%menu.title.file">
-                    <items>
-                        <MenuItem mnemonicParsing="false" text="%menu.title.new"/>
-                        <MenuItem mnemonicParsing="false" text="%menu.title.open"/>
-                        <Menu mnemonicParsing="false" text="%menu.title.open.recent"/>
-                        <SeparatorMenuItem mnemonicParsing="false"/>
-                        <MenuItem mnemonicParsing="false" text="%menu.title.close"/>
-                        <MenuItem mnemonicParsing="false" text="%menu.title.save"/>
-                        <MenuItem mnemonicParsing="false" text="%menu.title.save.as"/>
-                        <MenuItem mnemonicParsing="false" text="%menu.title.revert"/>
-                        <SeparatorMenuItem mnemonicParsing="false"/>
-                        <MenuItem mnemonicParsing="false" text="%menu.title.preferences"/>
-                        <SeparatorMenuItem mnemonicParsing="false"/>
-                        <MenuItem mnemonicParsing="false" text="%menu.title.quit"/>
-                    </items>
-                </Menu>
-                <Menu mnemonicParsing="false" text="%menu.title.edit">
-                    <items>
-                        <MenuItem mnemonicParsing="false" text="%menu.title.undo"/>
-                        <MenuItem mnemonicParsing="false" text="%menu.title.redo"/>
-                        <SeparatorMenuItem mnemonicParsing="false"/>
-                        <MenuItem mnemonicParsing="false" text="%menu.title.cut"/>
-                        <MenuItem mnemonicParsing="false" text="%menu.title.copy"/>
-                        <MenuItem mnemonicParsing="false" text="%menu.title.paste"/>
-                        <MenuItem mnemonicParsing="false" text="%menu.title.delete"/>
-                        <SeparatorMenuItem mnemonicParsing="false"/>
-                        <MenuItem mnemonicParsing="false" text="%menu.title.select.all"/>
-                        <MenuItem mnemonicParsing="false" text="%menu.title.unselect.all"/>
-                    </items>
-                </Menu>
-                <Menu mnemonicParsing="false" text="%menu.title.help">
-                    <items>
-                        <MenuItem mnemonicParsing="false" text="%menu.title.about"/>
-                    </items>
-                </Menu>
-            </menus>
-        </MenuBar>
-        <SplitPane dividerPositions="0.2505567928730512, 0.7505567928730512" focusTraversable="true" prefHeight="-1.0"
-                   prefWidth="-1.0" VBox.vgrow="ALWAYS">
-            <items>
-                <AnchorPane>
-                    <children>
-                        <Label alignment="CENTER" layoutX="14.0" layoutY="14.0" minWidth="60.0" prefWidth="-1.0"
-                               style="&#10;" text="%label.text.master" textAlignment="CENTER" wrapText="false">
-                            <font>
-                                <Font size="18.0" fx:id="x1"/>
-                            </font>
-                            <textFill>
-                                <Color blue="0.624" green="0.624" red="0.624" fx:id="x2"/>
-                            </textFill>
-                        </Label>
-                    </children>
-                </AnchorPane>
-                <ScrollPane prefHeight="-1.0" prefWidth="-1.0">
-                    <content>
-                        <AnchorPane id="Content" minHeight="-1.0" minWidth="-1.0" prefHeight="415.0" prefWidth="456.0">
-                            <children>
-                                <Label alignment="CENTER" font="$x1" layoutX="14.0" layoutY="14.0" style="&#10;"
-                                       text="%label.text.view" textAlignment="CENTER" textFill="$x2" wrapText="false"/>
-                                <VBox layoutX="165.0" layoutY="173.0" prefHeight="273.0" prefWidth="456.0"
-                                      AnchorPane.bottomAnchor="92.0" AnchorPane.leftAnchor="0.0"
-                                      AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0">
-                                    <children>
-                                        <fx:include source="RelativeBandPowerChart.fxml"/>
-                                    </children>
-                                </VBox>
-                            </children>
-                        </AnchorPane>
-                    </content>
-                </ScrollPane>
-                <AnchorPane>
-                    <children>
-                        <Label alignment="CENTER" font="$x1" layoutX="14.0" layoutY="14.0" style="&#10;"
-                               text="%label.text.details" textAlignment="CENTER" textFill="$x2" wrapText="false"/>
-                        <GridPane layoutY="37.0" prefHeight="374.0" prefWidth="228.0">
-                            <columnConstraints>
-                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="110.0" minWidth="10.0" prefWidth="91.0"/>
-                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="144.0" minWidth="10.0"
-                                                   prefWidth="127.0"/>
-                            </columnConstraints>
-                            <rowConstraints>
-                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-                            </rowConstraints>
-                            <children>
-                                <Label text="MAC Address:" GridPane.halignment="LEFT" GridPane.valignment="CENTER">
-                                    <font>
-                                        <Font size="11.0"/>
-                                    </font>
-                                </Label>
-                                <TextField fx:id="macAddress" editable="false" GridPane.columnIndex="1">
-                                    <font>
-                                        <Font size="11.0"/>
-                                    </font>
-                                </TextField>
-                                <TextField fx:id="serialNumber" editable="false" GridPane.columnIndex="1"
-                                           GridPane.rowIndex="1">
-                                    <font>
-                                        <Font size="11.0"/>
-                                    </font>
-                                </TextField>
-                                <TextField fx:id="preset" editable="false" GridPane.columnIndex="1"
-                                           GridPane.rowIndex="2">
-                                    <font>
-                                        <Font size="11.0"/>
-                                    </font>
-                                </TextField>
-                                <TextField fx:id="channelCount" editable="false" GridPane.columnIndex="1"
-                                           GridPane.rowIndex="3">
-                                    <font>
-                                        <Font size="11.0"/>
-                                    </font>
-                                </TextField>
-                                <TextField fx:id="hardwareVersion" editable="false" GridPane.columnIndex="1"
-                                           GridPane.rowIndex="4">
-                                    <font>
-                                        <Font size="11.0"/>
-                                    </font>
-                                </TextField>
-                                <TextField fx:id="firmwareHeadsetVersion" editable="false" GridPane.columnIndex="1"
-                                           GridPane.rowIndex="5">
-                                    <font>
-                                        <Font size="11.0"/>
-                                    </font>
-                                </TextField>
-                                <Label text="Serial Number:" GridPane.rowIndex="1">
-                                    <font>
-                                        <Font size="11.0"/>
-                                    </font>
-                                </Label>
-                                <Label text="Preset:" GridPane.rowIndex="2">
-                                    <font>
-                                        <Font size="11.0"/>
-                                    </font>
-                                </Label>
-                                <Label text="Channel Count:" GridPane.rowIndex="3">
-                                    <font>
-                                        <Font size="11.0"/>
-                                    </font>
-                                </Label>
-                                <Label text="Hardware:" GridPane.rowIndex="4">
-                                    <font>
-                                        <Font size="11.0"/>
-                                    </font>
-                                </Label>
-                                <Label text="Firmware:" GridPane.rowIndex="5">
-                                    <font>
-                                        <Font size="11.0"/>
-                                    </font>
-                                </Label>
-                            </children>
-                            <padding>
-                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
-                            </padding>
-                        </GridPane>
-                    </children>
-                </AnchorPane>
-            </items>
-        </SplitPane>
-        <HBox id="HBox" alignment="CENTER_LEFT" spacing="5.0" VBox.vgrow="NEVER">
-            <children>
-                <Label maxHeight="1.7976931348623157E308" maxWidth="-1.0" text="OSC Client" HBox.hgrow="ALWAYS">
-                    <font>
-                        <Font size="11.0" fx:id="x3"/>
-                    </font>
-                </Label>
-                <fx:include source="OscClient.fxml"/>
-                <fx:include source="HeadbandStatus.fxml"/>
-                <fx:include source="Battery.fxml"/>
-            </children>
-            <padding>
-                <Insets bottom="3.0" left="3.0" right="3.0" top="3.0"/>
-            </padding>
-        </HBox>
-    </children>
+<VBox xmlns="http://javafx.com/javafx/9"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="kungzhi.muse.ui.MainController"
+      maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity">
     <stylesheets>
         <URL value="@muse.css"/>
     </stylesheets>
+    <MenuBar VBox.vgrow="NEVER">
+        <Menu mnemonicParsing="false" text="%menu.title.file">
+            <MenuItem mnemonicParsing="false" text="%menu.title.new"/>
+            <MenuItem mnemonicParsing="false" text="%menu.title.open"/>
+            <Menu mnemonicParsing="false" text="%menu.title.open.recent"/>
+            <SeparatorMenuItem mnemonicParsing="false"/>
+            <MenuItem mnemonicParsing="false" text="%menu.title.close"/>
+            <MenuItem mnemonicParsing="false" text="%menu.title.save"/>
+            <MenuItem mnemonicParsing="false" text="%menu.title.save.as"/>
+            <MenuItem mnemonicParsing="false" text="%menu.title.revert"/>
+            <SeparatorMenuItem mnemonicParsing="false"/>
+            <MenuItem mnemonicParsing="false" text="%menu.title.preferences"/>
+            <SeparatorMenuItem mnemonicParsing="false"/>
+            <MenuItem mnemonicParsing="false" text="%menu.title.quit"/>
+        </Menu>
+        <Menu mnemonicParsing="false" text="%menu.title.edit">
+            <MenuItem mnemonicParsing="false" text="%menu.title.undo"/>
+            <MenuItem mnemonicParsing="false" text="%menu.title.redo"/>
+            <SeparatorMenuItem mnemonicParsing="false"/>
+            <MenuItem mnemonicParsing="false" text="%menu.title.cut"/>
+            <MenuItem mnemonicParsing="false" text="%menu.title.copy"/>
+            <MenuItem mnemonicParsing="false" text="%menu.title.paste"/>
+            <MenuItem mnemonicParsing="false" text="%menu.title.delete"/>
+            <SeparatorMenuItem mnemonicParsing="false"/>
+            <MenuItem mnemonicParsing="false" text="%menu.title.select.all"/>
+            <MenuItem mnemonicParsing="false" text="%menu.title.unselect.all"/>
+        </Menu>
+        <Menu mnemonicParsing="false" text="%menu.title.help">
+            <MenuItem mnemonicParsing="false" text="%menu.title.about"/>
+        </Menu>
+    </MenuBar>
+    <SplitPane focusTraversable="true">
+        <ScrollPane minWidth="500">
+            <AnchorPane id="Content">
+                <Label alignment="CENTER" layoutX="14.0" layoutY="14.0" style="&#10;"
+                       text="%label.text.view" textAlignment="CENTER">
+                    <font>
+                        <Font size="18.0" fx:id="x1"/>
+                    </font>
+                    <textFill>
+                        <Color blue="0.624" green="0.624" red="0.624" fx:id="x2"/>
+                    </textFill>
+                </Label>
+                <VBox>
+                    <fx:include source="RelativeBandPowerChart.fxml"/>
+                </VBox>
+            </AnchorPane>
+        </ScrollPane>
+        <AnchorPane minWidth="230">
+            <Label alignment="CENTER" font="$x1" layoutX="14.0" layoutY="14.0" style="&#10;"
+                   text="%label.text.details" textAlignment="CENTER" textFill="$x2"/>
+            <GridPane layoutY="37.0">
+                <columnConstraints>
+                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="110.0" minWidth="10.0" prefWidth="91.0"/>
+                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="144.0" minWidth="10.0" prefWidth="127.0"/>
+                </columnConstraints>
+                <rowConstraints>
+                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                </rowConstraints>
+                <padding>
+                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                </padding>
+                <Label text="MAC Address:" GridPane.halignment="LEFT" GridPane.valignment="CENTER">
+                    <font>
+                        <Font size="11.0"/>
+                    </font>
+                </Label>
+                <TextField fx:id="macAddress" editable="false" GridPane.columnIndex="1">
+                    <font>
+                        <Font size="11.0"/>
+                    </font>
+                </TextField>
+                <TextField fx:id="serialNumber" editable="false" GridPane.columnIndex="1"
+                           GridPane.rowIndex="1">
+                    <font>
+                        <Font size="11.0"/>
+                    </font>
+                </TextField>
+                <TextField fx:id="preset" editable="false" GridPane.columnIndex="1"
+                           GridPane.rowIndex="2">
+                    <font>
+                        <Font size="11.0"/>
+                    </font>
+                </TextField>
+                <TextField fx:id="channelCount" editable="false" GridPane.columnIndex="1"
+                           GridPane.rowIndex="3">
+                    <font>
+                        <Font size="11.0"/>
+                    </font>
+                </TextField>
+                <TextField fx:id="hardwareVersion" editable="false" GridPane.columnIndex="1"
+                           GridPane.rowIndex="4">
+                    <font>
+                        <Font size="11.0"/>
+                    </font>
+                </TextField>
+                <TextField fx:id="firmwareHeadsetVersion" editable="false" GridPane.columnIndex="1"
+                           GridPane.rowIndex="5">
+                    <font>
+                        <Font size="11.0"/>
+                    </font>
+                </TextField>
+                <Label text="Serial Number:" GridPane.rowIndex="1">
+                    <font>
+                        <Font size="11.0"/>
+                    </font>
+                </Label>
+                <Label text="Preset:" GridPane.rowIndex="2">
+                    <font>
+                        <Font size="11.0"/>
+                    </font>
+                </Label>
+                <Label text="Channel Count:" GridPane.rowIndex="3">
+                    <font>
+                        <Font size="11.0"/>
+                    </font>
+                </Label>
+                <Label text="Hardware:" GridPane.rowIndex="4">
+                    <font>
+                        <Font size="11.0"/>
+                    </font>
+                </Label>
+                <Label text="Firmware:" GridPane.rowIndex="5">
+                    <font>
+                        <Font size="11.0"/>
+                    </font>
+                </Label>
+            </GridPane>
+        </AnchorPane>
+    </SplitPane>
+    <HBox id="HBox" alignment="CENTER_LEFT" spacing="5.0" VBox.vgrow="NEVER">
+        <padding>
+            <Insets bottom="3.0" left="3.0" right="3.0" top="3.0"/>
+        </padding>
+        <Label maxHeight="1.7976931348623157E308" text="OSC Client" HBox.hgrow="ALWAYS">
+            <font>
+                <Font size="11.0" fx:id="x3"/>
+            </font>
+        </Label>
+        <fx:include source="OscClient.fxml"/>
+        <fx:include source="HeadbandStatus.fxml"/>
+        <fx:include source="Battery.fxml"/>
+    </HBox>
 </VBox>
