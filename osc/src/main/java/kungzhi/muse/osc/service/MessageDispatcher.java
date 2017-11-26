@@ -19,10 +19,8 @@ import java.net.SocketAddress;
 import java.time.Clock;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.Executor;
 
 import static de.sciss.net.OSCPacket.printTextOn;
@@ -44,7 +42,6 @@ public class MessageDispatcher
     private final Logger log = LoggerFactory.getLogger(getClass());
     private final MessageDispatcherErrorHandler<Throwable> defaultErrorHandler = (dispatcher, message, error) -> {
     };
-    private final Set<String> availablePaths = new HashSet<>();
     private final Map<Class<? extends Throwable>, MessageDispatcherErrorHandler<? extends Throwable>> handlers = new HashMap<>();
     private final Map<String, MessageTransformer> transformers = new HashMap<>();
     private final Map<String, List<ModelStream>> streams = new HashMap<>();
@@ -102,10 +99,6 @@ public class MessageDispatcher
         return this;
     }
 
-    public Set<String> availablePaths() {
-        return availablePaths;
-    }
-
     @Override
     @SuppressWarnings("unchecked")
     public void messageReceived(OSCMessage message, SocketAddress sender, long time) {
@@ -113,8 +106,7 @@ public class MessageDispatcher
         try {
             MessageTransformer transformer = transformer(path);
             List<ModelStream> streams = streams(path, true);
-            availablePaths.add(path);
-            final Model model = transformer.fromMessage(clock.millis(), message);
+            Model model = transformer.fromMessage(clock.millis(), message);
             executor.execute(() -> streams.forEach(stream -> {
                 try {
                     stream.next(headband, model);
