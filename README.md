@@ -10,7 +10,7 @@ modules:
 
 | module | purpose |
 |--------|---------|
-|`model`|muse domain objects| 
+|`model`|muse workbench domain objects| 
 |`osc`|a framework for processing muse OSC messages|
 |`platform`|an experiment in direct headband connection|
 |`ui`|the Spring Boot/JavaFX application for exploring the Muse headband|
