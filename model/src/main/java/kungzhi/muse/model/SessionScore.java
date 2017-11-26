@@ -2,6 +2,8 @@ package kungzhi.muse.model;
 
 import java.util.stream.Stream;
 
+import static java.lang.Float.NaN;
+
 public class SessionScore
         extends AbstractModel {
     private final Band band;
@@ -27,7 +29,8 @@ public class SessionScore
 
     public Double average() {
         return values()
-                .mapToDouble(value -> (value == null) ? 0 : value)
+                .filter(value -> value != null && value != NaN)
+                .mapToDouble(value -> value)
                 .average()
                 .getAsDouble();
     }
