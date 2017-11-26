@@ -10,16 +10,20 @@ import kungzhi.muse.runtime.StreamPostProcessor;
 import kungzhi.muse.runtime.TransformerPostProcessor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.net.SocketAddress;
 import java.time.Clock;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.Executor;
 
 import static de.sciss.net.OSCPacket.printTextOn;
 import static java.lang.String.format;
@@ -42,13 +46,16 @@ public class MessageDispatcher
     };
     private final Set<String> availablePaths = new HashSet<>();
     private final Map<Class<? extends Throwable>, MessageDispatcherErrorHandler<? extends Throwable>> handlers = new HashMap<>();
-    private final Map<String, MessageTransformer<? extends Model>> transformers = new HashMap<>();
-    private final Map<String, ModelStream<? extends Model>> streams = new HashMap<>();
+    private final Map<String, MessageTransformer> transformers = new HashMap<>();
+    private final Map<String, List<ModelStream>> streams = new HashMap<>();
     private final Clock clock;
+    private final Executor executor;
     private final Headband headband;
 
-    public MessageDispatcher(Clock clock, Headband headband) {
+    @Autowired
+    public MessageDispatcher(Clock clock, Executor executor, Headband headband) {
         this.clock = clock;
+        this.executor = executor;
         this.headband = headband;
     }
 
@@ -65,7 +72,7 @@ public class MessageDispatcher
 
     public <M extends Model> MessageDispatcher withStream(
             String path, Class<M> type, ModelStream<M> stream) {
-        streams.put(path, stream);
+        streams(path, false).add(stream);
         return this;
     }
 
@@ -82,8 +89,7 @@ public class MessageDispatcher
     public <M extends Model> MessageDispatcher streaming(
             String path, MessageTransformer<M> transformer, ModelStream<M> stream) {
         transformers.put(path, transformer);
-        streams.put(path, stream);
-        return this;
+        return withStream(path, null, stream);
     }
 
     public <M extends Model> MessageDispatcher streaming(
@@ -106,9 +112,17 @@ public class MessageDispatcher
         String path = message.getName();
         try {
             MessageTransformer transformer = transformer(path);
-            ModelStream stream = stream(path);
+            List<ModelStream> streams = streams(path, true);
             availablePaths.add(path);
-            stream.next(headband, transformer.fromMessage(clock.millis(), message));
+            final Model model = transformer.fromMessage(clock.millis(), message);
+            executor.execute(() -> streams.forEach(stream -> {
+                try {
+                    stream.next(headband, model);
+                } catch (Exception e) {
+                    log.error(format("Failure dispatching message: %s", toString(message)), e);
+                    handler(e).on(this, message, e);
+                }
+            }));
         } catch (MissingTransformerException e) {
             log.debug("No transformer configured for {}", path);
             this.<MissingTransformerException>handler(e).on(this, message, e);
@@ -121,18 +135,21 @@ public class MessageDispatcher
         }
     }
 
-    private MessageTransformer<? extends Model> transformer(String path) {
+    private MessageTransformer transformer(String path) {
         return transformers.getOrDefault(path, (time, message) -> {
             throw new MissingTransformerException(format(
                     "Not configured to transform messages received on %s", path), path);
         });
     }
 
-    private ModelStream<? extends Model> stream(String path) {
-        return streams.getOrDefault(path, (session, model) -> {
+    private List<ModelStream> streams(String path, boolean failIfEmpty) {
+        List<ModelStream> streamsForPath = streams
+                .computeIfAbsent(path, key -> new ArrayList<>());
+        if (failIfEmpty && streamsForPath.isEmpty()) {
             throw new MissingStreamException(format(
                     "Not configured to stream data models received on %s", path), path);
-        });
+        }
+        return streamsForPath;
     }
 
     @SuppressWarnings("unchecked")

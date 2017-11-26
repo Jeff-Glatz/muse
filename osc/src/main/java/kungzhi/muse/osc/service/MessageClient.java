@@ -74,30 +74,30 @@ import java.net.InetSocketAddress;
  * system properties:
  * <p>
  * <table>
- *     <th>
- *         <td>System Property</td>
- *         <td>Default Value</td>
- *     </th>
- *     <tr>
- *         <td>muse.osc.protocol</td>
- *         <td>tcp</td>
- *     </tr>
- *     <tr>
- *         <td>muse.osc.receiver.host</td>
- *         <td>0.0.0.0</td>
- *     </tr>
- *     <tr>
- *         <td>muse.osc.receiver.port</td>
- *         <td>5000</td>
- *     </tr>
- *     <tr>
- *         <td>muse.osc.transmitter.host</td>
- *         <td>localhost</td>
- *     </tr>
- *     <tr>
- *         <td>muse.osc.transmitter.port</td>
- *         <td>5000</td>
- *     </tr>
+ * <th>
+ * <td>System Property</td>
+ * <td>Default Value</td>
+ * </th>
+ * <tr>
+ * <td>muse.osc.protocol</td>
+ * <td>tcp</td>
+ * </tr>
+ * <tr>
+ * <td>muse.osc.receiver.host</td>
+ * <td>0.0.0.0</td>
+ * </tr>
+ * <tr>
+ * <td>muse.osc.receiver.port</td>
+ * <td>5000</td>
+ * </tr>
+ * <tr>
+ * <td>muse.osc.transmitter.host</td>
+ * <td>localhost</td>
+ * </tr>
+ * <tr>
+ * <td>muse.osc.transmitter.port</td>
+ * <td>5000</td>
+ * </tr>
  * </table>
  */
 @Component
@@ -205,6 +205,7 @@ public class MessageClient {
             throws IOException {
         if (transmitter == null) {
             log.warn("cannot send packet, client is off");
+            return;
         }
         transmitter.send(packet);
     }

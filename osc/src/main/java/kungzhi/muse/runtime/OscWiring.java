@@ -20,6 +20,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 import java.time.Clock;
+import java.util.concurrent.ScheduledExecutorService;
 
 import static java.lang.Integer.parseInt;
 import static kungzhi.muse.osc.service.MessagePath.ACCELEROMETER_DROPPED_SAMPLES;
@@ -64,8 +65,9 @@ public class OscWiring {
     private final Logger log = LoggerFactory.getLogger(OscWiring.class);
 
     @Bean
-    public MessageDispatcher messageDispatcher(Clock clock, Headband headband, Bands bands) {
-        return new MessageDispatcher(clock, headband)
+    public MessageDispatcher messageDispatcher(Clock clock, ScheduledExecutorService executor,
+                                               Headband headband, Bands bands) {
+        return new MessageDispatcher(clock, executor, headband)
                 .withStream(BATTERY, headband.batteryStream())
                 .withStream(CONFIGURATION, headband.configurationStream())
                 .withStream(DRL_REFERENCE, headband.drlReferenceStream())
