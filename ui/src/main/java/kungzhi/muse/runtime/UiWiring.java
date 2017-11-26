@@ -9,6 +9,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Scope;
 
+import java.util.ResourceBundle;
+
+import static java.util.ResourceBundle.getBundle;
+
 @ComponentScan({"kungzhi.muse.ui"})
 @Import(OscWiring.class)
 @Configuration
@@ -16,9 +20,15 @@ import org.springframework.context.annotation.Scope;
 public class UiWiring {
 
     @Bean
+    public ResourceBundle labels() {
+        return getBundle("kungzhi.muse.ui.Labels");
+    }
+
+    @Bean
     @Scope("prototype")
-    public FXMLLoader fxmlLoader(ApplicationContext context) {
+    public FXMLLoader loader(ApplicationContext context, ResourceBundle labels) {
         FXMLLoader loader = new FXMLLoader();
+        loader.setResources(labels);
         loader.setControllerFactory(context::getBean);
         return loader;
     }

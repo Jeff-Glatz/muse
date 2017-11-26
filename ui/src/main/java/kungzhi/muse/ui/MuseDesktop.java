@@ -7,8 +7,6 @@ import javafx.stage.Stage;
 import kungzhi.muse.runtime.SpringContext;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import static java.util.ResourceBundle.getBundle;
-
 public class MuseDesktop
         extends Application {
     private final SpringContext context = new SpringContext(this);
@@ -26,8 +24,7 @@ public class MuseDesktop
     @Override
     public void start(Stage stage)
             throws Exception {
-        loader.setResources(getBundle("kungzhi.muse.ui.muse"));
-        loader.setLocation(getClass().getResource("main.fxml"));
+        loader.setLocation(getClass().getResource("MuseDesktop.fxml"));
 
         stage.setTitle("Muse Desktop");
         stage.setOnCloseRequest(event -> {

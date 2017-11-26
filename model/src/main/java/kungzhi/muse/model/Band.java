@@ -1,9 +1,13 @@
 package kungzhi.muse.model;
 
+import kungzhi.muse.lang.Localizable;
+
 import java.io.Serializable;
 
+import static java.lang.String.format;
+
 public class Band
-        implements Serializable {
+        implements Serializable, Localizable {
     private String identifier;
     private FrequencyRange range;
 
@@ -30,6 +34,11 @@ public class Band
 
     public void setRange(FrequencyRange range) {
         this.range = range;
+    }
+
+    @Override
+    public String resourceKey() {
+        return format("band.%s.name", identifier);
     }
 
     @Override

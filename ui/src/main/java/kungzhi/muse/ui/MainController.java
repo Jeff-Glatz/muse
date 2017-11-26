@@ -33,12 +33,10 @@ import org.springframework.stereotype.Controller;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
-import java.net.URL;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Queue;
-import java.util.ResourceBundle;
 import java.util.SortedSet;
 
 import static java.lang.String.format;
@@ -74,7 +72,6 @@ public class MainController
     private final MessageDispatcher dispatcher;
     private final Timeline timeline;
 
-    private ResourceBundle resources;
     private long start;
 
     @FXML
@@ -169,9 +166,7 @@ public class MainController
     }
 
     @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        log.info("Initializing controller from {}", location);
-        this.resources = resources;
+    protected void initialize() {
         batteryProgressBar.setTooltip(new Tooltip("Battery"));
         batteryProgressBar.progressProperty()
                 .addListener((observable, oldValue, newValue) -> {
