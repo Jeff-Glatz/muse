@@ -23,11 +23,10 @@ public class MuseDesktop
     @Override
     public void start(Stage stage)
             throws Exception {
-        loader.setLocation(getClass().getResource("/kungzhi/muse/ui/MuseDesktop.fxml"));
+        loader.setLocation(getClass()
+                .getResource("/kungzhi/muse/ui/MuseDesktop.fxml"));
         stage.setTitle("Muse Desktop");
-        stage.setOnCloseRequest(event -> {
-            context.close();
-        });
+        stage.setOnCloseRequest(event -> context.close());
         stage.setScene(new Scene(loader.load()));
         stage.show();
     }
