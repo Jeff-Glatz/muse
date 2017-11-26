@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.ToggleButton?>
+<ToggleButton xmlns:fx="http://javafx.com/fxml"
+              fx:controller="kungzhi.muse.ui.OscClientController"
+              fx:id="clientToggleButton"
+              mnemonicParsing="false"
+              onAction="#toggleClient"
+              text="off"/>

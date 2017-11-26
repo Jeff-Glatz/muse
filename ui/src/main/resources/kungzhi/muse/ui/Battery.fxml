@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.ProgressBar?>
+<ProgressBar xmlns:fx="http://javafx.com/fxml"
+             fx:controller="kungzhi.muse.ui.BatteryController"
+             fx:id="batteryProgressBar"
+             progress="0.0"
+             styleClass="battery-indicator"/>

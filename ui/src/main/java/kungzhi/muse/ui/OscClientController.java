@@ -9,7 +9,7 @@ import org.springframework.stereotype.Controller;
 import java.io.IOException;
 
 @Controller
-public class MessageClientController
+public class OscClientController
         extends AbstractController {
     private final MessageClient client;
 
@@ -17,7 +17,7 @@ public class MessageClientController
     private ToggleButton clientToggleButton;
 
     @Autowired
-    public MessageClientController(MessageClient client) {
+    public OscClientController(MessageClient client) {
         this.client = client;
     }
 
