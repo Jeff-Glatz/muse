@@ -29,10 +29,23 @@ public class ConfigurationController
     private TextField channelCount;
 
     @FXML
+    private TextField buildNumber;
+
+    @FXML
+    private TextField firmwareType;
+
+    @FXML
     private TextField hardwareVersion;
 
     @FXML
     private TextField firmwareHeadsetVersion;
+
+    @FXML
+    private TextField firmwareBootloaderVersion;
+
+    @FXML
+    private TextField protocolVersion;
+
 
     @Autowired
     public ConfigurationController(Headband headband) {
@@ -55,7 +68,11 @@ public class ConfigurationController
         channelCount.setText(format("%d", configuration.getEegChannelCount()));
 
         Version version = headband.getVersion();
+        buildNumber.setText(version.getBuildNumber());
+        firmwareType.setText(version.getFirmwareType());
         hardwareVersion.setText(version.getHardwareVersion());
         firmwareHeadsetVersion.setText(version.getFirmwareHeadsetVersion());
+        firmwareBootloaderVersion.setText(version.getFirmwareBootloaderVersion());
+        protocolVersion.setText(version.getProtocolVersion());
     }
 }
