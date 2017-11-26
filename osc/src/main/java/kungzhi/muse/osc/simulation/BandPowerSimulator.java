@@ -30,7 +30,7 @@ public class BandPowerSimulator {
     private final MessageClient client;
     private final Headband headband;
 
-    private boolean relative;
+    private boolean relative = true;
     private boolean producing;
     private long latencyFactor = 300;
 
