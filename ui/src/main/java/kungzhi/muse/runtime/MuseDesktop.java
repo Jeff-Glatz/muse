@@ -1,10 +1,9 @@
-package kungzhi.muse.ui;
+package kungzhi.muse.runtime;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import kungzhi.muse.runtime.SpringContext;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class MuseDesktop
@@ -25,12 +24,10 @@ public class MuseDesktop
     public void start(Stage stage)
             throws Exception {
         loader.setLocation(getClass().getResource("MuseDesktop.fxml"));
-
         stage.setTitle("Muse Desktop");
         stage.setOnCloseRequest(event -> {
             context.close();
         });
-
         stage.setScene(new Scene(loader.load()));
         stage.show();
     }
