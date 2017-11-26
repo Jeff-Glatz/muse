@@ -6,7 +6,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class MuseDesktop
+public class MuseWorkbench
         extends Application {
     private final SpringContext context = new SpringContext(this);
 
@@ -24,8 +24,8 @@ public class MuseDesktop
     public void start(Stage stage)
             throws Exception {
         loader.setLocation(getClass()
-                .getResource("/kungzhi/muse/ui/MuseDesktop.fxml"));
-        stage.setTitle("Muse Desktop");
+                .getResource("/kungzhi/muse/ui/MuseWorkbench.fxml"));
+        stage.setTitle("Muse Workbench");
         stage.setOnCloseRequest(event -> context.close());
         stage.setScene(new Scene(loader.load()));
         stage.show();

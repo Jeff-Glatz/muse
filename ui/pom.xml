@@ -24,7 +24,7 @@
                     <artifactId>spring-boot-maven-plugin</artifactId>
                     <configuration>
                         <useTestClasspath>true</useTestClasspath>
-                        <mainClass>kungzhi.muse.runtime.MuseDesktop</mainClass>
+                        <mainClass>kungzhi.muse.runtime.MuseWorkbench</mainClass>
                         <profiles>
                             <profile>simulation</profile>
                         </profiles>
