@@ -24,7 +24,7 @@ public class Fft
     }
 
     public Double average() {
-        return averageOf(values());
+        return averageOf(values(), 0);
     }
 
     @Override

@@ -6,10 +6,10 @@ import static java.lang.Float.isNaN;
 
 public class Functions {
 
-    public static Double averageOf(Stream<Float> values) {
+    public static Double averageOf(Stream<Float> values, double orElse) {
         return values.filter(value -> value != null && !isNaN(value))
                 .mapToDouble(value -> value)
                 .average()
-                .getAsDouble();
+                .orElse(orElse);
     }
 }

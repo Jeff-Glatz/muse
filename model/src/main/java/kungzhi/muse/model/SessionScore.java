@@ -28,7 +28,7 @@ public class SessionScore
     }
 
     public Double average() {
-        return averageOf(values());
+        return averageOf(values(), 0);
     }
 
     @Override

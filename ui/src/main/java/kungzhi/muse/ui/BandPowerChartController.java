@@ -78,6 +78,7 @@ public abstract class BandPowerChartController
         MessagePath path = valueOf(format("%s_%s",
                 band.getIdentifier().toUpperCase(),
                 relative ? "RELATIVE" : "ABSOLUTE"));
+        log.info("Streaming data on {} for {}", path, band.getIdentifier());
         Series<Number, Number> series = new Series<>();
         series.setName(localize(band.resourceKey()));
         dispatcher.withStream(path, BandPower.class,

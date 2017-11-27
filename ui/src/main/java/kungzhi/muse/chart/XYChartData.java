@@ -22,6 +22,6 @@ public class XYChartData<X, Y> {
         if (list.size() > window) {
             list.remove(0);
         }
-        log.info("added {} to {}", data.getYValue(), series.getName());
+        log.info("added {}:{} to {}", data.getXValue(), data.getYValue(), series.getName());
     }
 }

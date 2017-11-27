@@ -34,7 +34,7 @@ public class BandPower
     }
 
     public Double average() {
-        return averageOf(values());
+        return averageOf(values(), 0);
     }
 
     @Override
