@@ -2,7 +2,7 @@ package kungzhi.muse.model;
 
 import java.util.stream.Stream;
 
-import static java.lang.Float.NaN;
+import static kungzhi.muse.lang.Functions.averageOf;
 
 public class SessionScore
         extends AbstractModel {
@@ -28,11 +28,7 @@ public class SessionScore
     }
 
     public Double average() {
-        return values()
-                .filter(value -> value != null && value != NaN)
-                .mapToDouble(value -> value)
-                .average()
-                .getAsDouble();
+        return averageOf(values());
     }
 
     @Override

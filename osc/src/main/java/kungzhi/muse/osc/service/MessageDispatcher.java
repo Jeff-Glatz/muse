@@ -38,7 +38,6 @@ import static java.lang.String.format;
 @Component
 public class MessageDispatcher
         implements OSCListener {
-
     private final Logger log = LoggerFactory.getLogger(getClass());
     private final MessageDispatcherErrorHandler<Throwable> defaultErrorHandler = (dispatcher, message, error) -> {
     };
