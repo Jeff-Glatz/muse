@@ -6,6 +6,8 @@ import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.chart.XYChart.Series;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.Clock;
 import java.util.LinkedList;
@@ -15,6 +17,7 @@ import static javafx.animation.Animation.INDEFINITE;
 import static javafx.util.Duration.millis;
 
 public class XYChartAnimator<Y> {
+    private final Logger log = LoggerFactory.getLogger(getClass());
     private final Queue<XYChartData<Number, Y>> queue = new LinkedList<>();
     private final Clock clock;
     private final Timeline timeline;
