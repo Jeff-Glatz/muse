@@ -54,7 +54,8 @@
         <ScrollPane minWidth="500">
             <AnchorPane id="Content">
                 <VBox>
-                    <fx:include source="RelativeBandPowerChart.fxml"/>
+                    <fx:include source="RelativeBandPowerChart.fxml" prefHeight="250"/>
+                    <fx:include source="AbsoluteBandPowerChart.fxml" prefHeight="250"/>
                 </VBox>
             </AnchorPane>
         </ScrollPane>
