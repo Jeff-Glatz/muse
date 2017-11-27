@@ -22,10 +22,10 @@ public class XYChartAnimator<Y> {
     private final Clock clock;
     private final Timeline timeline;
 
+    private long startedAt;
     private LineChart<Number, Y> chart;
     private int secondsOfHistory = 30;
     private int maxDataWindow = 1000;
-    private long startedAt = 0;
 
     public XYChartAnimator(Clock clock) {
         this.clock = clock;
@@ -34,6 +34,7 @@ public class XYChartAnimator<Y> {
                 .add(new KeyFrame(millis(1000 / 60), (event) ->
                         addQueuedDataToChart()));
         this.timeline.setCycleCount(INDEFINITE);
+        this.startedAt = clock.millis();
     }
 
     public LineChart<Number, Y> getChart() {
