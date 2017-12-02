@@ -5,7 +5,7 @@
            xmlns:fx="http://javafx.com/fxml/1"
            fx:id="bandPowerChart"
            fx:controller="kungzhi.muse.ui.RelativeBandPowerChartController"
-           title="%chart.band-power.relative"
+           title="%chart.band-power.relative.title"
            animated="true"
            verticalGridLinesVisible="false"
            createSymbols="false">
@@ -17,7 +17,7 @@
                     upperBound="30"
                     forceZeroInRange="false"
                     tickUnit="5"
-                    label="%chart.band-power.axis.elapsed"
+                    label="%chart.axis.elapsed"
                     tickLabelsVisible="false"/>
     </xAxis>
     <yAxis>
@@ -27,6 +27,6 @@
                     lowerBound="0.0"
                     upperBound="1.0"
                     tickUnit="0.2"
-                    label="%chart.band-power.axis.power"/>
+                    label="%chart.axis.power"/>
     </yAxis>
 </LineChart>

@@ -32,8 +32,7 @@ public class BatteryController
     }
 
     @Override
-    protected void onInitialize()
-            throws Exception {
+    protected void onInitialize() {
         final String key = "tooltip.text.battery";
         batteryProgressBar.setTooltip(new Tooltip(localize(key)));
         batteryProgressBar.progressProperty()

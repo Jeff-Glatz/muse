@@ -1,20 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.SeparatorMenuItem?>
 <?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import org.controlsfx.control.StatusBar?>
 <?import java.net.URL?>
 <VBox xmlns="http://javafx.com/javafx/9"
-      xmlns:fx="http://javafx.com/fxml/1"
-      maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity">
+      xmlns:fx="http://javafx.com/fxml/1">
     <stylesheets>
         <URL value="@muse.css"/>
     </stylesheets>
@@ -49,16 +48,22 @@
             <MenuItem mnemonicParsing="false" text="%menu.title.about"/>
         </Menu>
     </MenuBar>
-    <SplitPane focusTraversable="true">
-        <ScrollPane minWidth="500">
-            <AnchorPane id="Content">
-                <VBox>
-                    <fx:include source="RelativeBandPowerChart.fxml" prefHeight="250"/>
-                    <fx:include source="AbsoluteBandPowerChart.fxml" prefHeight="250"/>
-                </VBox>
-            </AnchorPane>
-        </ScrollPane>
-        <AnchorPane SplitPane.resizableWithParent="false">
+    <SplitPane focusTraversable="true" prefHeight="250" minWidth="800">
+        <TabPane SplitPane.resizableWithParent="true" minWidth="572">
+            <Tab text="%chart.band-power.relative.title" closable="false">
+                <fx:include source="RelativeBandPowerChart.fxml"/>
+            </Tab>
+            <Tab text="%chart.band-power.absolute.title" closable="false">
+                <fx:include source="AbsoluteBandPowerChart.fxml"/>
+            </Tab>
+            <Tab text="%chart.concentration.title" closable="false">
+                <fx:include source="ConcentrationChart.fxml"/>
+            </Tab>
+            <Tab text="%chart.mellow.title" closable="false">
+                <fx:include source="MellowChart.fxml"/>
+            </Tab>
+        </TabPane>
+        <AnchorPane SplitPane.resizableWithParent="false" minWidth="228">
             <VBox>
                 <TitledPane animated="false" text="%label.text.headband.connection">
                     <fx:include source="HeadbandConnection.fxml"/>
@@ -72,11 +77,12 @@
             </VBox>
         </AnchorPane>
     </SplitPane>
-    <HBox id="HBox" alignment="CENTER_LEFT" spacing="5.0" VBox.vgrow="NEVER">
-        <padding>
-            <Insets bottom="3.0" left="3.0" right="3.0" top="3.0"/>
-        </padding>
-        <fx:include source="SensorStatus.fxml"/>
-        <fx:include source="Battery.fxml"/>
-    </HBox>
+    <StatusBar VBox.vgrow="NEVER" text="">
+        <leftItems>
+            <fx:include source="SensorStatus.fxml"/>
+        </leftItems>
+        <rightItems>
+            <fx:include source="Battery.fxml"/>
+        </rightItems>
+    </StatusBar>
 </VBox>

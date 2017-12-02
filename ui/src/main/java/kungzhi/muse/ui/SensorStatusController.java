@@ -39,8 +39,7 @@ public class SensorStatusController
     }
 
     @Override
-    protected void onInitialize()
-            throws Exception {
+    protected void onInitialize() {
         Configuration configuration = headband.getConfiguration();
         configuration.addActiveItemListener((current, previous) -> {
             if (previous.initial()) {
