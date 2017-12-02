@@ -5,12 +5,14 @@ import kungzhi.muse.model.Fft;
 import kungzhi.muse.model.Headband;
 import kungzhi.muse.osc.service.MessageDispatcher;
 import kungzhi.muse.osc.service.MissingTransformerException;
+import kungzhi.muse.osc.service.MuseIO;
 import kungzhi.muse.osc.transform.BandPowerTransformer;
 import kungzhi.muse.osc.transform.EmptyMessageTransformer;
 import kungzhi.muse.osc.transform.FftTransformer;
 import kungzhi.muse.osc.transform.SessionScoreTransformer;
 import kungzhi.muse.osc.transform.SingleValueTransformer;
 import kungzhi.muse.repository.Bands;
+import kungzhi.muse.runtime.OscProperties.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -23,6 +25,7 @@ import java.time.Clock;
 import java.util.concurrent.ScheduledExecutorService;
 
 import static java.lang.Integer.parseInt;
+import static java.net.InetAddress.getLocalHost;
 import static kungzhi.muse.osc.service.MessagePath.ACCELEROMETER_DROPPED_SAMPLES;
 import static kungzhi.muse.osc.service.MessagePath.ALPHA_ABSOLUTE;
 import static kungzhi.muse.osc.service.MessagePath.ALPHA_RELATIVE;
@@ -63,6 +66,21 @@ import static kungzhi.muse.osc.service.MessagePath.VERSION;
 @EnableConfigurationProperties(OscProperties.class)
 public class OscWiring {
     private final Logger log = LoggerFactory.getLogger(OscWiring.class);
+    private final OscProperties properties;
+
+    public OscWiring(OscProperties properties) {
+        this.properties = properties;
+    }
+
+    @Bean
+    public MuseIO museIO()
+            throws Exception {
+        Service receiver = properties.getReceiver();
+        return new MuseIO()
+                .withProtocol(properties.protocol("tcp"))
+                .withHost(receiver.host(getLocalHost()))
+                .withPort(receiver.port(5000));
+    }
 
     @Bean
     public MessageDispatcher messageDispatcher(Clock clock, ScheduledExecutorService executor,

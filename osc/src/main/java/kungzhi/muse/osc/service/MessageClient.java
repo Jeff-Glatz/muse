@@ -101,7 +101,8 @@ import java.net.InetSocketAddress;
  * </table>
  */
 @Component
-public class MessageClient {
+public class MessageClient
+        implements OscService {
     private final Logger log = LoggerFactory.getLogger(getClass());
     private final MessageDispatcher dispatcher;
 
@@ -211,8 +212,7 @@ public class MessageClient {
     }
 
     @PreDestroy
-    public void off()
-            throws IOException {
+    public void off() {
         turnOffTransmitter();
         turnOffReceiver();
     }

@@ -51,6 +51,12 @@
     -fx-mark-color: red;
 }
 
-/*.radio-button .dot {*/
-    /*-fx-mark-color: red;*/
-/*}*/
+.toggle-on {
+    -fx-background-color:
+            linear-gradient(#b8ee36, #80c800);
+    -fx-text-fill: black;
+}
+.toggle-off {
+    -fx-background-color: linear-gradient(#ff5400, #be1d00);
+    -fx-text-fill: white;
+}

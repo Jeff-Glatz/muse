@@ -9,8 +9,8 @@ import java.net.InetAddress;
 public class OscProperties
         implements Serializable {
     private String protocol = "tcp";
-    private Service receiver;
-    private Service transmitter;
+    private Service receiver = new Service();
+    private Service transmitter = new Service();
 
     public String getProtocol() {
         return protocol;
@@ -18,6 +18,10 @@ public class OscProperties
 
     public void setProtocol(String protocol) {
         this.protocol = protocol;
+    }
+
+    public String protocol(String defaultProtocol) {
+        return protocol != null ? protocol : defaultProtocol;
     }
 
     public Service getReceiver() {
@@ -69,12 +73,20 @@ public class OscProperties
             this.host = host;
         }
 
+        public InetAddress host(InetAddress defaultHost) {
+            return host != null ? host : defaultHost;
+        }
+
         public Integer getPort() {
             return port;
         }
 
         public void setPort(Integer port) {
             this.port = port;
+        }
+
+        public Integer port(Integer defaultPort) {
+            return port != null ? port : defaultPort;
         }
 
         @Override

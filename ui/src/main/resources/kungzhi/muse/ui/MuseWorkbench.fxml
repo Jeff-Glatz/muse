@@ -65,7 +65,7 @@
                 <Accordion>
                     <panes>
                         <TitledPane animated="false" text="%label.text.dataCollection">
-                            <fx:include source="OscClient.fxml"/>
+                            <fx:include source="DataCollection.fxml"/>
                         </TitledPane>
                     </panes>
                 </Accordion>
