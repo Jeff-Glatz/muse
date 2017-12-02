@@ -3,11 +3,17 @@ package kungzhi.muse.ui;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.ToggleButton;
+import javafx.scene.control.Tooltip;
+import kungzhi.muse.lang.ServiceControl;
 import kungzhi.muse.osc.service.MessageClient;
 import kungzhi.muse.osc.service.MuseIO;
-import kungzhi.muse.osc.service.OscService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+
+import javax.annotation.PostConstruct;
+
+import static java.lang.String.format;
+import static javafx.application.Platform.runLater;
 
 @Controller
 public class DataCollectionController
@@ -31,6 +37,17 @@ public class DataCollectionController
         this.client = client;
     }
 
+    @PostConstruct
+    public void initialize() {
+        museIO.addHeadbandPairingListener(paired -> {
+            runLater(() -> {
+                museIOToggleButton.setDisable(!paired);
+                museIOToggleButton.setTooltip(new Tooltip(
+                        localize(format("model.headband.%s", paired ? "paired" : "not-paired"))));
+            });
+        });
+    }
+
     @FXML
     public void toggleMuseIO()
             throws Exception {
@@ -43,17 +60,17 @@ public class DataCollectionController
         toggle(clientToggleButton, client);
     }
 
-    private void toggle(ToggleButton button, OscService service)
+    private void toggle(ToggleButton button, ServiceControl control)
             throws Exception {
         ObservableList<String> styles = button.getStyleClass();
         styles.removeAll(TOGGLE_CLASSES);
         if (button.isSelected()) {
-            service.on();
-            button.setText(resources.getString("label.text.on"));
+            control.on();
+            button.setText(localize("label.text.on"));
             styles.add(TOGGLE_ON);
         } else {
-            service.off();
-            button.setText(resources.getString("label.text.off"));
+            control.off();
+            button.setText(localize("label.text.off"));
             styles.add(TOGGLE_OFF);
         }
     }

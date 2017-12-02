@@ -1,6 +1,6 @@
-package kungzhi.muse.osc.service;
+package kungzhi.muse.lang;
 
-public interface OscService {
+public interface ServiceControl {
     void on()
             throws Exception;
     void off()

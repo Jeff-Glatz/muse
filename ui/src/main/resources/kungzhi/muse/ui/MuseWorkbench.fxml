@@ -64,7 +64,7 @@
                 <fx:include source="Configuration.fxml"/>
                 <Accordion>
                     <panes>
-                        <TitledPane animated="false" text="%label.text.dataCollection">
+                        <TitledPane animated="false" text="%label.text.data-collection">
                             <fx:include source="DataCollection.fxml"/>
                         </TitledPane>
                     </panes>

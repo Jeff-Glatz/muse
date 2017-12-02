@@ -77,7 +77,7 @@ public class HeadbandStatusController
         SortedSet<EegChannel> channels = configuration.getEegChannelLayout();
         channels.forEach(channel -> {
             RadioButton indicator = new RadioButton(channel.getName());
-            indicator.setTooltip(new Tooltip(localize("sensor.status", channel.getName())));
+            indicator.setTooltip(new Tooltip(localize("model.sensor.status", channel.getName())));
             indicator.setPadding(new Insets(0, 5, 0, 5));
             ObservableList<String> styles = indicator.getStyleClass();
             styles.add("sensor-indicator");

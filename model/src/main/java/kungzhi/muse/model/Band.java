@@ -38,7 +38,7 @@ public class Band
 
     @Override
     public String resourceKey() {
-        return format("band.%s.name", identifier);
+        return format("model.band.%s", identifier);
     }
 
     @Override

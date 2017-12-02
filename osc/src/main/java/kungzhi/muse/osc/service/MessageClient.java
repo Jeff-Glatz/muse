@@ -3,6 +3,7 @@ package kungzhi.muse.osc.service;
 import de.sciss.net.OSCPacket;
 import de.sciss.net.OSCServer;
 import de.sciss.net.OSCTransmitter;
+import kungzhi.muse.lang.ServiceControl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -102,7 +103,7 @@ import java.net.InetSocketAddress;
  */
 @Component
 public class MessageClient
-        implements OscService {
+        implements ServiceControl {
     private final Logger log = LoggerFactory.getLogger(getClass());
     private final MessageDispatcher dispatcher;
 

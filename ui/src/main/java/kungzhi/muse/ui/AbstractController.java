@@ -1,6 +1,7 @@
 package kungzhi.muse.ui;
 
 import javafx.fxml.Initializable;
+import kungzhi.muse.lang.Localizable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,8 +13,8 @@ import static java.lang.String.format;
 public abstract class AbstractController
         implements Initializable {
     protected final Logger log = LoggerFactory.getLogger(getClass());
-    protected URL location;
-    protected ResourceBundle resources;
+    private URL location;
+    private ResourceBundle resources;
 
     @Override
     public final void initialize(URL location, ResourceBundle resources) {
@@ -36,6 +37,10 @@ public abstract class AbstractController
 
     protected String localize(String key, Object... args) {
         return format(resources.getString(key), args);
+    }
+
+    protected String localize(Localizable localizable, Object... args) {
+        return localize(localizable.resourceKey(), args);
     }
 
     protected void beforeInitialize()

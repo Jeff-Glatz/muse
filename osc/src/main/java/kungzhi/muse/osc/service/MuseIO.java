@@ -1,26 +1,41 @@
 package kungzhi.muse.osc.service;
 
+import kungzhi.muse.lang.ServiceControl;
 import kungzhi.muse.model.Preset;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.annotation.PreDestroy;
 import java.net.InetAddress;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 
 import static java.lang.String.format;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
 public class MuseIO
-        implements OscService {
+        implements ServiceControl {
     private final Logger log = LoggerFactory.getLogger(getClass());
+    private final Logger muse = LoggerFactory.getLogger("MuseIO");
+    private final List<HeadbandPairingListener> listeners = new ArrayList<>();
 
+    private Thread monitoringThread;
     private Preset preset = Preset.FOURTEEN;
     private String protocol;
     private InetAddress host;
     private Integer port;
     private long secondsToWaitForShutdown = 30;
     private Process process;
+
+    public void addHeadbandPairingListener(HeadbandPairingListener listener) {
+        listeners.add(listener);
+    }
+
+    public void removeHeadbandPairingListener(HeadbandPairingListener listener) {
+        listeners.remove(listener);
+    }
 
     public Preset getPreset() {
         return preset;
@@ -90,9 +105,10 @@ public class MuseIO
     public void on()
             throws Exception {
         log.info("Starting MuseIO ...");
-        ProcessBuilder builder = processBuilder(System.getProperty("os.name"));
-        builder.inheritIO();
-        process = builder.start();
+        process = processBuilder(System.getProperty("os.name"))
+                .redirectErrorStream(true)
+                .start();
+        startMonitoringOutput();
         log.info("MuseIO started.");
     }
 
@@ -101,13 +117,17 @@ public class MuseIO
         if (process != null) {
             log.info("Stopping MuseIO...");
             try {
-                process.destroyForcibly()
-                        .waitFor(secondsToWaitForShutdown, SECONDS);
-                log.info("MuseIO stopped.");
-            } catch (Exception e) {
-                log.error("Failure stopping MuseIO", e);
+                stopMonitoringOutput();
             } finally {
-                process = null;
+                try {
+                    process.destroyForcibly()
+                            .waitFor(secondsToWaitForShutdown, SECONDS);
+                    log.info("MuseIO stopped.");
+                } catch (Exception e) {
+                    log.error("Failure stopping MuseIO", e);
+                } finally {
+                    process = null;
+                }
             }
         }
     }
@@ -116,7 +136,7 @@ public class MuseIO
         if (platform.startsWith("Mac")) {
             ProcessBuilder builder = new ProcessBuilder(
                     "/Applications/Muse/muse-io",
-                    "--preset", preset.getId(),
+                    "--preset", preset.getId().toLowerCase(),
                     "--osc-timestamp",
                     "--osc", format("osc.%s://%s:%d", protocol, host.getHostAddress(), port));
             Map<String, String> environment = builder.environment();
@@ -126,11 +146,55 @@ public class MuseIO
         } else if (platform.startsWith("Windows")) {
             return new ProcessBuilder(
                     "C:\\Program Files (x86)\\Muse\\muse-io",
-                    "--preset", preset.getId(),
+                    "--preset", preset.getId().toLowerCase(),
                     "--osc-timestamp",
                     "--osc", format("osc.%s://%s:%d", protocol, host.getHostAddress(), port));
         }
         throw new UnsupportedPlatformException(
                 format("MuseIO on %s is currently not supported by Interaxon", platform));
+    }
+
+    private void firePaired(boolean paired) {
+        listeners.forEach(listener -> {
+            try {
+                listener.onHeadbandPaired(paired);
+            } catch (Exception e) {
+                log.error("Failure notifying listener", e);
+            }
+        });
+    }
+
+    private void startMonitoringOutput() {
+        log.info("Starting MuseIO output monitoring thread...");
+        monitoringThread = new Thread(() -> {
+            Scanner sc = new Scanner(process.getInputStream());
+            firePaired(false);
+            while (sc.hasNextLine()) {
+                String line = sc.nextLine();
+                muse.info(line);
+                if (line.contains("receiving at:")) {
+                    firePaired(true);
+                } else if (line.contains("Connection failure")) {
+                    firePaired(false);
+                } else if (line.contains("OSC error 61")) {
+                    // TODO: No client endpoint connected
+                }
+            }
+        });
+        monitoringThread.setDaemon(true);
+        monitoringThread.start();
+        log.info("MuseIO output monitoring thread started.");
+    }
+
+    private void stopMonitoringOutput() {
+        try {
+            if (monitoringThread != null) {
+                log.info("Stopping MuseIO output monitoring thread...");
+                monitoringThread.interrupt();
+                log.info("MuseIO output monitoring thread stopped.");
+            }
+        } finally {
+            monitoringThread = null;
+        }
     }
 }

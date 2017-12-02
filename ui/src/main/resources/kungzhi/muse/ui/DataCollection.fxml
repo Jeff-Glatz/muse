@@ -21,28 +21,28 @@
     </padding>
     <Label GridPane.columnIndex="0" GridPane.rowIndex="0"
            GridPane.halignment="LEFT" GridPane.valignment="CENTER"
-           text="%label.text.museIO">
-        <font>
-            <Font size="11.0"/>
-        </font>
-    </Label>
-    <ToggleButton fx:id="museIOToggleButton"
-                  GridPane.columnIndex="1" GridPane.rowIndex="0"
-                  mnemonicParsing="false"
-                  onAction="#toggleMuseIO"
-                  styleClass="toggle-off"
-                  text="%label.text.off"/>
-    <Label GridPane.columnIndex="0" GridPane.rowIndex="1"
-           GridPane.halignment="LEFT" GridPane.valignment="CENTER"
-           text="%label.text.oscClient">
+           text="%label.text.osc-client">
         <font>
             <Font size="11.0"/>
         </font>
     </Label>
     <ToggleButton fx:id="clientToggleButton"
-                  GridPane.columnIndex="1" GridPane.rowIndex="1"
+                  GridPane.columnIndex="1" GridPane.rowIndex="0"
                   mnemonicParsing="false"
                   onAction="#toggleClient"
+                  styleClass="toggle-off"
+                  text="%label.text.off"/>
+    <Label GridPane.columnIndex="0" GridPane.rowIndex="1"
+           GridPane.halignment="LEFT" GridPane.valignment="CENTER"
+           text="%label.text.muse-io">
+        <font>
+            <Font size="11.0"/>
+        </font>
+    </Label>
+    <ToggleButton fx:id="museIOToggleButton"
+                  GridPane.columnIndex="1" GridPane.rowIndex="1"
+                  mnemonicParsing="false"
+                  onAction="#toggleMuseIO"
                   styleClass="toggle-off"
                   text="%label.text.off"/>
 </GridPane>

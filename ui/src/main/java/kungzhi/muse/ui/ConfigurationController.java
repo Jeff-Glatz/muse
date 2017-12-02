@@ -53,8 +53,7 @@ public class ConfigurationController
     }
 
     @Override
-    protected void onInitialize()
-            throws Exception {
+    protected void onInitialize() {
         Configuration configuration = headband.getConfiguration();
         configuration.addActiveItemListener((current, previous) ->
                 runLater(this::updateDetailsView));
@@ -64,7 +63,7 @@ public class ConfigurationController
         Configuration configuration = headband.getConfiguration();
         macAddress.setText(configuration.getMacAddress());
         serialNumber.setText(configuration.getSerialNumber());
-        preset.setText(configuration.getPreset().getId());
+        preset.setText(localize(configuration.getPreset()));
         channelCount.setText(format("%d", configuration.getEegChannelCount()));
 
         Version version = headband.getVersion();
