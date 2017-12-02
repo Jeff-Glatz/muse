@@ -12,7 +12,7 @@ import static java.lang.String.format;
 import static javafx.application.Platform.runLater;
 
 @Controller
-public class ConfigurationController
+public class HeadbandDetailsController
         extends AbstractController {
     private final Headband headband;
 
@@ -48,7 +48,7 @@ public class ConfigurationController
 
 
     @Autowired
-    public ConfigurationController(Headband headband) {
+    public HeadbandDetailsController(Headband headband) {
         this.headband = headband;
     }
 

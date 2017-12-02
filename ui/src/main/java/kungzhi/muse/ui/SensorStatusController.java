@@ -20,7 +20,7 @@ import java.util.SortedSet;
 import static javafx.application.Platform.runLater;
 
 @Controller
-public class HeadbandStatusController
+public class SensorStatusController
         extends AbstractController {
     private static final String SENSOR_GOOD = "sensor-good";
     private static final String SENSOR_OK = "sensor-ok";
@@ -34,7 +34,7 @@ public class HeadbandStatusController
     private HBox headbandStatusBox;
 
     @Autowired
-    public HeadbandStatusController(Headband headband) {
+    public SensorStatusController(Headband headband) {
         this.headband = headband;
     }
 

@@ -1,4 +1,4 @@
-package kungzhi.muse.osc.service;
+package kungzhi.muse.platform;
 
 import kungzhi.muse.lang.ServiceControl;
 import kungzhi.muse.model.Preset;
@@ -19,7 +19,7 @@ public class MuseIO
         implements ServiceControl {
     private final Logger log = LoggerFactory.getLogger(getClass());
     private final Logger muse = LoggerFactory.getLogger("MuseIO");
-    private final List<HeadbandPairingListener> listeners = new ArrayList<>();
+    private final List<MusePairingListener> listeners = new ArrayList<>();
 
     private Thread monitoringThread;
     private Preset preset = Preset.FOURTEEN;
@@ -29,11 +29,11 @@ public class MuseIO
     private long secondsToWaitForShutdown = 30;
     private Process process;
 
-    public void addHeadbandPairingListener(HeadbandPairingListener listener) {
+    public void addMusePairingListener(MusePairingListener listener) {
         listeners.add(listener);
     }
 
-    public void removeHeadbandPairingListener(HeadbandPairingListener listener) {
+    public void removeMusePairingListener(MusePairingListener listener) {
         listeners.remove(listener);
     }
 
@@ -154,10 +154,10 @@ public class MuseIO
                 format("MuseIO on %s is currently not supported by Interaxon", platform));
     }
 
-    private void firePaired(boolean paired) {
+    private void fireMusePaired(boolean paired) {
         listeners.forEach(listener -> {
             try {
-                listener.onHeadbandPaired(paired);
+                listener.onMusePaired(paired);
             } catch (Exception e) {
                 log.error("Failure notifying listener", e);
             }
@@ -168,14 +168,14 @@ public class MuseIO
         log.info("Starting MuseIO output monitoring thread...");
         monitoringThread = new Thread(() -> {
             Scanner sc = new Scanner(process.getInputStream());
-            firePaired(false);
+            fireMusePaired(false);
             while (sc.hasNextLine()) {
                 String line = sc.nextLine();
                 muse.info(line);
                 if (line.contains("receiving at:")) {
-                    firePaired(true);
+                    fireMusePaired(true);
                 } else if (line.contains("Connection failure")) {
-                    firePaired(false);
+                    fireMusePaired(false);
                 } else if (line.contains("OSC error 61")) {
                     // TODO: No client endpoint connected
                 }

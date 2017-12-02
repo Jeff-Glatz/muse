@@ -2,7 +2,7 @@
 <?import javafx.scene.layout.HBox?>
 <HBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
-      fx:controller="kungzhi.muse.ui.HeadbandStatusController"
+      fx:controller="kungzhi.muse.ui.SensorStatusController"
       fx:id="headbandStatusBox"
       alignment="CENTER"
       HBox.hgrow="ALWAYS"/>

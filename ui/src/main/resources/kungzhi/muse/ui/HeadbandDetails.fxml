@@ -10,7 +10,7 @@
 <?import javafx.scene.text.Font?>
 <Accordion xmlns="http://javafx.com/javafx/9"
            xmlns:fx="http://javafx.com/fxml/1"
-           fx:controller="kungzhi.muse.ui.ConfigurationController">
+           fx:controller="kungzhi.muse.ui.HeadbandDetailsController">
     <panes>
         <TitledPane animated="false" text="%label.text.headband.configuration">
             <GridPane>

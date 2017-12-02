@@ -6,7 +6,7 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.control.Tooltip;
 import kungzhi.muse.lang.ServiceControl;
 import kungzhi.muse.osc.service.MessageClient;
-import kungzhi.muse.osc.service.MuseIO;
+import kungzhi.muse.platform.MuseIO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -16,7 +16,7 @@ import static java.lang.String.format;
 import static javafx.application.Platform.runLater;
 
 @Controller
-public class DataCollectionController
+public class HeadbandConnectionController
         extends AbstractController {
     private static final String TOGGLE_ON = "toggle-on";
     private static final String TOGGLE_OFF = "toggle-off";
@@ -32,14 +32,14 @@ public class DataCollectionController
     private ToggleButton clientToggleButton;
 
     @Autowired
-    public DataCollectionController(MuseIO museIO, MessageClient client) {
+    public HeadbandConnectionController(MuseIO museIO, MessageClient client) {
         this.museIO = museIO;
         this.client = client;
     }
 
     @PostConstruct
     public void initialize() {
-        museIO.addHeadbandPairingListener(paired -> {
+        museIO.addMusePairingListener(paired -> {
             runLater(() -> {
                 museIOToggleButton.setDisable(!paired);
                 museIOToggleButton.setTooltip(new Tooltip(
