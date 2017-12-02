@@ -17,10 +17,6 @@ import static javafx.application.Platform.runLater;
 @Controller
 public class HeadbandConnectionController
         extends AbstractController {
-    private static final String TOGGLE_ON = "toggle-on";
-    private static final String TOGGLE_OFF = "toggle-off";
-    private static final String[] TOGGLE_CLASSES = {TOGGLE_ON, TOGGLE_OFF};
-
     private final MuseIO museIO;
     private final MessageClient client;
 
@@ -40,10 +36,9 @@ public class HeadbandConnectionController
     public void initialize() {
         museIO.addMusePairingListener(paired -> {
             runLater(() -> {
-                String message = localize(format("model.headband.%s", paired ? "paired" : "not-paired"));
                 Notifications notifications = Notifications.create()
                         .title(localize("model.headband.monitor"))
-                        .text(message);
+                        .text(localize(format("model.headband.%s", paired ? "paired" : "not-paired")));
                 if (paired) {
                     notifications.showInformation();
                 } else {

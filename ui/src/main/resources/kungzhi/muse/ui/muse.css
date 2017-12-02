@@ -51,12 +51,14 @@
     -fx-mark-color: red;
 }
 
-.toggle-on {
-    -fx-background-color:
-            linear-gradient(#b8ee36, #80c800);
-    -fx-text-fill: black;
+.toggle-switch.service-control .thumb-area {
+    -fx-background-color: linear-gradient(to bottom, derive(-fx-text-box-border, -20%), derive(-fx-text-box-border, -30%)),
+    linear-gradient(to bottom, derive(#ff5400, 30%), #be1d00);
+    -fx-background-insets: 0, 1;
 }
-.toggle-off {
-    -fx-background-color: linear-gradient(#ff5400, #be1d00);
-    -fx-text-fill: white;
+
+.toggle-switch.service-control:selected .thumb-area {
+    -fx-background-color: linear-gradient(to bottom, derive(-fx-text-box-border, -20%), derive(-fx-text-box-border, -30%)),
+    linear-gradient(to bottom, derive(#b8ee36, 30%), #80c800);
+    -fx-background-insets: 0, 1;
 }

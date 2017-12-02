@@ -8,9 +8,17 @@
         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
     </padding>
     <ToggleSwitch fx:id="clientToggle"
-                  minWidth="120"
-                  text="%label.text.osc-client"/>
+                  id="osc-client-toggle"
+                  styleClass="service-control"
+                  minWidth="218"
+                  text="%label.text.osc-client">
+        <padding>
+            <Insets bottom="5.0"/>
+        </padding>
+    </ToggleSwitch>
     <ToggleSwitch fx:id="museIOToggle"
-                  minWidth="120"
+                  id="muse-io-toggle"
+                  styleClass="service-control"
+                  minWidth="218"
                   text="%label.text.muse-io"/>
 </VBox>

@@ -65,13 +65,13 @@
         </TabPane>
         <AnchorPane SplitPane.resizableWithParent="false" minWidth="228">
             <VBox>
-                <TitledPane animated="false" text="%label.text.headband.connection">
+                <TitledPane animated="false" text="%label.text.headband.connection" collapsible="false">
                     <fx:include source="HeadbandConnection.fxml"/>
                 </TitledPane>
-                <TitledPane animated="false" text="%label.text.headband.configuration">
+                <TitledPane animated="false" text="%label.text.headband.configuration" collapsible="false">
                     <fx:include source="HeadbandConfiguration.fxml"/>
                 </TitledPane>
-                <TitledPane animated="false" text="%label.text.headband.version">
+                <TitledPane animated="false" text="%label.text.headband.version" collapsible="false">
                     <fx:include source="HeadbandVersion.fxml"/>
                 </TitledPane>
             </VBox>
