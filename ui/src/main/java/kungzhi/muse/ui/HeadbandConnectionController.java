@@ -1,12 +1,11 @@
 package kungzhi.muse.ui;
 
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.ToggleButton;
-import javafx.scene.control.Tooltip;
 import kungzhi.muse.lang.ServiceControl;
 import kungzhi.muse.osc.service.MessageClient;
 import kungzhi.muse.platform.MuseIO;
+import org.controlsfx.control.Notifications;
+import org.controlsfx.control.ToggleSwitch;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -26,10 +25,10 @@ public class HeadbandConnectionController
     private final MessageClient client;
 
     @FXML
-    private ToggleButton museIOToggleButton;
+    private ToggleSwitch museIOToggle;
 
     @FXML
-    private ToggleButton clientToggleButton;
+    private ToggleSwitch clientToggle;
 
     @Autowired
     public HeadbandConnectionController(MuseIO museIO, MessageClient client) {
@@ -41,37 +40,44 @@ public class HeadbandConnectionController
     public void initialize() {
         museIO.addMusePairingListener(paired -> {
             runLater(() -> {
-                museIOToggleButton.setDisable(!paired);
-                museIOToggleButton.setTooltip(new Tooltip(
-                        localize(format("model.headband.%s", paired ? "paired" : "not-paired"))));
+                String message = localize(format("model.headband.%s", paired ? "paired" : "not-paired"));
+                Notifications notifications = Notifications.create()
+                        .title(localize("model.headband.monitor"))
+                        .text(message);
+                if (paired) {
+                    notifications.showInformation();
+                } else {
+                    notifications.showWarning();
+                }
             });
         });
     }
 
-    @FXML
-    public void toggleMuseIO()
-            throws Exception {
-        toggle(museIOToggleButton, museIO);
+    protected void onInitialize() {
+        museIOToggle.selectedProperty()
+                .addListener((observable, oldValue, newValue) -> {
+                    try {
+                        toggle(museIOToggle, museIO);
+                    } catch (Exception e) {
+                        log.error("Failure toggling MuseIO state", e);
+                    }
+                });
+        clientToggle.selectedProperty()
+                .addListener((observable, oldValue, newValue) -> {
+                    try {
+                        toggle(clientToggle, client);
+                    } catch (Exception e) {
+                        log.error("Failure toggling OSC client state", e);
+                    }
+                });
     }
 
-    @FXML
-    public void toggleClient()
+    private void toggle(ToggleSwitch button, ServiceControl control)
             throws Exception {
-        toggle(clientToggleButton, client);
-    }
-
-    private void toggle(ToggleButton button, ServiceControl control)
-            throws Exception {
-        ObservableList<String> styles = button.getStyleClass();
-        styles.removeAll(TOGGLE_CLASSES);
         if (button.isSelected()) {
             control.on();
-            button.setText(localize("label.text.on"));
-            styles.add(TOGGLE_ON);
         } else {
             control.off();
-            button.setText(localize("label.text.off"));
-            styles.add(TOGGLE_OFF);
         }
     }
 }

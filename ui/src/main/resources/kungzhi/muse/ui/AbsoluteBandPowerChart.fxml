@@ -22,7 +22,7 @@
     </xAxis>
     <yAxis>
         <NumberAxis side="LEFT"
-                    autoRanging="false"
+                    autoRanging="true"
                     animated="false"
                     lowerBound="-0.5"
                     upperBound="+1.5"

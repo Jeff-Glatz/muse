@@ -154,14 +154,19 @@ public class MuseIO
                 format("MuseIO on %s is currently not supported by Interaxon", platform));
     }
 
-    private void fireMusePaired(boolean paired) {
-        listeners.forEach(listener -> {
-            try {
-                listener.onMusePaired(paired);
-            } catch (Exception e) {
-                log.error("Failure notifying listener", e);
-            }
-        });
+    Boolean paired;
+
+    void fireMusePaired(boolean paired) {
+        if (this.paired == null || (this.paired ^ paired)) {
+            this.paired = paired;
+            listeners.forEach(listener -> {
+                try {
+                    listener.onMusePaired(paired);
+                } catch (Exception e) {
+                    log.error("Failure notifying listener", e);
+                }
+            });
+        }
     }
 
     private void startMonitoringOutput() {
