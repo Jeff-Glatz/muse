@@ -10,6 +10,10 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>muse-model</artifactId>
     <packaging>jar</packaging>
+    <properties>
+        <protobuf.skip>true</protobuf.skip>
+        <protobuf.compiler>/usr/local/bin/protoc</protobuf.compiler>
+    </properties>
     <dependencies>
         <dependency>
             <groupId>javax.annotation</groupId>
@@ -45,7 +49,8 @@
                 <artifactId>protobuf-maven-plugin</artifactId>
                 <version>0.5.1</version>
                 <configuration>
-                    <protocExecutable>/usr/local/bin/protoc</protocExecutable>
+                    <skip>${protobuf.skip}</skip>
+                    <protocExecutable>${protobuf.compiler}</protocExecutable>
                     <outputDirectory>${basedir}/src/main/java</outputDirectory>
                     <clearOutputDirectory>false</clearOutputDirectory>
                 </configuration>
@@ -60,4 +65,17 @@
             </plugin>
         </plugins>
     </build>
+    <profiles>
+        <profile>
+            <id>protobuf-support</id>
+            <activation>
+                <file>
+                    <exists>${protobuf.compiler}</exists>
+                </file>
+            </activation>
+            <properties>
+                <protobuf.skip>false</protobuf.skip>
+            </properties>
+        </profile>
+    </profiles>
 </project>
