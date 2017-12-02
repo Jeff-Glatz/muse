@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Accordion?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
@@ -61,14 +60,15 @@
         </ScrollPane>
         <AnchorPane SplitPane.resizableWithParent="false">
             <VBox>
-                <Accordion>
-                    <panes>
-                        <TitledPane animated="false" text="%label.text.headband.connection">
-                            <fx:include source="HeadbandConnection.fxml"/>
-                        </TitledPane>
-                    </panes>
-                </Accordion>
-                <fx:include source="HeadbandDetails.fxml"/>
+                <TitledPane animated="false" text="%label.text.headband.connection">
+                    <fx:include source="HeadbandConnection.fxml"/>
+                </TitledPane>
+                <TitledPane animated="false" text="%label.text.headband.configuration">
+                    <fx:include source="HeadbandConfiguration.fxml"/>
+                </TitledPane>
+                <TitledPane animated="false" text="%label.text.headband.version">
+                    <fx:include source="HeadbandVersion.fxml"/>
+                </TitledPane>
             </VBox>
         </AnchorPane>
     </SplitPane>

@@ -2,31 +2,17 @@ package kungzhi.muse.ui;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
-import kungzhi.muse.model.Configuration;
 import kungzhi.muse.model.Headband;
 import kungzhi.muse.model.Version;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
-import static java.lang.String.format;
 import static javafx.application.Platform.runLater;
 
 @Controller
-public class HeadbandDetailsController
+public class HeadbandVersionController
         extends AbstractController {
     private final Headband headband;
-
-    @FXML
-    private TextField macAddress;
-
-    @FXML
-    private TextField serialNumber;
-
-    @FXML
-    private TextField preset;
-
-    @FXML
-    private TextField channelCount;
 
     @FXML
     private TextField buildNumber;
@@ -48,25 +34,18 @@ public class HeadbandDetailsController
 
 
     @Autowired
-    public HeadbandDetailsController(Headband headband) {
+    public HeadbandVersionController(Headband headband) {
         this.headband = headband;
     }
 
     @Override
     protected void onInitialize() {
-        Configuration configuration = headband.getConfiguration();
-        configuration.addActiveItemListener((current, previous) ->
-                runLater(this::updateDetailsView));
+        Version version = headband.getVersion();
+        version.addActiveItemListener((current, previous) ->
+                runLater(() -> update(current)));
     }
 
-    private void updateDetailsView() {
-        Configuration configuration = headband.getConfiguration();
-        macAddress.setText(configuration.getMacAddress());
-        serialNumber.setText(configuration.getSerialNumber());
-        preset.setText(localize(configuration.getPreset()));
-        channelCount.setText(format("%d", configuration.getEegChannelCount()));
-
-        Version version = headband.getVersion();
+    private void update(Version version) {
         buildNumber.setText(version.getBuildNumber());
         firmwareType.setText(version.getFirmwareType());
         hardwareVersion.setText(version.getHardwareVersion());
