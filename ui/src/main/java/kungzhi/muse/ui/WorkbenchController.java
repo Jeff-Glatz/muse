@@ -1,64 +1,54 @@
 package kungzhi.muse.ui;
 
-import javafx.animation.KeyFrame;
-import javafx.animation.KeyValue;
-import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.util.Duration;
 import org.controlsfx.control.NotificationPane;
 import org.controlsfx.control.action.Action;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
-import static javafx.util.Duration.ZERO;
-import static javafx.util.Duration.millis;
-import static javafx.util.Duration.seconds;
+import java.util.concurrent.ScheduledExecutorService;
+
+import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
 @Controller
 public class WorkbenchController
         extends AbstractController
         implements Notifier {
-    private Duration notificationDuration = seconds(5);
+    private final ScheduledExecutorService executor;
+    private long notificationDuration = 5000;
 
     @FXML
     private NotificationPane notificationPane;
 
+    @Autowired
+    public WorkbenchController(ScheduledExecutorService executor) {
+        this.executor = executor;
+    }
 
-    public Duration getNotificationDuration() {
+    public long getNotificationDuration() {
         return notificationDuration;
     }
 
-    public void setNotificationDuration(Duration notificationDuration) {
+    public void setNotificationDuration(long notificationDuration) {
         this.notificationDuration = notificationDuration;
     }
 
     @Override
     public void show(String text) {
-        Timeline timeline = createHideTimeline();
         notificationPane.show(text);
-        timeline.play();
+        executor.schedule(this::hide, notificationDuration, MILLISECONDS);
     }
 
     @Override
     public void show(String text, Node graphic, Action... actions) {
-        Timeline timeline = createHideTimeline();
         notificationPane.show(text, graphic, actions);
-        timeline.play();
+        executor.schedule(notificationPane::hide, notificationDuration, MILLISECONDS);
     }
 
     @Override
     public void hide() {
         notificationPane.hide();
-    }
-
-    private Timeline createHideTimeline() {
-        Timeline timeline = new Timeline(
-                new KeyFrame(ZERO,
-                        new KeyValue(notificationPane.opacityProperty(), 1.0)),
-                new KeyFrame(millis(500),
-                        new KeyValue(notificationPane.opacityProperty(), 0.0)));
-        timeline.setDelay(notificationDuration);
-        timeline.setOnFinished(e -> notificationPane.hide());
-        return timeline;
+        notificationPane.setGraphic(null);
     }
 }
