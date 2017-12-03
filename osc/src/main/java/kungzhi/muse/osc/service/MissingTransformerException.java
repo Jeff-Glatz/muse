@@ -6,5 +6,4 @@ public class MissingTransformerException
     public MissingTransformerException(String message, String address) {
         super(message, address);
     }
-
 }

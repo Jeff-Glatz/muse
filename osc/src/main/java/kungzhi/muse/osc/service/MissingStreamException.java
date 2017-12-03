@@ -6,5 +6,4 @@ public class MissingStreamException
     public MissingStreamException(String message, String address) {
         super(message, address);
     }
-
 }
