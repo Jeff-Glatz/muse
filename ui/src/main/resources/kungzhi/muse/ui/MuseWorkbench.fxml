@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.SeparatorMenuItem?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
@@ -15,42 +11,43 @@
 <?import java.net.URL?>
 <VBox xmlns="http://javafx.com/javafx/9"
       xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="kungzhi.muse.ui.WorkbenchController">
+      fx:controller="kungzhi.muse.ui.WorkbenchController"
+      minWidth="800">
     <stylesheets>
         <URL value="@muse.css"/>
     </stylesheets>
-    <MenuBar VBox.vgrow="NEVER">
-        <Menu mnemonicParsing="false" text="%menu.title.file">
-            <MenuItem mnemonicParsing="false" text="%menu.title.new"/>
-            <MenuItem mnemonicParsing="false" text="%menu.title.open"/>
-            <Menu mnemonicParsing="false" text="%menu.title.open.recent"/>
-            <SeparatorMenuItem mnemonicParsing="false"/>
-            <MenuItem mnemonicParsing="false" text="%menu.title.close"/>
-            <MenuItem mnemonicParsing="false" text="%menu.title.save"/>
-            <MenuItem mnemonicParsing="false" text="%menu.title.save.as"/>
-            <MenuItem mnemonicParsing="false" text="%menu.title.revert"/>
-            <SeparatorMenuItem mnemonicParsing="false"/>
-            <MenuItem mnemonicParsing="false" text="%menu.title.preferences"/>
-            <SeparatorMenuItem mnemonicParsing="false"/>
-            <MenuItem mnemonicParsing="false" text="%menu.title.quit"/>
-        </Menu>
-        <Menu mnemonicParsing="false" text="%menu.title.edit">
-            <MenuItem mnemonicParsing="false" text="%menu.title.undo"/>
-            <MenuItem mnemonicParsing="false" text="%menu.title.redo"/>
-            <SeparatorMenuItem mnemonicParsing="false"/>
-            <MenuItem mnemonicParsing="false" text="%menu.title.cut"/>
-            <MenuItem mnemonicParsing="false" text="%menu.title.copy"/>
-            <MenuItem mnemonicParsing="false" text="%menu.title.paste"/>
-            <MenuItem mnemonicParsing="false" text="%menu.title.delete"/>
-            <SeparatorMenuItem mnemonicParsing="false"/>
-            <MenuItem mnemonicParsing="false" text="%menu.title.select.all"/>
-            <MenuItem mnemonicParsing="false" text="%menu.title.unselect.all"/>
-        </Menu>
-        <Menu mnemonicParsing="false" text="%menu.title.help">
-            <MenuItem mnemonicParsing="false" text="%menu.title.about"/>
-        </Menu>
-    </MenuBar>
-    <NotificationPane fx:id="notificationPane" showFromTop="true">
+    <!--<MenuBar fx:id="menuBar" VBox.vgrow="NEVER">-->
+    <!--<Menu mnemonicParsing="false" text="%menu.title.file">-->
+    <!--<MenuItem mnemonicParsing="false" text="%menu.title.new"/>-->
+    <!--<MenuItem mnemonicParsing="false" text="%menu.title.open"/>-->
+    <!--<Menu mnemonicParsing="false" text="%menu.title.open.recent"/>-->
+    <!--<SeparatorMenuItem mnemonicParsing="false"/>-->
+    <!--<MenuItem mnemonicParsing="false" text="%menu.title.close"/>-->
+    <!--<MenuItem mnemonicParsing="false" text="%menu.title.save"/>-->
+    <!--<MenuItem mnemonicParsing="false" text="%menu.title.save.as"/>-->
+    <!--<MenuItem mnemonicParsing="false" text="%menu.title.revert"/>-->
+    <!--<SeparatorMenuItem mnemonicParsing="false"/>-->
+    <!--<MenuItem mnemonicParsing="false" text="%menu.title.preferences"/>-->
+    <!--<SeparatorMenuItem mnemonicParsing="false"/>-->
+    <!--<MenuItem mnemonicParsing="false" text="%menu.title.quit"/>-->
+    <!--</Menu>-->
+    <!--<Menu mnemonicParsing="false" text="%menu.title.edit">-->
+    <!--<MenuItem mnemonicParsing="false" text="%menu.title.undo"/>-->
+    <!--<MenuItem mnemonicParsing="false" text="%menu.title.redo"/>-->
+    <!--<SeparatorMenuItem mnemonicParsing="false"/>-->
+    <!--<MenuItem mnemonicParsing="false" text="%menu.title.cut"/>-->
+    <!--<MenuItem mnemonicParsing="false" text="%menu.title.copy"/>-->
+    <!--<MenuItem mnemonicParsing="false" text="%menu.title.paste"/>-->
+    <!--<MenuItem mnemonicParsing="false" text="%menu.title.delete"/>-->
+    <!--<SeparatorMenuItem mnemonicParsing="false"/>-->
+    <!--<MenuItem mnemonicParsing="false" text="%menu.title.select.all"/>-->
+    <!--<MenuItem mnemonicParsing="false" text="%menu.title.unselect.all"/>-->
+    <!--</Menu>-->
+    <!--<Menu mnemonicParsing="false" text="%menu.title.help">-->
+    <!--<MenuItem mnemonicParsing="false" text="%menu.title.about"/>-->
+    <!--</Menu>-->
+    <!--</MenuBar>-->
+    <NotificationPane fx:id="notificationPane" VBox.vgrow="ALWAYS" showFromTop="false">
         <content>
             <SplitPane focusTraversable="true" prefHeight="250" minWidth="800">
                 <TabPane SplitPane.resizableWithParent="true" minWidth="572">
@@ -83,7 +80,7 @@
             </SplitPane>
         </content>
     </NotificationPane>
-    <StatusBar VBox.vgrow="NEVER" text="">
+    <StatusBar fx:id="statusBar" VBox.vgrow="NEVER" text="">
         <leftItems>
             <fx:include source="SensorStatus.fxml"/>
         </leftItems>

@@ -19,7 +19,7 @@ public class HeadbandConnectionController
     private final PseudoClass disconnectedPseudoClass = PseudoClass.getPseudoClass("disconnected");
     private final MuseIO museIO;
     private final MessageClient client;
-    private final Notifier notifier;
+    private final NotificationControl notificationControl;
 
     @FXML
     private ToggleSwitch museIOToggle;
@@ -28,10 +28,10 @@ public class HeadbandConnectionController
     private ToggleSwitch clientToggle;
 
     @Autowired
-    public HeadbandConnectionController(MuseIO museIO, MessageClient client, Notifier notifier) {
+    public HeadbandConnectionController(MuseIO museIO, MessageClient client, NotificationControl notificationControl) {
         this.museIO = museIO;
         this.client = client;
-        this.notifier = notifier;
+        this.notificationControl = notificationControl;
     }
 
     @PostConstruct
@@ -40,10 +40,10 @@ public class HeadbandConnectionController
             runLater(() -> {
                 if (paired) {
                     museIOToggle.pseudoClassStateChanged(disconnectedPseudoClass, false);
-                    notifier.show(localize("model.headband.paired"));
+                    notificationControl.notification(localize("model.headband.paired"));
                 } else {
                     museIOToggle.pseudoClassStateChanged(disconnectedPseudoClass, true);
-                    notifier.show(localize("model.headband.not-paired"));
+                    notificationControl.notification(localize("model.headband.not-paired"));
                 }
             });
         });

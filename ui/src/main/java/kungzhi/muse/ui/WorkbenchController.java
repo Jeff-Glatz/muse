@@ -3,6 +3,7 @@ package kungzhi.muse.ui;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import org.controlsfx.control.NotificationPane;
+import org.controlsfx.control.StatusBar;
 import org.controlsfx.control.action.Action;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -10,16 +11,20 @@ import org.springframework.stereotype.Controller;
 import java.util.concurrent.ScheduledExecutorService;
 
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
+import static javafx.application.Platform.runLater;
 
 @Controller
 public class WorkbenchController
         extends AbstractController
-        implements Notifier {
+        implements NotificationControl, StatusControl {
     private final ScheduledExecutorService executor;
     private long notificationDuration = 5000;
 
     @FXML
     private NotificationPane notificationPane;
+
+    @FXML
+    private StatusBar statusBar;
 
     @Autowired
     public WorkbenchController(ScheduledExecutorService executor) {
@@ -35,20 +40,40 @@ public class WorkbenchController
     }
 
     @Override
-    public void show(String text) {
+    public void notification(String text) {
         notificationPane.show(text);
-        executor.schedule(this::hide, notificationDuration, MILLISECONDS);
+        executor.schedule(() -> runLater(this::hideNotifications),
+                notificationDuration, MILLISECONDS);
     }
 
     @Override
-    public void show(String text, Node graphic, Action... actions) {
+    public void notification(String text, Node graphic, Action... actions) {
         notificationPane.show(text, graphic, actions);
-        executor.schedule(notificationPane::hide, notificationDuration, MILLISECONDS);
+        executor.schedule(() -> runLater(this::hideNotifications),
+                notificationDuration, MILLISECONDS);
     }
 
     @Override
-    public void hide() {
+    public void hideNotifications() {
         notificationPane.hide();
+        notificationPane.setText(null);
         notificationPane.setGraphic(null);
+        notificationPane.getActions()
+                .clear();
+    }
+
+    @Override
+    public void status(String text) {
+        statusBar.setText(text);
+    }
+
+    @Override
+    public void status(Node node) {
+        statusBar.setGraphic(node);
+    }
+
+    @Override
+    public void status(double progress) {
+        statusBar.setProgress(progress);
     }
 }
