@@ -170,7 +170,7 @@ public class MuseIO
     }
 
     private void startMonitoringOutput() {
-        log.info("Starting MuseIO output monitoring thread...");
+        log.info("Starting MuseIO monitoring thread...");
         monitoringThread = new Thread(() -> {
             Scanner sc = new Scanner(process.getInputStream());
             fireMusePaired(false);
@@ -185,18 +185,18 @@ public class MuseIO
                     // TODO: No client endpoint connected
                 }
             }
-        });
+        }, "MuseIO Monitor");
         monitoringThread.setDaemon(true);
         monitoringThread.start();
-        log.info("MuseIO output monitoring thread started.");
+        log.info("MuseIO monitoring thread started.");
     }
 
     private void stopMonitoringOutput() {
         try {
             if (monitoringThread != null) {
-                log.info("Stopping MuseIO output monitoring thread...");
+                log.info("Stopping MuseIO monitoring thread...");
                 monitoringThread.interrupt();
-                log.info("MuseIO output monitoring thread stopped.");
+                log.info("MuseIO monitoring thread stopped.");
             }
         } finally {
             monitoringThread = null;
