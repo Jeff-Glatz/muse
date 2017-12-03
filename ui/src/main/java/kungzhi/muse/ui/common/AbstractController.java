@@ -1,7 +1,7 @@
 package kungzhi.muse.ui.common;
 
 import javafx.fxml.Initializable;
-import kungzhi.muse.lang.Localizable;
+import kungzhi.lang.Localizable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

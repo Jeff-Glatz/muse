@@ -1,6 +1,6 @@
 package kungzhi.muse.model;
 
-import kungzhi.muse.lang.Equivalence;
+import kungzhi.lang.Equivalence;
 
 public class SingleValue<V>
         extends AbstractModel

@@ -1,4 +1,4 @@
-package kungzhi.muse.active;
+package kungzhi.active;
 
 import java.io.Serializable;
 

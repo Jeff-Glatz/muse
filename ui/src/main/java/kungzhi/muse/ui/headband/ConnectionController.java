@@ -2,7 +2,7 @@ package kungzhi.muse.ui.headband;
 
 import javafx.css.PseudoClass;
 import javafx.fxml.FXML;
-import kungzhi.muse.lang.ServiceControl;
+import kungzhi.lang.ServiceControl;
 import kungzhi.muse.osc.service.MessageClient;
 import kungzhi.muse.platform.MuseIO;
 import kungzhi.muse.ui.common.AbstractController;

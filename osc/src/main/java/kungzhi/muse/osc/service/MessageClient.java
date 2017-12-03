@@ -3,7 +3,7 @@ package kungzhi.muse.osc.service;
 import com.illposed.osc.OSCMessage;
 import com.illposed.osc.OSCPortIn;
 import com.illposed.osc.OSCPortOut;
-import kungzhi.muse.lang.ServiceControl;
+import kungzhi.lang.ServiceControl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,6 +1,6 @@
 package kungzhi.muse.model;
 
-import kungzhi.muse.lang.Localizable;
+import kungzhi.lang.Localizable;
 
 import static java.lang.String.format;
 

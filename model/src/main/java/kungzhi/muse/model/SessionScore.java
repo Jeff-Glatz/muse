@@ -2,7 +2,7 @@ package kungzhi.muse.model;
 
 import java.util.stream.Stream;
 
-import static kungzhi.muse.lang.Functions.averageOf;
+import static kungzhi.lang.Functions.averageOf;
 
 public class SessionScore
         extends AbstractModel {

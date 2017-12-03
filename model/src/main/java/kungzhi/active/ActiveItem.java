@@ -1,6 +1,6 @@
-package kungzhi.muse.active;
+package kungzhi.active;
 
-import kungzhi.muse.lang.Equivalence;
+import kungzhi.lang.Equivalence;
 
 import java.io.Serializable;
 

@@ -1,4 +1,4 @@
-package kungzhi.muse.lang;
+package kungzhi.lang;
 
 import java.util.stream.Stream;
 

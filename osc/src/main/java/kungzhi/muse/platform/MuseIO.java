@@ -1,6 +1,6 @@
 package kungzhi.muse.platform;
 
-import kungzhi.muse.lang.ServiceControl;
+import kungzhi.lang.ServiceControl;
 import kungzhi.muse.model.Preset;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
