@@ -1,6 +1,6 @@
 package kungzhi.muse.osc.simulation;
 
-import de.sciss.net.OSCMessage;
+import com.illposed.osc.OSCMessage;
 import kungzhi.muse.model.Configuration;
 import kungzhi.muse.model.Headband;
 import kungzhi.muse.osc.service.MessageClient;
@@ -14,6 +14,9 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PreDestroy;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ScheduledExecutorService;
 
@@ -69,19 +72,19 @@ public class BandPowerSimulator {
     public void start()
             throws Exception {
         Configuration configuration = headband.getConfiguration();
-        int argCount = configuration.getEegChannelCount();
-        log.info("Producing random {} band power data for {} channels",
-                relative ? "relative" : "absolute", argCount);
+        int sensors = configuration.getEegChannelCount();
+        log.info("Producing random {} band power data for {} sensors",
+                relative ? "relative" : "absolute", sensors);
         executor.submit(() -> {
             producing = true;
             try {
                 while (producing) {
                     executor.execute(() -> {
-                        sendBandPower("gamma", argCount);
-                        sendBandPower("beta", argCount);
-                        sendBandPower("alpha", argCount);
-                        sendBandPower("theta", argCount);
-                        sendBandPower("delta", argCount);
+                        sendBandPower("gamma", sensors);
+                        sendBandPower("beta", sensors);
+                        sendBandPower("alpha", sensors);
+                        sendBandPower("theta", sensors);
+                        sendBandPower("delta", sensors);
                     });
                     sleep(computeRandomLatency());
                 }
@@ -98,16 +101,16 @@ public class BandPowerSimulator {
         producing = false;
     }
 
-    private void send(String path, Float[] args)
+    private void send(String address, Collection args)
             throws IOException {
-        client.send(new OSCMessage(path, args));
+        client.send(new OSCMessage(address, args));
     }
 
-    private void sendBandPower(String band, int argCount) {
+    private void sendBandPower(String band, int sensors) {
         try {
-            Float[] arguments = new Float[argCount];
-            for (int i = 0; i < argCount; i++) {
-                arguments[i] = random.nextFloat();
+            List<Float> arguments = new ArrayList<>(sensors);
+            for (int i = 0; i < sensors; i++) {
+                arguments.add(random.nextFloat());
             }
             send(format("/muse/elements/%s_%s", band, relative ? "relative" : "absolute"),
                     arguments);

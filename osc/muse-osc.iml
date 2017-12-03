@@ -19,7 +19,7 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-configuration-processor:1.5.8.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: com.vaadin.external.google:android-json:0.0.20131108.vaadin1" level="project" />
-    <orderEntry type="library" name="Maven: de.sciss:netutil:1.0.1" level="project" />
+    <orderEntry type="library" name="Maven: com.illposed.osc:javaosc-core:0.4" level="project" />
     <orderEntry type="library" name="Maven: com.jsoniter:jsoniter:0.9.17" level="project" />
     <orderEntry type="module" module-name="muse-model" />
     <orderEntry type="library" name="Maven: javax.annotation:jsr250-api:1.0" level="project" />

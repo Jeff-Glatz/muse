@@ -7,7 +7,7 @@ import org.springframework.stereotype.Controller;
 
 import java.time.Clock;
 
-import static kungzhi.muse.osc.service.MessagePath.MELLOW;
+import static kungzhi.muse.osc.service.MessageAddress.MELLOW;
 
 @Controller
 public class MellowController

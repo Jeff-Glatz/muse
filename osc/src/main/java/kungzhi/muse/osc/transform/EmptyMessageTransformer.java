@@ -1,6 +1,6 @@
 package kungzhi.muse.osc.transform;
 
-import de.sciss.net.OSCMessage;
+import com.illposed.osc.OSCMessage;
 import kungzhi.muse.model.Model;
 
 public class EmptyMessageTransformer<M extends Model>

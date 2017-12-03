@@ -1,10 +1,10 @@
 package kungzhi.muse.osc.transform;
 
-import de.sciss.net.OSCMessage;
+import com.illposed.osc.OSCMessage;
 import kungzhi.muse.model.Battery;
 import kungzhi.muse.runtime.Transformer;
 
-import static kungzhi.muse.osc.service.MessagePath.BATTERY;
+import static kungzhi.muse.osc.service.MessageAddress.BATTERY;
 import static kungzhi.muse.osc.transform.MessageHelper.argumentAt;
 
 @Transformer(BATTERY)

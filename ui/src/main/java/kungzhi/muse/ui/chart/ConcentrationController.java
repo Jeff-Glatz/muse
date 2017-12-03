@@ -7,7 +7,7 @@ import org.springframework.stereotype.Controller;
 
 import java.time.Clock;
 
-import static kungzhi.muse.osc.service.MessagePath.CONCENTRATION;
+import static kungzhi.muse.osc.service.MessageAddress.CONCENTRATION;
 
 @Controller
 public class ConcentrationController

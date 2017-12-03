@@ -1,8 +1,8 @@
 package kungzhi.muse.osc.service;
 
-import de.sciss.net.OSCPacket;
-import de.sciss.net.OSCServer;
-import de.sciss.net.OSCTransmitter;
+import com.illposed.osc.OSCMessage;
+import com.illposed.osc.OSCPortIn;
+import com.illposed.osc.OSCPortOut;
 import kungzhi.muse.lang.ServiceControl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,7 +16,7 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 
 /**
- * OSC messages will be emitted over OSC to paths:
+ * OSC messages will be emitted over OSC to addresses:
  * <p>
  * /muse/eeg
  * /muse/eeg/dropped_samples
@@ -109,9 +109,9 @@ public class MessageClient
 
     private String protocol;
     private InetSocketAddress receiverAddress;
-    private OSCServer receiver;
+    private OSCPortIn receiver;
     private InetSocketAddress transmitterAddress;
-    private OSCTransmitter transmitter;
+    private OSCPortOut transmitter;
 
     @Autowired
     public MessageClient(MessageDispatcher dispatcher) {
@@ -128,7 +128,7 @@ public class MessageClient
 
     @Autowired
     public MessageClient withProtocol(
-            @Value("${muse.osc.protocol:tcp}") String protocol) {
+            @Value("${muse.osc.protocol:udp}") String protocol) {
         this.protocol = protocol;
         return this;
     }
@@ -203,7 +203,7 @@ public class MessageClient
         turnOnTransmitter();
     }
 
-    public void send(OSCPacket packet)
+    public void send(OSCMessage packet)
             throws IOException {
         if (transmitter == null) {
             log.warn("cannot send packet, client is off");
@@ -222,16 +222,15 @@ public class MessageClient
             throws IOException {
         log.info("connecting transmitter to: {}://{}...",
                 protocol, transmitterAddress);
-        transmitter = OSCTransmitter.newUsing(protocol);
-        transmitter.setTarget(transmitterAddress);
-        transmitter.connect();
+        transmitter = new OSCPortOut(transmitterAddress.getAddress(),
+                transmitterAddress.getPort());
         log.info("transmitter started.");
     }
 
     private void turnOffTransmitter() {
         if (transmitter != null) {
             log.info("stopping {} transmitter on: {}...", protocol, transmitterAddress);
-            transmitter.dispose();
+            transmitter.close();
             transmitter = null;
             log.info("transmitter stopped.");
         }
@@ -241,16 +240,17 @@ public class MessageClient
             throws IOException {
         log.info("starting receiver on: {}://{}...",
                 protocol, receiverAddress);
-        receiver = OSCServer.newUsing(protocol, receiverAddress);
-        receiver.addOSCListener(dispatcher);
-        receiver.start();
+        receiver = new OSCPortIn(receiverAddress.getPort());
+        receiver.addListener((address) -> true, dispatcher);
+        receiver.startListening();
         log.info("receiver started.");
     }
 
     private void turnOffReceiver() {
         if (receiver != null) {
             log.info("stopping {} receiver on: {}...", protocol, receiverAddress);
-            receiver.dispose();
+            receiver.stopListening();
+            receiver.close();
             receiver = null;
             log.info("receiver stopped.");
         }

@@ -26,39 +26,39 @@ import java.util.concurrent.ScheduledExecutorService;
 
 import static java.lang.Integer.parseInt;
 import static java.net.InetAddress.getLocalHost;
-import static kungzhi.muse.osc.service.MessagePath.ACCELEROMETER_DROPPED_SAMPLES;
-import static kungzhi.muse.osc.service.MessagePath.ALPHA_ABSOLUTE;
-import static kungzhi.muse.osc.service.MessagePath.ALPHA_RELATIVE;
-import static kungzhi.muse.osc.service.MessagePath.ALPHA_SESSION_SCORE;
-import static kungzhi.muse.osc.service.MessagePath.BATTERY;
-import static kungzhi.muse.osc.service.MessagePath.BETA_ABSOLUTE;
-import static kungzhi.muse.osc.service.MessagePath.BETA_RELATIVE;
-import static kungzhi.muse.osc.service.MessagePath.BETA_SESSION_SCORE;
-import static kungzhi.muse.osc.service.MessagePath.BLINK;
-import static kungzhi.muse.osc.service.MessagePath.CONCENTRATION;
-import static kungzhi.muse.osc.service.MessagePath.CONFIGURATION;
-import static kungzhi.muse.osc.service.MessagePath.DELTA_ABSOLUTE;
-import static kungzhi.muse.osc.service.MessagePath.DELTA_RELATIVE;
-import static kungzhi.muse.osc.service.MessagePath.DELTA_SESSION_SCORE;
-import static kungzhi.muse.osc.service.MessagePath.DRL_REFERENCE;
-import static kungzhi.muse.osc.service.MessagePath.EEG_DROPPED_SAMPLES;
-import static kungzhi.muse.osc.service.MessagePath.EEG_QUANTIZATION;
-import static kungzhi.muse.osc.service.MessagePath.GAMMA_ABSOLUTE;
-import static kungzhi.muse.osc.service.MessagePath.GAMMA_RELATIVE;
-import static kungzhi.muse.osc.service.MessagePath.GAMMA_SESSION_SCORE;
-import static kungzhi.muse.osc.service.MessagePath.HEADBAND_STATUS;
-import static kungzhi.muse.osc.service.MessagePath.HEADBAND_TOUCHING;
-import static kungzhi.muse.osc.service.MessagePath.JAW_CLENCH;
-import static kungzhi.muse.osc.service.MessagePath.LOW_FREQUENCY_ABSOLUTE;
-import static kungzhi.muse.osc.service.MessagePath.MELLOW;
-import static kungzhi.muse.osc.service.MessagePath.RAW_FFT_0;
-import static kungzhi.muse.osc.service.MessagePath.RAW_FFT_1;
-import static kungzhi.muse.osc.service.MessagePath.RAW_FFT_2;
-import static kungzhi.muse.osc.service.MessagePath.RAW_FFT_3;
-import static kungzhi.muse.osc.service.MessagePath.THETA_ABSOLUTE;
-import static kungzhi.muse.osc.service.MessagePath.THETA_RELATIVE;
-import static kungzhi.muse.osc.service.MessagePath.THETA_SESSION_SCORE;
-import static kungzhi.muse.osc.service.MessagePath.VERSION;
+import static kungzhi.muse.osc.service.MessageAddress.ACCELEROMETER_DROPPED_SAMPLES;
+import static kungzhi.muse.osc.service.MessageAddress.ALPHA_ABSOLUTE;
+import static kungzhi.muse.osc.service.MessageAddress.ALPHA_RELATIVE;
+import static kungzhi.muse.osc.service.MessageAddress.ALPHA_SESSION_SCORE;
+import static kungzhi.muse.osc.service.MessageAddress.BATTERY;
+import static kungzhi.muse.osc.service.MessageAddress.BETA_ABSOLUTE;
+import static kungzhi.muse.osc.service.MessageAddress.BETA_RELATIVE;
+import static kungzhi.muse.osc.service.MessageAddress.BETA_SESSION_SCORE;
+import static kungzhi.muse.osc.service.MessageAddress.BLINK;
+import static kungzhi.muse.osc.service.MessageAddress.CONCENTRATION;
+import static kungzhi.muse.osc.service.MessageAddress.CONFIGURATION;
+import static kungzhi.muse.osc.service.MessageAddress.DELTA_ABSOLUTE;
+import static kungzhi.muse.osc.service.MessageAddress.DELTA_RELATIVE;
+import static kungzhi.muse.osc.service.MessageAddress.DELTA_SESSION_SCORE;
+import static kungzhi.muse.osc.service.MessageAddress.DRL_REFERENCE;
+import static kungzhi.muse.osc.service.MessageAddress.EEG_DROPPED_SAMPLES;
+import static kungzhi.muse.osc.service.MessageAddress.EEG_QUANTIZATION;
+import static kungzhi.muse.osc.service.MessageAddress.GAMMA_ABSOLUTE;
+import static kungzhi.muse.osc.service.MessageAddress.GAMMA_RELATIVE;
+import static kungzhi.muse.osc.service.MessageAddress.GAMMA_SESSION_SCORE;
+import static kungzhi.muse.osc.service.MessageAddress.HEADBAND_STATUS;
+import static kungzhi.muse.osc.service.MessageAddress.HEADBAND_TOUCHING;
+import static kungzhi.muse.osc.service.MessageAddress.JAW_CLENCH;
+import static kungzhi.muse.osc.service.MessageAddress.LOW_FREQUENCY_ABSOLUTE;
+import static kungzhi.muse.osc.service.MessageAddress.MELLOW;
+import static kungzhi.muse.osc.service.MessageAddress.RAW_FFT_0;
+import static kungzhi.muse.osc.service.MessageAddress.RAW_FFT_1;
+import static kungzhi.muse.osc.service.MessageAddress.RAW_FFT_2;
+import static kungzhi.muse.osc.service.MessageAddress.RAW_FFT_3;
+import static kungzhi.muse.osc.service.MessageAddress.THETA_ABSOLUTE;
+import static kungzhi.muse.osc.service.MessageAddress.THETA_RELATIVE;
+import static kungzhi.muse.osc.service.MessageAddress.THETA_SESSION_SCORE;
+import static kungzhi.muse.osc.service.MessageAddress.VERSION;
 
 @ComponentScan({"kungzhi.muse.osc"})
 @Import(ModelWiring.class)
@@ -176,13 +176,13 @@ public class OscWiring {
                 // Error Handling
                 .handling(MissingTransformerException.class,
                         (dispatcher, message, error) -> {
-                            String path = message.getName();
-                            if (path.startsWith("/muse/elements/raw_fft")) {
-                                int channelIndex = parseInt(path.substring(
+                            String address = message.getAddress();
+                            if (address.startsWith("/muse/elements/raw_fft")) {
+                                int channelIndex = parseInt(address.substring(
                                         "/muse/elements/raw_fft".length(),
-                                        path.length()));
+                                        address.length()));
                                 log.info("Discovered new raw FFT channel with index: {}", channelIndex);
-                                dispatcher.withTransformer(path, Fft.class,
+                                dispatcher.withTransformer(address, Fft.class,
                                         new FftTransformer(channelIndex));
                             }
                         })

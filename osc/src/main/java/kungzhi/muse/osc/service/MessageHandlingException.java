@@ -2,14 +2,14 @@ package kungzhi.muse.osc.service;
 
 public class MessageHandlingException
         extends RuntimeException {
-    protected final String path;
+    protected final String address;
 
-    public MessageHandlingException(String message, String path) {
+    public MessageHandlingException(String message, String address) {
         super(message);
-        this.path = path;
+        this.address = address;
     }
 
-    public String getPath() {
-        return path;
+    public String getAddress() {
+        return address;
     }
 }

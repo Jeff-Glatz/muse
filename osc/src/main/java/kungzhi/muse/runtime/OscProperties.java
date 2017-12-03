@@ -8,7 +8,7 @@ import java.net.InetAddress;
 @ConfigurationProperties("muse.osc")
 public class OscProperties
         implements Serializable {
-    private String protocol = "tcp";
+    private String protocol = "udp";
     private Service receiver = new Service();
     private Service transmitter = new Service();
 

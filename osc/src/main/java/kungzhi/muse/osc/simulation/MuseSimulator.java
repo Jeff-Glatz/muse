@@ -1,6 +1,6 @@
 package kungzhi.muse.osc.simulation;
 
-import de.sciss.net.OSCMessage;
+import com.illposed.osc.OSCMessage;
 import kungzhi.muse.osc.service.MessageClient;
 import kungzhi.muse.osc.service.MessageDispatcher;
 import org.slf4j.Logger;
@@ -13,12 +13,16 @@ import org.springframework.jmx.export.annotation.ManagedResource;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.util.Collection;
+import java.util.List;
 
 import static java.lang.Class.forName;
 import static java.lang.Float.parseFloat;
 import static java.lang.String.format;
-import static java.lang.reflect.Array.newInstance;
+import static java.util.Arrays.asList;
 import static java.util.Arrays.stream;
+import static java.util.Collections.singletonList;
+import static java.util.stream.Collectors.toList;
 
 /**
  * The {@link MuseSimulator} is a JMX managed singleton that can be used to transmit
@@ -46,15 +50,15 @@ public class MuseSimulator {
     }
 
     @ManagedOperation
-    public void send(String path, String message)
+    public void send(String address, String message)
             throws IOException {
-        client.send(new OSCMessage(path, new String[]{message}));
+        send(address, singletonList(message));
     }
 
     @ManagedOperation
-    public void sendTypedArray(String path, String type, String args)
+    public void sendTypedArray(String address, String type, String args)
             throws Exception {
-        client.send(new OSCMessage(path, args(forName(type), args)));
+        send(address, args(forName(type), args));
     }
 
     @ManagedOperation
@@ -98,13 +102,13 @@ public class MuseSimulator {
     public void sendBattery(Integer stateOfCharge, Integer fuelGuageVoltage,
                             Integer adcVoltage, Integer temperature)
             throws IOException {
-        send("/muse/batt", new Integer[]{stateOfCharge, fuelGuageVoltage, adcVoltage, temperature});
+        send("/muse/batt", asList(stateOfCharge, fuelGuageVoltage, adcVoltage, temperature));
     }
 
     @ManagedOperation
     public void sendDrlReference(String drl, String ref)
             throws IOException {
-        send("/muse/drlref", new Float[]{parseFloat(drl), parseFloat(ref)});
+        send("/muse/drlref", asList(parseFloat(drl), parseFloat(ref)));
     }
 
     @ManagedOperation
@@ -144,56 +148,41 @@ public class MuseSimulator {
     @ManagedOperation
     public void sendConcentration(Float value)
             throws IOException {
-        send("/muse/elements/experimental/concentration", new Float[]{value});
+        send("/muse/elements/experimental/concentration", singletonList(value));
     }
 
     @ManagedOperation
     public void sendMellow(Float value)
             throws IOException {
-        send("/muse/elements/experimental/mellow", new Float[]{value});
+        send("/muse/elements/experimental/mellow", singletonList(value));
     }
 
     @ManagedOperation
     public void sendTouchingForehead(Integer value)
             throws IOException {
-        send("/muse/elements/touching_forehead", new Integer[]{value});
+        send("/muse/elements/touching_forehead", singletonList(value));
     }
 
     @ManagedOperation
     public void sendBlink(Integer value)
             throws IOException {
-        send("/muse/elements/blink", new Integer[]{value});
+        send("/muse/elements/blink", singletonList(value));
     }
 
     @ManagedOperation
     public void sendJawClench(Integer value)
             throws IOException {
-        send("/muse/elements/jaw_clench", new Integer[]{value});
+        send("/muse/elements/jaw_clench", singletonList(value));
     }
 
-    private <T> T[] args(Class<T> componentType, String args) {
+    private <T> List<T> args(Class<T> componentType, String args) {
         return stream(args.split("\\s*,\\s*"))
                 .map(arg -> conversionService.convert(arg, componentType))
-                .toArray(length -> (T[]) newInstance(componentType, length));
+                .collect(toList());
     }
 
-    private void send(String path, Float[] args)
+    private void send(String address, Collection args)
             throws IOException {
-        client.send(new OSCMessage(path, args));
-    }
-
-    private void send(String path, Integer[] args)
-            throws IOException {
-        client.send(new OSCMessage(path, args));
-    }
-
-    private void send(String path, Boolean[] args)
-            throws IOException {
-        client.send(new OSCMessage(path, args));
-    }
-
-    private void send(String path, String[] args)
-            throws IOException {
-        client.send(new OSCMessage(path, args));
+        client.send(new OSCMessage(address, args));
     }
 }

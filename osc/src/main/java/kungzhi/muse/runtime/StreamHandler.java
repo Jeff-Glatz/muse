@@ -1,6 +1,6 @@
 package kungzhi.muse.runtime;
 
-import kungzhi.muse.osc.service.MessagePath;
+import kungzhi.muse.osc.service.MessageAddress;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
@@ -13,5 +13,5 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Retention(RUNTIME)
 @Documented
 public @interface StreamHandler {
-    MessagePath value();
+    MessageAddress value();
 }

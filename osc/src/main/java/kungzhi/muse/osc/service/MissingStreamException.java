@@ -3,8 +3,8 @@ package kungzhi.muse.osc.service;
 public class MissingStreamException
         extends MessageHandlingException {
 
-    public MissingStreamException(String message, String path) {
-        super(message, path);
+    public MissingStreamException(String message, String address) {
+        super(message, address);
     }
 
 }

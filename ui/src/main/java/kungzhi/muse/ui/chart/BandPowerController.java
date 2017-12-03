@@ -10,14 +10,14 @@ import kungzhi.muse.model.BandPower;
 import kungzhi.muse.model.Configuration;
 import kungzhi.muse.model.Headband;
 import kungzhi.muse.osc.service.MessageDispatcher;
-import kungzhi.muse.osc.service.MessagePath;
+import kungzhi.muse.osc.service.MessageAddress;
 import kungzhi.muse.repository.Bands;
 import kungzhi.muse.ui.common.AbstractController;
 
 import java.time.Clock;
 
 import static java.lang.String.format;
-import static kungzhi.muse.osc.service.MessagePath.valueOf;
+import static kungzhi.muse.osc.service.MessageAddress.valueOf;
 
 public abstract class BandPowerController
         extends AbstractController {
@@ -76,13 +76,13 @@ public abstract class BandPowerController
     }
 
     private Series<Number, Number> bandPowerSeries(Band band) {
-        MessagePath path = valueOf(format("%s_%s",
+        MessageAddress address = valueOf(format("%s_%s",
                 band.getIdentifier().toUpperCase(),
                 relative ? "RELATIVE" : "ABSOLUTE"));
-        log.info("Streaming data on {} for {}", path, band.getIdentifier());
+        log.info("Streaming data on {} for {}", address, band.getIdentifier());
         Series<Number, Number> series = new Series<>();
         series.setName(localize(band));
-        dispatcher.withStream(path, BandPower.class,
+        dispatcher.withStream(address, BandPower.class,
                 (headband, power) -> animator.offer(series, power.average()));
         return series;
     }

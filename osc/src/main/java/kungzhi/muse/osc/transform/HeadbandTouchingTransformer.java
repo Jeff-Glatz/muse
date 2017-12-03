@@ -1,10 +1,10 @@
 package kungzhi.muse.osc.transform;
 
-import de.sciss.net.OSCMessage;
+import com.illposed.osc.OSCMessage;
 import kungzhi.muse.model.HeadbandTouching;
 import kungzhi.muse.runtime.Transformer;
 
-import static kungzhi.muse.osc.service.MessagePath.HEADBAND_TOUCHING;
+import static kungzhi.muse.osc.service.MessageAddress.HEADBAND_TOUCHING;
 import static kungzhi.muse.osc.transform.MessageHelper.argumentAt;
 
 @Transformer(HEADBAND_TOUCHING)

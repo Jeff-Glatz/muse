@@ -1,12 +1,12 @@
 package kungzhi.muse.osc.transform;
 
+import com.illposed.osc.OSCMessage;
 import com.jsoniter.any.Any;
-import de.sciss.net.OSCMessage;
 import kungzhi.muse.model.Version;
 import kungzhi.muse.runtime.Transformer;
 
 import static com.jsoniter.JsonIterator.deserialize;
-import static kungzhi.muse.osc.service.MessagePath.VERSION;
+import static kungzhi.muse.osc.service.MessageAddress.VERSION;
 import static kungzhi.muse.osc.transform.MessageHelper.argumentAt;
 
 @Transformer(VERSION)

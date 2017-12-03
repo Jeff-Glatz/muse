@@ -7,9 +7,9 @@ import kungzhi.muse.model.Configuration;
 import kungzhi.muse.model.DrlReference;
 import kungzhi.muse.model.Eeg;
 import kungzhi.muse.model.Fft;
-import kungzhi.muse.model.HeadbandTouching;
 import kungzhi.muse.model.HeadbandStatus;
 import kungzhi.muse.model.HeadbandStatusStrict;
+import kungzhi.muse.model.HeadbandTouching;
 import kungzhi.muse.model.Model;
 import kungzhi.muse.model.SessionScore;
 import kungzhi.muse.model.SingleValue;
@@ -24,10 +24,10 @@ import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.toMap;
 
 /**
- * Enumerates the available message paths and the expected domain/model
+ * Enumerates the available message addresses and the expected domain/model
  * objects contained in the message stream.
  */
-public enum MessagePath {
+public enum MessageAddress {
     EEG("/muse/eeg", Eeg.class, false),
     EEG_DROPPED_SAMPLES("/muse/eeg/dropped_samples", SingleValue.class, false),
     EEG_QUANTIZATION("/muse/eeg/quantization", SingleValue.class, false),
@@ -75,14 +75,14 @@ public enum MessagePath {
     VERSION("/muse/version", Version.class, false),
     ANNOTATION("/muse/annotation", Model.class, false);
 
-    private static final Logger log = LoggerFactory.getLogger(MessagePath.class);
-    private static final Map<String, MessagePath> pathMap = mapPaths();
+    private static final Logger log = LoggerFactory.getLogger(MessageAddress.class);
+    private static final Map<String, MessageAddress> addressMap = mapAddresses();
 
     private final String name;
     private final Class<? extends Model> type;
     private final boolean experimental;
 
-    MessagePath(String name, Class<? extends Model> type, boolean experimental) {
+    MessageAddress(String name, Class<? extends Model> type, boolean experimental) {
         this.name = name.intern();
         this.type = type;
         this.experimental = experimental;
@@ -100,15 +100,15 @@ public enum MessagePath {
         return experimental;
     }
 
-    public static MessagePath fromPath(String path) {
-        MessagePath metadata = pathMap.get(path);
+    public static MessageAddress fromAddress(String address) {
+        MessageAddress metadata = addressMap.get(address);
         if (metadata == null) {
-            log.warn("Missing path for {}", path);
+            log.warn("Missing address for {}", address);
         }
         return metadata;
     }
 
-    private static Map<String, MessagePath> mapPaths() {
+    private static Map<String, MessageAddress> mapAddresses() {
         return stream(values())
                 .collect(toMap(metadata -> metadata.name, identity()));
     }

@@ -1,7 +1,7 @@
 package kungzhi.muse.osc.transform;
 
+import com.illposed.osc.OSCMessage;
 import com.jsoniter.any.Any;
-import de.sciss.net.OSCMessage;
 import kungzhi.muse.model.Configuration;
 import kungzhi.muse.model.Preset;
 import kungzhi.muse.model.Sensor;
@@ -9,7 +9,7 @@ import kungzhi.muse.runtime.Transformer;
 
 import static com.jsoniter.JsonIterator.deserialize;
 import static java.util.Arrays.stream;
-import static kungzhi.muse.osc.service.MessagePath.CONFIGURATION;
+import static kungzhi.muse.osc.service.MessageAddress.CONFIGURATION;
 import static kungzhi.muse.osc.transform.MessageHelper.argumentAt;
 
 @Transformer(CONFIGURATION)

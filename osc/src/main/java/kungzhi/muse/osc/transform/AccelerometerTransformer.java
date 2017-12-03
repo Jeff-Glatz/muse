@@ -1,10 +1,10 @@
 package kungzhi.muse.osc.transform;
 
-import de.sciss.net.OSCMessage;
+import com.illposed.osc.OSCMessage;
 import kungzhi.muse.model.Accelerometer;
 import kungzhi.muse.runtime.Transformer;
 
-import static kungzhi.muse.osc.service.MessagePath.ACCELEROMETER;
+import static kungzhi.muse.osc.service.MessageAddress.ACCELEROMETER;
 import static kungzhi.muse.osc.transform.MessageHelper.argumentAt;
 
 @Transformer(ACCELEROMETER)

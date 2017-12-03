@@ -1,10 +1,10 @@
 package kungzhi.muse.osc.transform;
 
-import de.sciss.net.OSCMessage;
+import com.illposed.osc.OSCMessage;
 import kungzhi.muse.model.Eeg;
 import kungzhi.muse.runtime.Transformer;
 
-import static kungzhi.muse.osc.service.MessagePath.EEG;
+import static kungzhi.muse.osc.service.MessageAddress.EEG;
 import static kungzhi.muse.osc.transform.MessageHelper.extractArguments;
 
 @Transformer(EEG)

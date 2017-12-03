@@ -1,6 +1,6 @@
 package kungzhi.muse.osc.transform;
 
-import de.sciss.net.OSCMessage;
+import com.illposed.osc.OSCMessage;
 import kungzhi.muse.model.Band;
 import kungzhi.muse.model.BandPower;
 

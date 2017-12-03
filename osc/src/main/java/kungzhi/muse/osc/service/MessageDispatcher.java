@@ -1,7 +1,7 @@
 package kungzhi.muse.osc.service;
 
-import de.sciss.net.OSCListener;
-import de.sciss.net.OSCMessage;
+import com.illposed.osc.OSCListener;
+import com.illposed.osc.OSCMessage;
 import kungzhi.muse.model.Headband;
 import kungzhi.muse.model.Model;
 import kungzhi.muse.model.ModelStream;
@@ -13,17 +13,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
-import java.net.SocketAddress;
 import java.time.Clock;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Executor;
 
-import static de.sciss.net.OSCPacket.printTextOn;
 import static java.lang.String.format;
 
 /**
@@ -56,41 +53,41 @@ public class MessageDispatcher
     }
 
     public <M extends Model> MessageDispatcher withTransformer(
-            String path, Class<M> type, MessageTransformer<M> transformer) {
-        transformers.put(path, transformer);
+            String address, Class<M> type, MessageTransformer<M> transformer) {
+        transformers.put(address, transformer);
         return this;
     }
 
     public <M extends Model> MessageDispatcher withTransformer(
-            MessagePath path, Class<M> type, MessageTransformer<M> transformer) {
-        return withTransformer(path.getName(), type, transformer);
+            MessageAddress address, Class<M> type, MessageTransformer<M> transformer) {
+        return withTransformer(address.getName(), type, transformer);
     }
 
     public <M extends Model> MessageDispatcher withStream(
-            String path, Class<M> type, ModelStream<M> stream) {
-        streams(path, false).add(stream);
+            String address, Class<M> type, ModelStream<M> stream) {
+        streams(address, false).add(stream);
         return this;
     }
 
     public <M extends Model> MessageDispatcher withStream(
-            MessagePath path, ModelStream<M> stream) {
-        return withStream(path.getName(), null, stream);
+            MessageAddress address, ModelStream<M> stream) {
+        return withStream(address.getName(), null, stream);
     }
 
     public <M extends Model> MessageDispatcher withStream(
-            MessagePath path, Class<M> type, ModelStream<M> stream) {
-        return withStream(path.getName(), type, stream);
+            MessageAddress address, Class<M> type, ModelStream<M> stream) {
+        return withStream(address.getName(), type, stream);
     }
 
     public <M extends Model> MessageDispatcher streaming(
-            String path, MessageTransformer<M> transformer, ModelStream<M> stream) {
-        transformers.put(path, transformer);
-        return withStream(path, null, stream);
+            String address, MessageTransformer<M> transformer, ModelStream<M> stream) {
+        transformers.put(address, transformer);
+        return withStream(address, null, stream);
     }
 
     public <M extends Model> MessageDispatcher streaming(
-            MessagePath path, MessageTransformer<M> transformer, ModelStream<M> stream) {
-        return streaming(path.getName(), transformer, stream);
+            MessageAddress address, MessageTransformer<M> transformer, ModelStream<M> stream) {
+        return streaming(address.getName(), transformer, stream);
     }
 
     public <E extends Exception> MessageDispatcher handling(Class<E> type, MessageDispatcherErrorHandler<E> errorHandler) {
@@ -100,12 +97,12 @@ public class MessageDispatcher
 
     @Override
     @SuppressWarnings("unchecked")
-    public void messageReceived(OSCMessage message, SocketAddress sender, long time) {
-        String path = message.getName();
+    public void acceptMessage(Date time, OSCMessage message) {
+        String address = message.getAddress();
         try {
-            MessageTransformer transformer = transformer(path);
-            List<ModelStream> streams = streams(path, true);
-            Model model = transformer.fromMessage((time > 1) ? time : clock.millis(), message);
+            MessageTransformer transformer = transformer(address);
+            List<ModelStream> streams = streams(address, true);
+            Model model = transformer.fromMessage(time != null ? time.getTime() : clock.millis(), message);
             executor.execute(() -> streams.forEach(stream -> {
                 try {
                     stream.next(headband, model);
@@ -115,10 +112,10 @@ public class MessageDispatcher
                 }
             }));
         } catch (MissingTransformerException e) {
-            log.debug("No transformer configured for {}", path);
+            log.debug("No transformer configured for {}", address);
             this.<MissingTransformerException>handler(e).on(this, message, e);
         } catch (MissingStreamException e) {
-            log.debug("No stream configured for {}", path);
+            log.debug("No stream configured for {}", address);
             this.<MissingStreamException>handler(e).on(this, message, e);
         } catch (Throwable e) {
             log.error(format("Failure dispatching message: %s", toString(message)), e);
@@ -126,21 +123,21 @@ public class MessageDispatcher
         }
     }
 
-    private MessageTransformer transformer(String path) {
-        return transformers.getOrDefault(path, (time, message) -> {
+    private MessageTransformer transformer(String address) {
+        return transformers.getOrDefault(address, (time, message) -> {
             throw new MissingTransformerException(format(
-                    "Not configured to transform messages received on %s", path), path);
+                    "Not configured to transform messages received on %s", address), address);
         });
     }
 
-    private List<ModelStream> streams(String path, boolean failIfEmpty) {
-        List<ModelStream> streamsForPath = streams
-                .computeIfAbsent(path, key -> new ArrayList<>());
-        if (failIfEmpty && streamsForPath.isEmpty()) {
+    private List<ModelStream> streams(String address, boolean failIfEmpty) {
+        List<ModelStream> streamsForAddress = streams
+                .computeIfAbsent(address, key -> new ArrayList<>());
+        if (failIfEmpty && streamsForAddress.isEmpty()) {
             throw new MissingStreamException(format(
-                    "Not configured to stream data models received on %s", path), path);
+                    "Not configured to stream data models received on %s", address), address);
         }
-        return streamsForPath;
+        return streamsForAddress;
     }
 
     @SuppressWarnings("unchecked")
@@ -150,8 +147,6 @@ public class MessageDispatcher
     }
 
     private static String toString(OSCMessage message) {
-        ByteArrayOutputStream text = new ByteArrayOutputStream();
-        printTextOn(new PrintStream(text), message);
-        return text.toString();
+        return format("address: %s args: %s", message.getAddress(), message.getArguments());
     }
 }

@@ -9,7 +9,7 @@ import kungzhi.muse.model.Configuration;
 import kungzhi.muse.model.Headband;
 import kungzhi.muse.model.SingleValue;
 import kungzhi.muse.osc.service.MessageDispatcher;
-import kungzhi.muse.osc.service.MessagePath;
+import kungzhi.muse.osc.service.MessageAddress;
 import kungzhi.muse.ui.common.AbstractController;
 
 import java.time.Clock;
@@ -19,18 +19,18 @@ public abstract class SingleNumberController
     private final XYChartAnimator<Number> animator;
     private final Headband headband;
     private final MessageDispatcher dispatcher;
-    private final MessagePath path;
+    private final MessageAddress address;
     private final String resourceKey;
 
     @FXML
     protected LineChart<Number, Number> singleValueChart;
 
     protected SingleNumberController(Clock clock, Headband headband, MessageDispatcher dispatcher,
-                                     MessagePath path, String resourceKey) {
+                                     MessageAddress address, String resourceKey) {
         this.animator = new XYChartAnimator<>(clock);
         this.headband = headband;
         this.dispatcher = dispatcher;
-        this.path = path;
+        this.address = address;
         this.resourceKey = resourceKey;
     }
 
@@ -69,7 +69,7 @@ public abstract class SingleNumberController
     private Series<Number, Number> singleValueSeries() {
         Series<Number, Number> series = new Series<>();
         series.setName(localize(resourceKey));
-        dispatcher.withStream(path, SingleValue.class,
+        dispatcher.withStream(address, SingleValue.class,
                 (headband, value) -> animator.offer(series, (Number) value.get()));
         return series;
     }

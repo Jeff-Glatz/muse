@@ -1,10 +1,10 @@
 package kungzhi.muse.osc.transform;
 
-import de.sciss.net.OSCMessage;
+import com.illposed.osc.OSCMessage;
 import kungzhi.muse.model.HeadbandStatus;
 import kungzhi.muse.runtime.Transformer;
 
-import static kungzhi.muse.osc.service.MessagePath.HEADBAND_STATUS;
+import static kungzhi.muse.osc.service.MessageAddress.HEADBAND_STATUS;
 import static kungzhi.muse.osc.transform.MessageHelper.extractArguments;
 
 @Transformer(HEADBAND_STATUS)

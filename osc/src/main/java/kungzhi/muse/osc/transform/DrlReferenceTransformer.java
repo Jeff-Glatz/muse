@@ -1,10 +1,10 @@
 package kungzhi.muse.osc.transform;
 
-import de.sciss.net.OSCMessage;
+import com.illposed.osc.OSCMessage;
 import kungzhi.muse.model.DrlReference;
 import kungzhi.muse.runtime.Transformer;
 
-import static kungzhi.muse.osc.service.MessagePath.DRL_REFERENCE;
+import static kungzhi.muse.osc.service.MessageAddress.DRL_REFERENCE;
 import static kungzhi.muse.osc.transform.MessageHelper.argumentAt;
 
 @Transformer(DRL_REFERENCE)

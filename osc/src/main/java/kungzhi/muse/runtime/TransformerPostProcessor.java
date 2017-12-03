@@ -43,11 +43,11 @@ public class TransformerPostProcessor implements BeanPostProcessor {
             Class<?> implementation = bean.getClass();
             if (implementation.isAnnotationPresent(Transformer.class)) {
                 Transformer transformer = implementation.getAnnotation(Transformer.class);
-                stream(transformer.value()).forEach(path -> {
-                    dispatcher.withTransformer(path, path.getType(), (MessageTransformer<?>) bean);
+                stream(transformer.value()).forEach(address -> {
+                    dispatcher.withTransformer(address, address.getType(), (MessageTransformer<?>) bean);
                     log.info("Transforming messages on {} into {} using {}",
-                            path.getName(),
-                            path.getType().getSimpleName(),
+                            address.getName(),
+                            address.getType().getSimpleName(),
                             implementation.getSimpleName());
                 });
             }

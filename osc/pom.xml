@@ -17,8 +17,8 @@
             <optional>true</optional>
         </dependency>
         <dependency>
-            <groupId>de.sciss</groupId>
-            <artifactId>netutil</artifactId>
+            <groupId>com.illposed.osc</groupId>
+            <artifactId>javaosc-core</artifactId>
         </dependency>
         <dependency>
             <groupId>com.jsoniter</groupId>
