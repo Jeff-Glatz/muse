@@ -1,4 +1,4 @@
-package kungzhi.ui.chart;
+package kungzhi.ui.chart.realtime;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -22,7 +22,6 @@ public class XYChartAnimator<Y> {
     private final Clock clock;
     private final Timeline timeline;
 
-    private long startedAt;
     private LineChart<Number, Y> chart;
     private int secondsOfHistory = 30;
     private int maxDataWindow = 1000;
@@ -34,7 +33,6 @@ public class XYChartAnimator<Y> {
                 .add(new KeyFrame(millis(1000 / 60), (event) ->
                         addQueuedDataToChart()));
         this.timeline.setCycleCount(INDEFINITE);
-        this.startedAt = clock.millis();
     }
 
     public LineChart<Number, Y> getChart() {
@@ -65,21 +63,16 @@ public class XYChartAnimator<Y> {
         if (chart == null) {
             throw new IllegalStateException("Missing chart to animate");
         }
-        startedAt = clock.millis();
         timeline.play();
     }
 
-    public boolean offer(Series<Number, Y> series, Y value) {
+    public boolean offer(Series<Number, Y> series, Number x, Y y) {
         return queue.offer(new XYChartData<>(series,
-                new XYChart.Data<>(elapsedTimeInSeconds(), value)));
+                new XYChart.Data<>(x, y)));
     }
 
     public void stop() {
-        try {
-            timeline.stop();
-        } finally {
-            startedAt = 0;
-        }
+        timeline.stop();
     }
 
     private void addQueuedDataToChart() {
@@ -88,15 +81,13 @@ public class XYChartAnimator<Y> {
              data = queue.poll()) {
             data.addToSeries(maxDataWindow);
         }
-        double elapsed = elapsedTimeInSeconds();
-        if (elapsed > secondsOfHistory) {
-            NumberAxis xAxis = (NumberAxis) chart.getXAxis();
-            xAxis.setUpperBound(elapsed);
-            xAxis.setLowerBound(elapsed - secondsOfHistory);
-        }
+        NumberAxis xAxis = (NumberAxis) chart.getXAxis();
+        double upperBound = clock.millis();
+        xAxis.setUpperBound(upperBound);
+        xAxis.setLowerBound(upperBound - millisecondsOfHistory());
     }
 
-    private double elapsedTimeInSeconds() {
-        return (clock.millis() - startedAt) / 1000D;
+    private long millisecondsOfHistory() {
+        return secondsOfHistory * 1000;
     }
 }

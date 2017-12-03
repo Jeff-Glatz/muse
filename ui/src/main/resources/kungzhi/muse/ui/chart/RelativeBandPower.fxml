@@ -13,12 +13,12 @@
         <NumberAxis side="BOTTOM"
                     autoRanging="false"
                     animated="true"
-                    lowerBound="0"
-                    upperBound="30"
                     forceZeroInRange="false"
-                    tickUnit="5"
-                    label="%chart.axis.elapsed"
-                    tickLabelsVisible="false"/>
+                    tickLabelsVisible="false"
+                    lowerBound="0"
+                    upperBound="30000"
+                    tickUnit="5000"
+                    label="%chart.axis.elapsed"/>
     </xAxis>
     <yAxis>
         <NumberAxis side="LEFT"

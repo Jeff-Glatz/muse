@@ -4,7 +4,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart.Series;
-import kungzhi.ui.chart.XYChartAnimator;
+import kungzhi.ui.chart.realtime.XYChartAnimator;
 import kungzhi.muse.model.Band;
 import kungzhi.muse.model.BandPower;
 import kungzhi.muse.model.Configuration;
@@ -83,7 +83,7 @@ public abstract class BandPowerController
         Series<Number, Number> series = new Series<>();
         series.setName(localize(band));
         dispatcher.withStream(address, BandPower.class,
-                (headband, power) -> animator.offer(series, power.average()));
+                (headband, power) -> animator.offer(series, power.getTime(), power.average()));
         return series;
     }
 }

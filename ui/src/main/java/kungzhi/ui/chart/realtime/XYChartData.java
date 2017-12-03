@@ -1,4 +1,4 @@
-package kungzhi.ui.chart;
+package kungzhi.ui.chart.realtime;
 
 import javafx.collections.ObservableList;
 import javafx.scene.chart.XYChart.Data;

@@ -4,13 +4,13 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart.Series;
-import kungzhi.ui.chart.XYChartAnimator;
 import kungzhi.muse.model.Configuration;
 import kungzhi.muse.model.Headband;
 import kungzhi.muse.model.SingleValue;
-import kungzhi.muse.osc.service.MessageDispatcher;
 import kungzhi.muse.osc.service.MessageAddress;
+import kungzhi.muse.osc.service.MessageDispatcher;
 import kungzhi.muse.ui.common.AbstractController;
+import kungzhi.ui.chart.realtime.XYChartAnimator;
 
 import java.time.Clock;
 
@@ -70,7 +70,7 @@ public abstract class SingleNumberController
         Series<Number, Number> series = new Series<>();
         series.setName(localize(resourceKey));
         dispatcher.withStream(address, SingleValue.class,
-                (headband, value) -> animator.offer(series, (Number) value.get()));
+                (headband, value) -> animator.offer(series, value.getTime(), (Number) value.get()));
         return series;
     }
 }
