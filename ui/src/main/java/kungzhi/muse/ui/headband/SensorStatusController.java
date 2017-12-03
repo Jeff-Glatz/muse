@@ -62,7 +62,7 @@ public class SensorStatusController
         touching.addActiveItemListener((current, previous) -> {
             if (current.isFalse()) {
                 runLater(() -> notificationControl
-                        .notification(localize("model.headband.disconnected")));
+                        .notification(localize("model.headband.not-touching")));
             }
         });
 
