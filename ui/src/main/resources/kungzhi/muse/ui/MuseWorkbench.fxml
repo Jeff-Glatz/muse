@@ -10,10 +10,12 @@
 <?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
+<?import org.controlsfx.control.NotificationPane?>
 <?import org.controlsfx.control.StatusBar?>
 <?import java.net.URL?>
 <VBox xmlns="http://javafx.com/javafx/9"
-      xmlns:fx="http://javafx.com/fxml/1">
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="kungzhi.muse.ui.WorkbenchController">
     <stylesheets>
         <URL value="@muse.css"/>
     </stylesheets>
@@ -48,35 +50,39 @@
             <MenuItem mnemonicParsing="false" text="%menu.title.about"/>
         </Menu>
     </MenuBar>
-    <SplitPane focusTraversable="true" prefHeight="250" minWidth="800">
-        <TabPane SplitPane.resizableWithParent="true" minWidth="572">
-            <Tab text="%chart.band-power.relative.title" closable="false">
-                <fx:include source="RelativeBandPowerChart.fxml"/>
-            </Tab>
-            <Tab text="%chart.band-power.absolute.title" closable="false">
-                <fx:include source="AbsoluteBandPowerChart.fxml"/>
-            </Tab>
-            <Tab text="%chart.concentration.title" closable="false">
-                <fx:include source="ConcentrationChart.fxml"/>
-            </Tab>
-            <Tab text="%chart.mellow.title" closable="false">
-                <fx:include source="MellowChart.fxml"/>
-            </Tab>
-        </TabPane>
-        <AnchorPane SplitPane.resizableWithParent="false" minWidth="228">
-            <VBox>
-                <TitledPane animated="false" text="%label.text.headband.connection" collapsible="false">
-                    <fx:include source="HeadbandConnection.fxml"/>
-                </TitledPane>
-                <TitledPane animated="false" text="%label.text.headband.configuration" collapsible="false">
-                    <fx:include source="HeadbandConfiguration.fxml"/>
-                </TitledPane>
-                <TitledPane animated="false" text="%label.text.headband.version" collapsible="false">
-                    <fx:include source="HeadbandVersion.fxml"/>
-                </TitledPane>
-            </VBox>
-        </AnchorPane>
-    </SplitPane>
+    <NotificationPane fx:id="notificationPane" showFromTop="true">
+        <content>
+            <SplitPane focusTraversable="true" prefHeight="250" minWidth="800">
+                <TabPane SplitPane.resizableWithParent="true" minWidth="572">
+                    <Tab text="%chart.band-power.relative.title" closable="false">
+                        <fx:include source="RelativeBandPowerChart.fxml"/>
+                    </Tab>
+                    <Tab text="%chart.band-power.absolute.title" closable="false">
+                        <fx:include source="AbsoluteBandPowerChart.fxml"/>
+                    </Tab>
+                    <Tab text="%chart.concentration.title" closable="false">
+                        <fx:include source="ConcentrationChart.fxml"/>
+                    </Tab>
+                    <Tab text="%chart.mellow.title" closable="false">
+                        <fx:include source="MellowChart.fxml"/>
+                    </Tab>
+                </TabPane>
+                <AnchorPane SplitPane.resizableWithParent="false" minWidth="228">
+                    <VBox>
+                        <TitledPane animated="false" text="%label.text.headband.connection" collapsible="false">
+                            <fx:include source="HeadbandConnection.fxml"/>
+                        </TitledPane>
+                        <TitledPane animated="false" text="%label.text.headband.configuration" collapsible="false">
+                            <fx:include source="HeadbandConfiguration.fxml"/>
+                        </TitledPane>
+                        <TitledPane animated="false" text="%label.text.headband.version" collapsible="false">
+                            <fx:include source="HeadbandVersion.fxml"/>
+                        </TitledPane>
+                    </VBox>
+                </AnchorPane>
+            </SplitPane>
+        </content>
+    </NotificationPane>
     <StatusBar VBox.vgrow="NEVER" text="">
         <leftItems>
             <fx:include source="SensorStatus.fxml"/>

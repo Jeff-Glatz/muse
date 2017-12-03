@@ -1,24 +1,25 @@
 package kungzhi.muse.ui;
 
+import javafx.css.PseudoClass;
 import javafx.fxml.FXML;
 import kungzhi.muse.lang.ServiceControl;
 import kungzhi.muse.osc.service.MessageClient;
 import kungzhi.muse.platform.MuseIO;
-import org.controlsfx.control.Notifications;
 import org.controlsfx.control.ToggleSwitch;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import javax.annotation.PostConstruct;
 
-import static java.lang.String.format;
 import static javafx.application.Platform.runLater;
 
 @Controller
 public class HeadbandConnectionController
         extends AbstractController {
+    private final PseudoClass disconnectedPseudoClass = PseudoClass.getPseudoClass("disconnected");
     private final MuseIO museIO;
     private final MessageClient client;
+    private final Notifier notifier;
 
     @FXML
     private ToggleSwitch museIOToggle;
@@ -27,22 +28,22 @@ public class HeadbandConnectionController
     private ToggleSwitch clientToggle;
 
     @Autowired
-    public HeadbandConnectionController(MuseIO museIO, MessageClient client) {
+    public HeadbandConnectionController(MuseIO museIO, MessageClient client, Notifier notifier) {
         this.museIO = museIO;
         this.client = client;
+        this.notifier = notifier;
     }
 
     @PostConstruct
     public void initialize() {
         museIO.addMusePairingListener(paired -> {
             runLater(() -> {
-                Notifications notifications = Notifications.create()
-                        .title(localize("model.headband.monitor"))
-                        .text(localize(format("model.headband.%s", paired ? "paired" : "not-paired")));
                 if (paired) {
-                    notifications.showInformation();
+                    museIOToggle.pseudoClassStateChanged(disconnectedPseudoClass, false);
+                    notifier.show(localize("model.headband.paired"));
                 } else {
-                    notifications.showWarning();
+                    museIOToggle.pseudoClassStateChanged(disconnectedPseudoClass, true);
+                    notifier.show(localize("model.headband.not-paired"));
                 }
             });
         });
@@ -51,6 +52,7 @@ public class HeadbandConnectionController
     protected void onInitialize() {
         museIOToggle.selectedProperty()
                 .addListener((observable, oldValue, newValue) -> {
+                    museIOToggle.pseudoClassStateChanged(disconnectedPseudoClass, false);
                     try {
                         toggle(museIOToggle, museIO);
                     } catch (Exception e) {

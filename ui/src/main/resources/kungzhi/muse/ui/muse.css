@@ -62,3 +62,9 @@
     linear-gradient(to bottom, derive(#b8ee36, 30%), #80c800);
     -fx-background-insets: 0, 1;
 }
+
+#muse-io-toggle.toggle-switch.service-control:disconnected .thumb-area {
+    -fx-background-color: linear-gradient(to bottom, derive(-fx-text-box-border, -20%), derive(-fx-text-box-border, -30%)),
+    linear-gradient(to bottom, derive(orange, 30%), darkorange);
+    -fx-background-insets: 0, 1;
+}

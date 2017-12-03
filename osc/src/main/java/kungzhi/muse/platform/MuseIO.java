@@ -29,6 +29,8 @@ public class MuseIO
     private long secondsToWaitForShutdown = 30;
     private Process process;
 
+    Boolean paired;
+
     public void addMusePairingListener(MusePairingListener listener) {
         listeners.add(listener);
     }
@@ -154,8 +156,6 @@ public class MuseIO
                 format("MuseIO on %s is currently not supported by Interaxon", platform));
     }
 
-    Boolean paired;
-
     void fireMusePaired(boolean paired) {
         if (this.paired == null || (this.paired ^ paired)) {
             this.paired = paired;
@@ -200,6 +200,7 @@ public class MuseIO
             }
         } finally {
             monitoringThread = null;
+            paired = null;
         }
     }
 }
