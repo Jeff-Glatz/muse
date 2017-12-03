@@ -18,7 +18,7 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 public class MuseIO
         implements ServiceControl {
     private final Logger log = LoggerFactory.getLogger(getClass());
-    private final Logger muse = LoggerFactory.getLogger("MuseIO");
+    private final Logger museIOLog = LoggerFactory.getLogger("MuseIO");
     private final List<MusePairingListener> listeners = new ArrayList<>();
 
     private Thread monitoringThread;
@@ -176,8 +176,8 @@ public class MuseIO
             fireMusePaired(false);
             while (sc.hasNextLine()) {
                 String line = sc.nextLine();
-                muse.info(line);
-                if (line.contains("receiving at:")) {
+                museIOLog.info(line);
+                if (line.contains("Connected.")) {
                     fireMusePaired(true);
                 } else if (line.contains("Connection failure")) {
                     fireMusePaired(false);
