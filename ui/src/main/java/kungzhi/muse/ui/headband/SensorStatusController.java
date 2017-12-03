@@ -11,7 +11,9 @@ import kungzhi.muse.model.Configuration;
 import kungzhi.muse.model.EegChannel;
 import kungzhi.muse.model.Headband;
 import kungzhi.muse.model.HeadbandStatus;
+import kungzhi.muse.model.HeadbandTouching;
 import kungzhi.muse.ui.common.AbstractController;
+import kungzhi.muse.ui.common.NotificationControl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -31,13 +33,15 @@ public class SensorStatusController
 
     private final Map<EegChannel, RadioButton> sensorIndicatorMap = new HashMap<>();
     private final Headband headband;
+    private final NotificationControl notificationControl;
 
     @FXML
     private HBox headbandStatusBox;
 
     @Autowired
-    public SensorStatusController(Headband headband) {
+    public SensorStatusController(Headband headband, NotificationControl notificationControl) {
         this.headband = headband;
+        this.notificationControl = notificationControl;
     }
 
     @Override
@@ -51,6 +55,14 @@ public class SensorStatusController
                     log.info("Sensor Layout changed, rebuilding sensor display");
                     runLater(() -> buildSensorStatusDisplay(current));
                 }
+            }
+        });
+
+        HeadbandTouching touching = headband.getTouching();
+        touching.addActiveItemListener((current, previous) -> {
+            if (current.isFalse()) {
+                runLater(() -> notificationControl
+                        .notification(localize("model.headband.disconnected")));
             }
         });
 

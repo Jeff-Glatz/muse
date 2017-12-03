@@ -17,6 +17,14 @@ public class HeadbandTouching
         return value;
     }
 
+    public boolean isTrue() {
+        return value > 0;
+    }
+
+    public boolean isFalse() {
+        return value <= 0;
+    }
+
     @Override
     public boolean sameAs(HeadbandTouching that) {
         return value != null ? value.equals(that.value) : that.value == null;
