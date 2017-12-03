@@ -19,7 +19,7 @@ public class MuseIO
         implements ServiceControl {
     private final Logger log = LoggerFactory.getLogger(getClass());
     private final Logger museIOLog = LoggerFactory.getLogger("MuseIO");
-    private final List<MusePairingListener> listeners = new ArrayList<>();
+    private final List<ConnectionListener> listeners = new ArrayList<>();
 
     private Thread monitoringThread;
     private Preset preset = Preset.FOURTEEN;
@@ -29,13 +29,13 @@ public class MuseIO
     private long secondsToWaitForShutdown = 30;
     private Process process;
 
-    Boolean paired;
+    Boolean connected;
 
-    public void addMusePairingListener(MusePairingListener listener) {
+    public void addConnectionListener(ConnectionListener listener) {
         listeners.add(listener);
     }
 
-    public void removeMusePairingListener(MusePairingListener listener) {
+    public void removeConnectionListener(ConnectionListener listener) {
         listeners.remove(listener);
     }
 
@@ -156,12 +156,12 @@ public class MuseIO
                 format("MuseIO on %s is currently not supported by Interaxon", platform));
     }
 
-    void fireMusePaired(boolean paired) {
-        if (this.paired == null || (this.paired ^ paired)) {
-            this.paired = paired;
+    void fireConnected(boolean connected) {
+        if (this.connected == null || (this.connected ^ connected)) {
+            this.connected = connected;
             listeners.forEach(listener -> {
                 try {
-                    listener.onMusePaired(paired);
+                    listener.onConnected(connected);
                 } catch (Exception e) {
                     log.error("Failure notifying listener", e);
                 }
@@ -173,14 +173,14 @@ public class MuseIO
         log.info("Starting MuseIO monitoring thread...");
         monitoringThread = new Thread(() -> {
             Scanner sc = new Scanner(process.getInputStream());
-            fireMusePaired(false);
+            fireConnected(false);
             while (sc.hasNextLine()) {
                 String line = sc.nextLine();
                 museIOLog.info(line);
                 if (line.contains("Connected.")) {
-                    fireMusePaired(true);
+                    fireConnected(true);
                 } else if (line.contains("Connection failure")) {
-                    fireMusePaired(false);
+                    fireConnected(false);
                 } else if (line.contains("OSC error 61")) {
                     // TODO: No client endpoint connected
                 }
@@ -200,7 +200,7 @@ public class MuseIO
             }
         } finally {
             monitoringThread = null;
-            paired = null;
+            connected = null;
         }
     }
 }

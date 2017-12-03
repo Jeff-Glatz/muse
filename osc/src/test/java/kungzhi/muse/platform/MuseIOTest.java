@@ -13,61 +13,61 @@ public class MuseIOTest
         extends UnitTest {
 
     @Mock
-    private MusePairingListener mockListener;
+    private ConnectionListener mockListener;
 
     private MuseIO museIO;
 
     @BeforeEach
     void setUp() {
         museIO = new MuseIO();
-        museIO.addMusePairingListener(mockListener);
+        museIO.addConnectionListener(mockListener);
     }
 
     @Test
     public void shouldFireInitialPairingEventWhenFalse() {
-        assertThat(museIO.paired)
+        assertThat(museIO.connected)
                 .isNull();
 
-        museIO.fireMusePaired(false);
+        museIO.fireConnected(false);
 
-        assertThat(museIO.paired)
+        assertThat(museIO.connected)
                 .isFalse();
 
         verify(mockListener)
-                .onMusePaired(false);
+                .onConnected(false);
     }
 
     @Test
     public void shouldFireInitialPairingEventWhenTrue() {
-        assertThat(museIO.paired)
+        assertThat(museIO.connected)
                 .isNull();
 
-        museIO.fireMusePaired(true);
+        museIO.fireConnected(true);
 
-        assertThat(museIO.paired)
+        assertThat(museIO.connected)
                 .isTrue();
 
         verify(mockListener)
-                .onMusePaired(true);
+                .onConnected(true);
     }
 
     @Test
     public void shouldNotFirePairingEventWhenStateDoesNotChange() {
-        museIO.fireMusePaired(true);
-        museIO.fireMusePaired(true);
+        museIO.fireConnected(true);
+        museIO.fireConnected(true);
 
         verify(mockListener, times(1))
-                .onMusePaired(true);
+                .onConnected(true);
     }
 
     @Test
     public void shouldFirePairingEventWhenStateDoesChange() {
-        museIO.fireMusePaired(true);
-        museIO.fireMusePaired(false);
+        museIO.fireConnected(true);
+        museIO.fireConnected(false);
 
         verify(mockListener, times(1))
-                .onMusePaired(true);
+                .onConnected(true);
         verify(mockListener, times(1))
-                .onMusePaired(false);
+                .onConnected(false);
     }
 }

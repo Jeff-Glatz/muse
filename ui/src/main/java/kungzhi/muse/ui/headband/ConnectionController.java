@@ -5,8 +5,8 @@ import javafx.fxml.FXML;
 import kungzhi.muse.lang.ServiceControl;
 import kungzhi.muse.osc.service.MessageClient;
 import kungzhi.muse.platform.MuseIO;
-import kungzhi.muse.ui.common.NotificationControl;
 import kungzhi.muse.ui.common.AbstractController;
+import kungzhi.muse.ui.common.NotificationControl;
 import org.controlsfx.control.ToggleSwitch;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -38,14 +38,14 @@ public class ConnectionController
 
     @PostConstruct
     public void initialize() {
-        museIO.addMusePairingListener(paired -> {
+        museIO.addConnectionListener(connected -> {
             runLater(() -> {
-                if (paired) {
+                if (connected) {
                     museIOToggle.pseudoClassStateChanged(disconnectedPseudoClass, false);
-                    notificationControl.notification(localize("model.headband.paired"));
+                    notificationControl.notification(localize("model.headband.connected"));
                 } else {
                     museIOToggle.pseudoClassStateChanged(disconnectedPseudoClass, true);
-                    notificationControl.notification(localize("model.headband.not-paired"));
+                    notificationControl.notification(localize("model.headband.disconnected"));
                 }
             });
         });
