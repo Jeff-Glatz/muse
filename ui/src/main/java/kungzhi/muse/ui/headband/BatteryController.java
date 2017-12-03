@@ -1,4 +1,4 @@
-package kungzhi.muse.ui;
+package kungzhi.muse.ui.headband;
 
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -6,6 +6,7 @@ import javafx.scene.control.ProgressBar;
 import javafx.scene.control.Tooltip;
 import kungzhi.muse.model.Battery;
 import kungzhi.muse.model.Headband;
+import kungzhi.muse.ui.common.AbstractController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 

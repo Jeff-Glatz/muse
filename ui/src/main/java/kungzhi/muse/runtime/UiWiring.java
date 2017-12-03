@@ -18,6 +18,6 @@ public class UiWiring {
 
     @Bean
     public ResourceBundle labels() {
-        return getBundle("kungzhi.muse.ui.Labels");
+        return getBundle("kungzhi.muse.ui.main.Labels");
     }
 }

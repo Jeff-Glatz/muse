@@ -3,7 +3,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import org.controlsfx.control.ToggleSwitch?>
 <VBox xmlns:fx="http://javafx.com/fxml"
-      fx:controller="kungzhi.muse.ui.HeadbandConnectionController">
+      fx:controller="kungzhi.muse.ui.headband.ConnectionController">
     <padding>
         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
     </padding>

@@ -105,7 +105,7 @@ public class MessageDispatcher
         try {
             MessageTransformer transformer = transformer(path);
             List<ModelStream> streams = streams(path, true);
-            Model model = transformer.fromMessage(clock.millis(), message);
+            Model model = transformer.fromMessage((time > 1) ? time : clock.millis(), message);
             executor.execute(() -> streams.forEach(stream -> {
                 try {
                     stream.next(headband, model);

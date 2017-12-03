@@ -31,7 +31,7 @@ public class MuseWorkbench
         context.run();
         loader.setResources(resources);
         loader.setLocation(getClass()
-                .getResource("/kungzhi/muse/ui/MuseWorkbench.fxml"));
+                .getResource("/kungzhi/muse/ui/main/MuseWorkbench.fxml"));
     }
 
     @Override

@@ -1,9 +1,10 @@
-package kungzhi.muse.ui;
+package kungzhi.muse.ui.headband;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import kungzhi.muse.model.Configuration;
 import kungzhi.muse.model.Headband;
+import kungzhi.muse.ui.common.AbstractController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -11,7 +12,7 @@ import static java.lang.String.format;
 import static javafx.application.Platform.runLater;
 
 @Controller
-public class HeadbandConfigurationController
+public class ConfigurationController
         extends AbstractController {
     private final Headband headband;
 
@@ -29,7 +30,7 @@ public class HeadbandConfigurationController
 
 
     @Autowired
-    public HeadbandConfigurationController(Headband headband) {
+    public ConfigurationController(Headband headband) {
         this.headband = headband;
     }
 

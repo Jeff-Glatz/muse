@@ -1,4 +1,4 @@
-package kungzhi.muse.ui;
+package kungzhi.muse.ui.chart;
 
 import kungzhi.muse.model.Headband;
 import kungzhi.muse.osc.service.MessageDispatcher;
@@ -9,15 +9,15 @@ import org.springframework.stereotype.Controller;
 import java.time.Clock;
 
 @Controller
-public class RelativeBandPowerChartController
-        extends BandPowerChartController {
+public class AbsoluteBandPowerController
+        extends BandPowerController {
 
     @Autowired
-    public RelativeBandPowerChartController(
+    public AbsoluteBandPowerController(
             Clock clock,
             Bands bands,
             Headband headband,
             MessageDispatcher dispatcher) {
-        super(clock, bands, headband, dispatcher, true);
+        super(clock, bands, headband, dispatcher, false);
     }
 }

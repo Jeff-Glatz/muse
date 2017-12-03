@@ -1,4 +1,4 @@
-package kungzhi.muse.ui;
+package kungzhi.muse.ui.common;
 
 import javafx.fxml.Initializable;
 import kungzhi.muse.lang.Localizable;

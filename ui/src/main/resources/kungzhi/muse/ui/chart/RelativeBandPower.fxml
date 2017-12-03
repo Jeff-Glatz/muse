@@ -3,9 +3,9 @@
 <?import javafx.scene.chart.NumberAxis?>
 <LineChart xmlns="http://javafx.com/javafx/9"
            xmlns:fx="http://javafx.com/fxml/1"
-           fx:id="singleValueChart"
-           fx:controller="kungzhi.muse.ui.ConcentrationChartController"
-           title="%chart.concentration.title"
+           fx:id="bandPowerChart"
+           fx:controller="kungzhi.muse.ui.chart.RelativeBandPowerController"
+           title="%chart.band-power.relative.title"
            animated="true"
            verticalGridLinesVisible="false"
            createSymbols="false">
@@ -27,6 +27,6 @@
                     lowerBound="0.0"
                     upperBound="1.0"
                     tickUnit="0.2"
-                    label="%chart.axis.value"/>
+                    label="%chart.axis.power"/>
     </yAxis>
 </LineChart>

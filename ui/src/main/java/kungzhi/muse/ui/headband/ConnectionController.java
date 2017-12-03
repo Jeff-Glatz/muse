@@ -1,10 +1,12 @@
-package kungzhi.muse.ui;
+package kungzhi.muse.ui.headband;
 
 import javafx.css.PseudoClass;
 import javafx.fxml.FXML;
 import kungzhi.muse.lang.ServiceControl;
 import kungzhi.muse.osc.service.MessageClient;
 import kungzhi.muse.platform.MuseIO;
+import kungzhi.muse.ui.common.NotificationControl;
+import kungzhi.muse.ui.common.AbstractController;
 import org.controlsfx.control.ToggleSwitch;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,7 +16,7 @@ import javax.annotation.PostConstruct;
 import static javafx.application.Platform.runLater;
 
 @Controller
-public class HeadbandConnectionController
+public class ConnectionController
         extends AbstractController {
     private final PseudoClass disconnectedPseudoClass = PseudoClass.getPseudoClass("disconnected");
     private final MuseIO museIO;
@@ -28,7 +30,7 @@ public class HeadbandConnectionController
     private ToggleSwitch clientToggle;
 
     @Autowired
-    public HeadbandConnectionController(MuseIO museIO, MessageClient client, NotificationControl notificationControl) {
+    public ConnectionController(MuseIO museIO, MessageClient client, NotificationControl notificationControl) {
         this.museIO = museIO;
         this.client = client;
         this.notificationControl = notificationControl;

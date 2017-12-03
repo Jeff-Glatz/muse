@@ -1,4 +1,4 @@
-package kungzhi.muse.ui;
+package kungzhi.muse.ui.chart;
 
 import kungzhi.muse.model.Headband;
 import kungzhi.muse.osc.service.MessageDispatcher;
@@ -10,12 +10,12 @@ import java.time.Clock;
 import static kungzhi.muse.osc.service.MessagePath.CONCENTRATION;
 
 @Controller
-public class ConcentrationChartController
-        extends SingleNumberChartController {
+public class ConcentrationController
+        extends SingleNumberController {
 
     @Autowired
-    public ConcentrationChartController(Clock clock, Headband headband,
-                                        MessageDispatcher dispatcher) {
+    public ConcentrationController(Clock clock, Headband headband,
+                                   MessageDispatcher dispatcher) {
         super(clock, headband, dispatcher, CONCENTRATION, "model.algorithm.concentration");
     }
 }

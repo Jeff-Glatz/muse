@@ -1,4 +1,4 @@
-package kungzhi.muse.ui;
+package kungzhi.muse.ui.headband;
 
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -10,6 +10,7 @@ import kungzhi.muse.model.Configuration;
 import kungzhi.muse.model.EegChannel;
 import kungzhi.muse.model.Headband;
 import kungzhi.muse.model.HeadbandStatus;
+import kungzhi.muse.ui.common.AbstractController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 

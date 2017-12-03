@@ -1,7 +1,10 @@
-package kungzhi.muse.ui;
+package kungzhi.muse.ui.main;
 
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import kungzhi.muse.ui.common.NotificationControl;
+import kungzhi.muse.ui.common.StatusControl;
+import kungzhi.muse.ui.common.AbstractController;
 import org.controlsfx.control.NotificationPane;
 import org.controlsfx.control.StatusBar;
 import org.controlsfx.control.action.Action;

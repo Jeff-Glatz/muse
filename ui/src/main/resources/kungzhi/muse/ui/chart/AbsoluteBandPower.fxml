@@ -4,7 +4,7 @@
 <LineChart xmlns="http://javafx.com/javafx/9"
            xmlns:fx="http://javafx.com/fxml/1"
            fx:id="bandPowerChart"
-           fx:controller="kungzhi.muse.ui.AbsoluteBandPowerChartController"
+           fx:controller="kungzhi.muse.ui.chart.AbsoluteBandPowerController"
            title="%chart.band-power.absolute.title"
            animated="true"
            verticalGridLinesVisible="false"

@@ -1,41 +1,37 @@
-package kungzhi.muse.ui;
+package kungzhi.muse.ui.chart;
 
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart.Series;
 import kungzhi.muse.chart.XYChartAnimator;
-import kungzhi.muse.model.Band;
-import kungzhi.muse.model.BandPower;
 import kungzhi.muse.model.Configuration;
 import kungzhi.muse.model.Headband;
+import kungzhi.muse.model.SingleValue;
 import kungzhi.muse.osc.service.MessageDispatcher;
 import kungzhi.muse.osc.service.MessagePath;
-import kungzhi.muse.repository.Bands;
+import kungzhi.muse.ui.common.AbstractController;
 
 import java.time.Clock;
 
-import static java.lang.String.format;
-import static kungzhi.muse.osc.service.MessagePath.valueOf;
-
-public abstract class BandPowerChartController
+public abstract class SingleNumberController
         extends AbstractController {
     private final XYChartAnimator<Number> animator;
-    private final Bands bands;
     private final Headband headband;
     private final MessageDispatcher dispatcher;
-    private final boolean relative;
+    private final MessagePath path;
+    private final String resourceKey;
 
     @FXML
-    protected LineChart<Number, Number> bandPowerChart;
+    protected LineChart<Number, Number> singleValueChart;
 
-    protected BandPowerChartController(Clock clock, Bands bands, Headband headband,
-                                       MessageDispatcher dispatcher, boolean relative) {
+    protected SingleNumberController(Clock clock, Headband headband, MessageDispatcher dispatcher,
+                                     MessagePath path, String resourceKey) {
         this.animator = new XYChartAnimator<>(clock);
-        this.bands = bands;
         this.headband = headband;
         this.dispatcher = dispatcher;
-        this.relative = relative;
+        this.path = path;
+        this.resourceKey = resourceKey;
     }
 
     public int getSecondsOfHistory() {
@@ -56,14 +52,10 @@ public abstract class BandPowerChartController
 
     @Override
     protected void onInitialize() {
-        animator.setChart(bandPowerChart);
+        animator.setChart(singleValueChart);
 
-        ObservableList<Series<Number, Number>> seriesData = bandPowerChart.getData();
-        seriesData.add(bandPowerSeries(bands.load("gamma")));
-        seriesData.add(bandPowerSeries(bands.load("beta")));
-        seriesData.add(bandPowerSeries(bands.load("alpha")));
-        seriesData.add(bandPowerSeries(bands.load("theta")));
-        seriesData.add(bandPowerSeries(bands.load("delta")));
+        ObservableList<Series<Number, Number>> seriesData = singleValueChart.getData();
+        seriesData.add(singleValueSeries());
 
         Configuration configuration = headband.getConfiguration();
         configuration.addActiveItemListener((current, previous) -> {
@@ -74,15 +66,11 @@ public abstract class BandPowerChartController
         });
     }
 
-    private Series<Number, Number> bandPowerSeries(Band band) {
-        MessagePath path = valueOf(format("%s_%s",
-                band.getIdentifier().toUpperCase(),
-                relative ? "RELATIVE" : "ABSOLUTE"));
-        log.info("Streaming data on {} for {}", path, band.getIdentifier());
+    private Series<Number, Number> singleValueSeries() {
         Series<Number, Number> series = new Series<>();
-        series.setName(localize(band));
-        dispatcher.withStream(path, BandPower.class,
-                (headband, power) -> animator.offer(series, power.average()));
+        series.setName(localize(resourceKey));
+        dispatcher.withStream(path, SingleValue.class,
+                (headband, value) -> animator.offer(series, (Number) value.get()));
         return series;
     }
 }

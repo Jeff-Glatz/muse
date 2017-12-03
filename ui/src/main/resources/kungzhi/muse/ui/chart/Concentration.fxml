@@ -4,8 +4,8 @@
 <LineChart xmlns="http://javafx.com/javafx/9"
            xmlns:fx="http://javafx.com/fxml/1"
            fx:id="singleValueChart"
-           fx:controller="kungzhi.muse.ui.MellowChartController"
-           title="%chart.mellow.title"
+           fx:controller="kungzhi.muse.ui.chart.ConcentrationController"
+           title="%chart.concentration.title"
            animated="true"
            verticalGridLinesVisible="false"
            createSymbols="false">
