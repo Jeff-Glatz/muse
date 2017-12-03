@@ -1,4 +1,4 @@
-package kungzhi.muse.chart;
+package kungzhi.ui.chart;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;

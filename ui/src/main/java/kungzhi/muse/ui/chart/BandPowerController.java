@@ -4,7 +4,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart.Series;
-import kungzhi.muse.chart.XYChartAnimator;
+import kungzhi.ui.chart.XYChartAnimator;
 import kungzhi.muse.model.Band;
 import kungzhi.muse.model.BandPower;
 import kungzhi.muse.model.Configuration;

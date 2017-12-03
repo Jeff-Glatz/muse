@@ -1,4 +1,4 @@
-package kungzhi.muse.chart;
+package kungzhi.ui.chart;
 
 import javafx.collections.ObservableList;
 import javafx.scene.chart.XYChart.Data;
