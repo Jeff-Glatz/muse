@@ -138,8 +138,8 @@ public class MuseIO
         if (platform.startsWith("Mac")) {
             ProcessBuilder builder = new ProcessBuilder(
                     "/Applications/Muse/muse-io",
+                    "--no-ansi",
                     "--preset", preset.getId().toLowerCase(),
-                    "--osc-timestamp",
                     "--osc", format("osc.%s://%s:%d", protocol, host.getHostAddress(), port));
             Map<String, String> environment = builder.environment();
             environment.put("DYLD_LIBRARY_PATH", "/Applications/Muse");
@@ -148,8 +148,8 @@ public class MuseIO
         } else if (platform.startsWith("Windows")) {
             return new ProcessBuilder(
                     "C:\\Program Files (x86)\\Muse\\muse-io",
+                    "--no-ansi",
                     "--preset", preset.getId().toLowerCase(),
-                    "--osc-timestamp",
                     "--osc", format("osc.%s://%s:%d", protocol, host.getHostAddress(), port));
         }
         throw new UnsupportedPlatformException(

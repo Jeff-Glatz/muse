@@ -23,8 +23,7 @@ public class XYChartAnimator<Y> {
     private final Timeline timeline;
 
     private LineChart<Number, Y> chart;
-    private int secondsOfHistory = 30;
-    private int maxDataWindow = 1000;
+    private int millisecondsOfHistory = 30000;
 
     public XYChartAnimator(Clock clock) {
         this.clock = clock;
@@ -44,19 +43,11 @@ public class XYChartAnimator<Y> {
     }
 
     public int getSecondsOfHistory() {
-        return secondsOfHistory;
+        return millisecondsOfHistory / 1000;
     }
 
     public void setSecondsOfHistory(int secondsOfHistory) {
-        this.secondsOfHistory = secondsOfHistory;
-    }
-
-    public int getMaxDataWindow() {
-        return maxDataWindow;
-    }
-
-    public void setMaxDataWindow(int maxDataWindow) {
-        this.maxDataWindow = maxDataWindow;
+        this.millisecondsOfHistory = secondsOfHistory * 1000;
     }
 
     public void start() {
@@ -79,15 +70,11 @@ public class XYChartAnimator<Y> {
         for (XYChartData<Number, Y> data = queue.poll();
              data != null;
              data = queue.poll()) {
-            data.addToSeries(maxDataWindow);
+            data.addToSeries(millisecondsOfHistory);
         }
         NumberAxis xAxis = (NumberAxis) chart.getXAxis();
-        double upperBound = clock.millis();
-        xAxis.setUpperBound(upperBound);
-        xAxis.setLowerBound(upperBound - millisecondsOfHistory());
-    }
-
-    private long millisecondsOfHistory() {
-        return secondsOfHistory * 1000;
+        double now = clock.millis();
+        xAxis.setUpperBound(now);
+        xAxis.setLowerBound(now - millisecondsOfHistory);
     }
 }

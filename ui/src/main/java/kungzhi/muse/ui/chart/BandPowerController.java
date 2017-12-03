@@ -4,15 +4,15 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart.Series;
-import kungzhi.ui.chart.realtime.XYChartAnimator;
 import kungzhi.muse.model.Band;
 import kungzhi.muse.model.BandPower;
 import kungzhi.muse.model.Configuration;
 import kungzhi.muse.model.Headband;
-import kungzhi.muse.osc.service.MessageDispatcher;
 import kungzhi.muse.osc.service.MessageAddress;
+import kungzhi.muse.osc.service.MessageDispatcher;
 import kungzhi.muse.repository.Bands;
 import kungzhi.muse.ui.common.AbstractController;
+import kungzhi.ui.chart.realtime.XYChartAnimator;
 
 import java.time.Clock;
 
@@ -45,14 +45,6 @@ public abstract class BandPowerController
 
     public void setSecondsOfHistory(int secondsOfHistory) {
         animator.setSecondsOfHistory(secondsOfHistory);
-    }
-
-    public int getMaxDataWindow() {
-        return animator.getMaxDataWindow();
-    }
-
-    public void setMaxDataWindow(int maxDataWindow) {
-        animator.setMaxDataWindow(maxDataWindow);
     }
 
     @Override

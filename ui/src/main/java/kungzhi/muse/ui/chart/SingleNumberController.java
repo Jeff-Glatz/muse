@@ -42,14 +42,6 @@ public abstract class SingleNumberController
         animator.setSecondsOfHistory(secondsOfHistory);
     }
 
-    public int getMaxDataWindow() {
-        return animator.getMaxDataWindow();
-    }
-
-    public void setMaxDataWindow(int maxDataWindow) {
-        animator.setMaxDataWindow(maxDataWindow);
-    }
-
     @Override
     protected void onInitialize() {
         animator.setChart(singleValueChart);
