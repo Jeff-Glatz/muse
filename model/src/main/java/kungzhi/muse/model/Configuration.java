@@ -366,6 +366,10 @@ public class Configuration
                 .orElseThrow(IllegalArgumentException::new);
     }
 
+    public boolean eegChannelLayoutChanged(Configuration that) {
+        return !this.eegChannelLayout.equals(that.eegChannelLayout);
+    }
+
     @Override
     public boolean sameAs(Configuration that) {
         if (!eegChannelLayout.equals(that.eegChannelLayout))

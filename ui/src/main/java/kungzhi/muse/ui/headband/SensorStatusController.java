@@ -3,6 +3,7 @@ package kungzhi.muse.ui.headband;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.HBox;
@@ -46,34 +47,23 @@ public class SensorStatusController
             if (previous.initial()) {
                 runLater(() -> buildSensorStatusDisplay(current));
             } else {
-                // TODO: Update the sensor status display if channel layout changed
+                if (previous.eegChannelLayoutChanged(current)) {
+                    log.info("Sensor Layout changed, rebuilding sensor display");
+                    runLater(() -> buildSensorStatusDisplay(current));
+                }
             }
         });
 
         HeadbandStatus status = headband.getStatus();
         status.addActiveItemListener((current, previous) -> runLater(() ->
-                sensorIndicatorMap.forEach((channel, indicator) -> {
-                    ObservableList<String> styles = indicator.getStyleClass();
-                    styles.removeAll(SENSOR_CLASSES);
-                    switch (current.forChannel(channel)) {
-                        case GOOD:
-                            indicator.setSelected(true);
-                            styles.add(SENSOR_GOOD);
-                            break;
-                        case OK:
-                            indicator.setSelected(true);
-                            styles.add(SENSOR_OK);
-                            break;
-                        case BAD:
-                            indicator.setSelected(true);
-                            styles.add(SENSOR_BAD);
-                            break;
-                    }
-                })));
+                updateIndicators(current)));
     }
 
     private void buildSensorStatusDisplay(Configuration configuration) {
         log.info("Muse configuration received, building sensor status display");
+        ObservableList<Node> children = headbandStatusBox.getChildren();
+        children.clear();
+        sensorIndicatorMap.clear();
         SortedSet<EegChannel> channels = configuration.getEegChannelLayout();
         channels.forEach(channel -> {
             RadioButton indicator = new RadioButton(channel.getName());
@@ -82,7 +72,28 @@ public class SensorStatusController
             ObservableList<String> styles = indicator.getStyleClass();
             styles.add("sensor-indicator");
             sensorIndicatorMap.put(channel, indicator);
-            headbandStatusBox.getChildren().add(indicator);
+            children.add(indicator);
+        });
+    }
+
+    private void updateIndicators(HeadbandStatus status) {
+        sensorIndicatorMap.forEach((channel, indicator) -> {
+            ObservableList<String> styles = indicator.getStyleClass();
+            styles.removeAll(SENSOR_CLASSES);
+            switch (status.forChannel(channel)) {
+                case GOOD:
+                    indicator.setSelected(true);
+                    styles.add(SENSOR_GOOD);
+                    break;
+                case OK:
+                    indicator.setSelected(true);
+                    styles.add(SENSOR_OK);
+                    break;
+                case BAD:
+                    indicator.setSelected(true);
+                    styles.add(SENSOR_BAD);
+                    break;
+            }
         });
     }
 }
