@@ -2,35 +2,31 @@ package kungzhi.muse.model;
 
 import kungzhi.muse.runtime.ProblemLog;
 
+import java.util.List;
+
 import static kungzhi.muse.model.HeadbandStatusStrict.State.fromValue;
 
 public class HeadbandStatusStrict
         extends ActiveModel<HeadbandStatusStrict> {
-    private Values<Float> values;
+    private List<Object> values;
 
     public HeadbandStatusStrict() {
         this(0, null);
     }
 
-    public HeadbandStatusStrict(long time, Values<Float> values) {
+    public HeadbandStatusStrict(long time, List<Object> values) {
         super(time);
         this.values = values;
     }
 
     public State forChannel(EegChannel channel) {
-        return fromValue(values.at(channel.getIndex()).intValue());
+        Float value = (Float) values.get(channel.getIndex());
+        return fromValue(value.intValue());
     }
 
     @Override
     public boolean sameAs(HeadbandStatusStrict that) {
         return values != null ? values.equals(that.values) : that.values == null;
-    }
-
-    @Override
-    protected HeadbandStatusStrict update(HeadbandStatusStrict item) {
-        this.time = item.time;
-        this.values = item.values;
-        return this;
     }
 
     @Override
@@ -60,6 +56,13 @@ public class HeadbandStatusStrict
     @Override
     protected HeadbandStatusStrict newInstance() {
         return new HeadbandStatusStrict();
+    }
+
+    @Override
+    protected HeadbandStatusStrict update(HeadbandStatusStrict item) {
+        this.time = item.time;
+        this.values = item.values;
+        return this;
     }
 
     public enum State {

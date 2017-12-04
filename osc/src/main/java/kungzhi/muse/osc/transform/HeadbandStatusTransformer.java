@@ -14,6 +14,6 @@ public class HeadbandStatusTransformer
     @Override
     public HeadbandStatus fromMessage(long time, OSCMessage message)
             throws Exception {
-        return new HeadbandStatus(time, extractArguments(message, Float.class));
+        return new HeadbandStatus(time, extractArguments(message));
     }
 }

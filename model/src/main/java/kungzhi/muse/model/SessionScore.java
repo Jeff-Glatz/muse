@@ -1,5 +1,6 @@
 package kungzhi.muse.model;
 
+import java.util.List;
 import java.util.stream.Stream;
 
 import static kungzhi.lang.Functions.averageOf;
@@ -7,9 +8,9 @@ import static kungzhi.lang.Functions.averageOf;
 public class SessionScore
         extends AbstractModel {
     private final Band band;
-    private final Values<Float> values;
+    private final List<Object> values;
 
-    public SessionScore(long time, Band band, Values<Float> values) {
+    public SessionScore(long time, Band band, List<Object> values) {
         super(time);
         this.band = band;
         this.values = values;
@@ -20,11 +21,12 @@ public class SessionScore
     }
 
     public Float forChannel(EegChannel channel) {
-        return values.at(channel.getIndex());
+        return (Float) values.get(channel.getIndex());
     }
 
     public Stream<Float> values() {
-        return values.streamOf();
+        return values.stream()
+                .map(Float.class::cast);
     }
 
     public Double average() {

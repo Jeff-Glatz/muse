@@ -1,5 +1,6 @@
 package kungzhi.muse.model;
 
+import java.util.List;
 import java.util.stream.Stream;
 
 import static kungzhi.lang.Functions.averageOf;
@@ -8,9 +9,9 @@ public class BandPower
         extends AbstractModel {
     private final Band band;
     private final boolean relative;
-    private final Values<Float> values;
+    private final List<Object> values;
 
-    public BandPower(long time, Band band, boolean relative, Values<Float> values) {
+    public BandPower(long time, Band band, boolean relative, List<Object> values) {
         super(time);
         this.band = band;
         this.relative = relative;
@@ -26,11 +27,12 @@ public class BandPower
     }
 
     public Float forChannel(EegChannel channel) {
-        return values.at(channel.getIndex());
+        return (Float) values.get(channel.getIndex());
     }
 
     public Stream<Float> values() {
-        return values.streamOf();
+        return values.stream()
+                .map(Float.class::cast);
     }
 
     public Double average() {

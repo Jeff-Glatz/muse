@@ -1,5 +1,6 @@
 package kungzhi.muse.model;
 
+import java.util.List;
 import java.util.stream.Stream;
 
 import static kungzhi.lang.Functions.averageOf;
@@ -7,9 +8,9 @@ import static kungzhi.lang.Functions.averageOf;
 public class Fft
         extends AbstractModel {
     private final int channelIndex;
-    private final Values<Float> values;
+    private final List<Object> values;
 
-    public Fft(long time, int channelIndex, Values<Float> values) {
+    public Fft(long time, int channelIndex, List<Object> values) {
         super(time);
         this.channelIndex = channelIndex;
         this.values = values;
@@ -20,7 +21,8 @@ public class Fft
     }
 
     public Stream<Float> values() {
-        return values.streamOf();
+        return values.stream()
+                .map(Float.class::cast);
     }
 
     public Double average() {

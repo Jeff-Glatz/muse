@@ -17,6 +17,6 @@ public class SessionScoreTransformer
     @Override
     public SessionScore fromMessage(long time, OSCMessage message)
             throws Exception {
-        return new SessionScore(time, band, extractArguments(message, Float.class));
+        return new SessionScore(time, band, extractArguments(message));
     }
 }

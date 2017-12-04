@@ -60,7 +60,7 @@ public class SensorStatusController
 
         HeadbandTouching touching = headband.getTouching();
         touching.addActiveItemListener((current, previous) -> {
-            if (current.isFalse()) {
+            if (current != null && current.isFalse()) {
                 runLater(() -> notificationControl
                         .notification(localize("model.headband.not-touching")));
             }

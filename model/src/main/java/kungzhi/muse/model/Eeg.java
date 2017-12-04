@@ -1,20 +1,22 @@
 package kungzhi.muse.model;
 
+import java.util.List;
 import java.util.stream.Stream;
 
 import static kungzhi.lang.Functions.averageOf;
 
 public class Eeg
         extends AbstractModel {
-    private final Values<Float> values;
+    private final List<Object> values;
 
-    public Eeg(long time, Values<Float> values) {
+    public Eeg(long time, List<Object> values) {
         super(time);
         this.values = values;
     }
 
     public Stream<Float> values() {
-        return values.streamOf();
+        return values.stream()
+                .map(Float.class::cast);
     }
 
     public Double average() {

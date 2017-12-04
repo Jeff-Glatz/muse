@@ -19,6 +19,6 @@ public class BandPowerTransformer
     @Override
     public BandPower fromMessage(long time, OSCMessage message)
             throws Exception {
-        return new BandPower(time, band, relative, extractArguments(message, Float.class));
+        return new BandPower(time, band, relative, extractArguments(message));
     }
 }

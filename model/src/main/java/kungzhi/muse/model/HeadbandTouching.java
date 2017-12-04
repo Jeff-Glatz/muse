@@ -5,7 +5,7 @@ public class HeadbandTouching
     private Integer value;
 
     public HeadbandTouching() {
-        this(0, null);
+        this(0, 0);
     }
 
     public HeadbandTouching(long time, Integer value) {
@@ -28,13 +28,6 @@ public class HeadbandTouching
     @Override
     public boolean sameAs(HeadbandTouching that) {
         return value != null ? value.equals(that.value) : that.value == null;
-    }
-
-    @Override
-    protected HeadbandTouching update(HeadbandTouching item) {
-        this.time = item.time;
-        this.value = item.value;
-        return null;
     }
 
     @Override
@@ -64,5 +57,12 @@ public class HeadbandTouching
     @Override
     protected HeadbandTouching newInstance() {
         return new HeadbandTouching();
+    }
+
+    @Override
+    protected HeadbandTouching update(HeadbandTouching item) {
+        this.time = item.time;
+        this.value = item.value;
+        return this;
     }
 }

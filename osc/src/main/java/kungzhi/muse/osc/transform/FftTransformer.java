@@ -16,6 +16,6 @@ public class FftTransformer
     @Override
     public Fft fromMessage(long time, OSCMessage message)
             throws Exception {
-        return new Fft(time, channelIndex, extractArguments(message, Float.class));
+        return new Fft(time, channelIndex, extractArguments(message));
     }
 }

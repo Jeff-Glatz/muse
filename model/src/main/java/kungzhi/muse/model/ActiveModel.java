@@ -29,8 +29,8 @@ public abstract class ActiveModel<M extends ActiveItem<M> & Model>
 
     @Override
     public final M copy() {
-        return newInstance()
-                .update((M) this);
+        ActiveModel<M> copy = newInstance();
+        return copy.update((M) this);
     }
 
     @Override

@@ -14,6 +14,6 @@ public class EegTransformer
     @Override
     public Eeg fromMessage(long time, OSCMessage message)
             throws Exception {
-        return new Eeg(time, extractArguments(message, Float.class));
+        return new Eeg(time, extractArguments(message));
     }
 }
