@@ -13,7 +13,6 @@ import kungzhi.muse.model.Headband;
 import kungzhi.muse.model.HeadbandStatus;
 import kungzhi.muse.model.HeadbandTouching;
 import kungzhi.muse.ui.common.AbstractController;
-import kungzhi.muse.ui.common.NotificationControl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -33,15 +32,16 @@ public class SensorStatusController
 
     private final Map<EegChannel, RadioButton> sensorIndicatorMap = new HashMap<>();
     private final Headband headband;
-    private final NotificationControl notificationControl;
 
     @FXML
     private HBox headbandStatusBox;
 
+    @FXML
+    private RadioButton headbandTouchingIndicator;
+
     @Autowired
-    public SensorStatusController(Headband headband, NotificationControl notificationControl) {
+    public SensorStatusController(Headband headband) {
         this.headband = headband;
-        this.notificationControl = notificationControl;
     }
 
     @Override
@@ -59,12 +59,8 @@ public class SensorStatusController
         });
 
         HeadbandTouching touching = headband.getTouching();
-        touching.addActiveItemListener((current, previous) -> {
-            if (current != null && current.isFalse()) {
-                runLater(() -> notificationControl
-                        .notification(localize("model.headband.not-touching")));
-            }
-        });
+        touching.addActiveItemListener((current, previous) -> runLater(() ->
+                updateIndicator(current)));
 
         HeadbandStatus status = headband.getStatus();
         status.addActiveItemListener((current, previous) -> runLater(() ->
@@ -74,7 +70,9 @@ public class SensorStatusController
     private void buildSensorStatusDisplay(Configuration configuration) {
         log.info("Muse configuration received, building sensor status display");
         ObservableList<Node> children = headbandStatusBox.getChildren();
-        children.clear();
+        if (children.size() > 1) {
+            children.remove(1, children.size() - 1);
+        }
         sensorIndicatorMap.clear();
         SortedSet<EegChannel> channels = configuration.getEegChannelLayout();
         channels.forEach(channel -> {
@@ -107,5 +105,17 @@ public class SensorStatusController
                     break;
             }
         });
+    }
+
+    private void updateIndicator(HeadbandTouching touching) {
+        ObservableList<String> styles = headbandTouchingIndicator.getStyleClass();
+        styles.removeAll(SENSOR_CLASSES);
+        if (touching.isTrue()) {
+            headbandTouchingIndicator.setSelected(true);
+            styles.add(SENSOR_GOOD);
+        } else {
+            headbandTouchingIndicator.setSelected(true);
+            styles.add(SENSOR_BAD);
+        }
     }
 }
