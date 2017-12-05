@@ -37,9 +37,10 @@ public class MuseWorkbench
     @Override
     public void start(Stage stage)
             throws Exception {
-        stage.setTitle("Muse Workbench");
+        stage.setTitle(resources.getString("workbench.title"));
         stage.setOnCloseRequest(event -> context.stop());
         stage.setScene(new Scene(loader.load()));
+        stage.sizeToScene();
         stage.show();
     }
 
