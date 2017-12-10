@@ -78,8 +78,7 @@ public class OscWiring {
         Service receiver = properties.getReceiver();
         return new MuseIO()
                 .withProtocol(properties.protocol("tcp"))
-                .withHost(receiver.host(getLocalHost()))
-                .withPort(receiver.port(5000));
+                .withSocketAddress(receiver.socketAddress(getLocalHost(), 5000));
     }
 
     @Bean

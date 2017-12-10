@@ -4,6 +4,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import java.io.Serializable;
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
 
 @ConfigurationProperties("muse.osc")
 public class OscProperties
@@ -87,6 +88,10 @@ public class OscProperties
 
         public Integer port(Integer defaultPort) {
             return port != null ? port : defaultPort;
+        }
+
+        public InetSocketAddress socketAddress(InetAddress defaultHost, int defaultPort) {
+            return new InetSocketAddress(host(defaultHost), port(defaultPort));
         }
 
         @Override

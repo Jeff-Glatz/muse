@@ -6,7 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.annotation.PreDestroy;
-import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -24,8 +24,7 @@ public class MuseIO
     private Thread monitoringThread;
     private Preset preset = Preset.FOURTEEN;
     private String protocol;
-    private InetAddress host;
-    private Integer port;
+    private InetSocketAddress socketAddress;
     private long secondsToWaitForShutdown = 30;
     private Process process;
 
@@ -65,29 +64,16 @@ public class MuseIO
         return this;
     }
 
-    public InetAddress getHost() {
-        return host;
+    public InetSocketAddress getSocketAddress() {
+        return socketAddress;
     }
 
-    public void setHost(InetAddress host) {
-        this.host = host;
+    public void setSocketAddress(InetSocketAddress host) {
+        this.socketAddress = host;
     }
 
-    public MuseIO withHost(InetAddress host) {
-        this.host = host;
-        return this;
-    }
-
-    public Integer getPort() {
-        return port;
-    }
-
-    public void setPort(Integer port) {
-        this.port = port;
-    }
-
-    public MuseIO withPort(Integer port) {
-        this.port = port;
+    public MuseIO withSocketAddress(InetSocketAddress socketAddress) {
+        this.socketAddress = socketAddress;
         return this;
     }
 
@@ -140,7 +126,7 @@ public class MuseIO
                     "/Applications/Muse/muse-io",
                     "--no-ansi",
                     "--preset", preset.getId().toLowerCase(),
-                    "--osc", format("osc.%s://%s:%d", protocol, host.getHostAddress(), port));
+                    "--osc", osc());
             Map<String, String> environment = builder.environment();
             environment.put("DYLD_LIBRARY_PATH", "/Applications/Muse");
             return builder;
@@ -150,7 +136,7 @@ public class MuseIO
                     "C:\\Program Files (x86)\\Muse\\muse-io",
                     "--no-ansi",
                     "--preset", preset.getId().toLowerCase(),
-                    "--osc", format("osc.%s://%s:%d", protocol, host.getHostAddress(), port));
+                    "--osc", osc());
         }
         throw new UnsupportedPlatformException(
                 format("MuseIO on %s is currently not supported by Interaxon", platform));
@@ -167,6 +153,13 @@ public class MuseIO
                 }
             });
         }
+    }
+
+    private String osc() {
+        return format("osc.%s://%s:%d",
+                protocol,
+                socketAddress.getAddress().getHostAddress(),
+                socketAddress.getPort());
     }
 
     private void startMonitoringOutput() {
